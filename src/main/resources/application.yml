@@ -1,4 +1,11 @@
-#highschooltime-1.c5pr68jvzqcz.ap-northeast-2.rds.amazonaws.com
+server:
+  port: ${PORT_NUM}
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
 spring:
   profiles:
     include: oauth
