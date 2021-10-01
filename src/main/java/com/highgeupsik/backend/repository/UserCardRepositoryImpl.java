@@ -18,6 +18,7 @@ import static com.highgeupsik.backend.entity.QUserCard.*;
 
 public class UserCardRepositoryImpl implements UserCardRepositoryCustom {
 
+
     private final JPAQueryFactory queryFactory;
 
     public UserCardRepositoryImpl(EntityManager em) {
