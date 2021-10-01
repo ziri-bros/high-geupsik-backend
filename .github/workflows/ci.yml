@@ -1,14 +1,14 @@
 name: highgeupsik-backend build & test CI
 
-on: //디벨롭 브랜치에 풀 리퀘스트가 되면 동작해라
+on:
   pull_request:
     branches: [ develop ]
-  //깃허브액션 CICD툴 잰킨스는 서버를 하나더해야함 깃허브 액션은 자체서버있음
-jobs: //작업의 단위
+
+jobs:
   build:
 
-    runs-on: ubuntu-latest //우분투최신버전에서 돌아간다
-    env: //환경변수
+    runs-on: ubuntu-latest
+    env: 
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
