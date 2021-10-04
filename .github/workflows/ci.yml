@@ -9,7 +9,6 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      PORT_NUM: ${{secrets.PORT_NUM}}
       JWT_SECRET: ${{secrets.JWT_SECRET}}
       AWS_SECRETKEY: ${{secrets.AWS_SECRETKEY}}
       AWS_ACCESSKEY: ${{secrets.AWS_ACCESSKEY}}

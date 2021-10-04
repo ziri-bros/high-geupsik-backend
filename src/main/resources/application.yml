@@ -8,55 +8,12 @@ server:
 
 spring:
   profiles:
-    include: oauth
-  datasource:
-    url: ${DATASOURCE_LOCAL_URL}
-    username: ${DATASOURCE_LOCAL_USERNAME}
-    password: ${DATASOURCE_LOCAL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        default_batch_fetch_size: 100
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-       # show_sql: true
-        format_sql: true
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 200MB
-      max-request-size: 215MB
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: highgeupsik@gmail.com
-    password: ${SMTP_PASSWORD}
-    properties:
-      mail:
-        allow-bean-definition-overriding: true
-        smtp:
-          starttls:
-            enable: true
-            required: true
-          auth: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-file:
-  upload-dir: ./uploads
+    include:
+      - oauth
+      - db
+      - mail
+      - file
+      - aws
 
 jwt:
   secret: ${JWT_SECRET}
-cloud:
-  aws:
-    credentials:
-      accessKey: ${AWS_ACCESSKEY}
-      secretKey: ${AWS_SECRETKEY}
-    s3:
-      bucket: ${AWS_S3BUCKET}
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
