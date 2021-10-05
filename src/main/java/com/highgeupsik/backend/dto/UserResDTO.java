@@ -16,7 +16,6 @@ public class UserResDTO {
     private String username;
     private Role role;
     private SchoolInfo schoolInfo;
-    private UploadFileDTO profileImage;
 
     public UserResDTO(User user) {
         id = user.getId();

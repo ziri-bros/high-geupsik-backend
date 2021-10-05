@@ -1,13 +1,6 @@
-server:
-  port: ${PORT_NUM}
-  servlet:
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
-
 spring:
   profiles:
+<<<<<<< HEAD
     include: oauth
   datasource:
     driver-class-name: org.h2.Driver
@@ -34,6 +27,15 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+=======
+    include:
+      - aws
+      - oauth
+      - file
+      - mail
+      - test-db
+
+>>>>>>> a5d0560509e1433fb9f0b6b568adc474a2ccdb86
 jwt:
   secret: ${JWT_SECRET}
 cloud:
