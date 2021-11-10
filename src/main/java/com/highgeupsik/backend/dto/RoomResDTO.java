@@ -13,7 +13,7 @@ public class RoomResDTO {
     private Long toUserId;
     private String firstMessage;
 
-    public RoomResDTO(Room room){
+    public RoomResDTO(Room room) {
         id = room.getId();
         fromUserId = room.getFromUser().getId();
         toUserId = room.getToUser().getId();

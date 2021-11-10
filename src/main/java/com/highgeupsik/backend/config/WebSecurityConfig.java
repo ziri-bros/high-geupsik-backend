@@ -1,12 +1,12 @@
 package com.highgeupsik.backend.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highgeupsik.backend.handler.JwtAccessDeniedHandler;
 import com.highgeupsik.backend.handler.JwtAuthenticationEntryPoint;
 import com.highgeupsik.backend.handler.OAuth2AuthenticationSuccessHandler;
 import com.highgeupsik.backend.jwt.JwtAuthenticationFilter;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
 import com.highgeupsik.backend.oauth2.CustomOAuth2UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,34 +41,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
-                .csrf().disable()
+            .httpBasic().disable()
+            .csrf().disable()
 
-                .exceptionHandling()
+            .exceptionHandling()
             //    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
+            .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션허용안함
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션허용안함
 
-                .and()
-                .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/login/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-                .anyRequest()
-                .authenticated()
+            .and()
+            .authorizeRequests()
+            .antMatchers("/login").permitAll()
+            .antMatchers("/login/**").permitAll()
+            .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+            .anyRequest()
+            .authenticated()
 
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
-                        UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
+            .and()
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
+                UsernamePasswordAuthenticationFilter.class)
+            .oauth2Login()
+            .userInfoEndpoint()
+            .userService(customOAuth2UserService)
 
-                .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler);
+            .and()
+            .successHandler(oAuth2AuthenticationSuccessHandler);
     }
 }

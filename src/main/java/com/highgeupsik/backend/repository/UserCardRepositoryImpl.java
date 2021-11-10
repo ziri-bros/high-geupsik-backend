@@ -1,19 +1,16 @@
 package com.highgeupsik.backend.repository;
 
+import static com.highgeupsik.backend.entity.QUserCard.userCard;
+
 import com.highgeupsik.backend.dto.UserCardResDTO;
-import com.highgeupsik.backend.entity.QUserCard;
 import com.highgeupsik.backend.entity.UserCard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-
-import javax.persistence.EntityManager;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.highgeupsik.backend.entity.QUserCard.*;
 
 
 public class UserCardRepositoryImpl implements UserCardRepositoryCustom {
@@ -30,16 +27,16 @@ public class UserCardRepositoryImpl implements UserCardRepositoryCustom {
         List<UserCard> content = queryFactory.selectFrom(userCard)
 //                .join(userCard.uploadFile, uploadFile).fetchJoin()
 //                .join(userCard.user, user).fetchJoin()
-                .orderBy(userCard.createdDate.asc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .orderBy(userCard.createdDate.asc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         long total = queryFactory.selectFrom(userCard)
-                .fetchCount();
+            .fetchCount();
 
         List<UserCardResDTO> result = content.stream().map(userCard -> new UserCardResDTO(userCard))
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
 
         return new PageImpl<>(result, pageable, total);
     }

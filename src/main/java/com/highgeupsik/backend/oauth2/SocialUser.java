@@ -1,14 +1,21 @@
 package com.highgeupsik.backend.oauth2;
 
 import com.highgeupsik.backend.entity.User;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;
-
-import java.io.Serializable;
-import java.util.*;
 
 public class SocialUser implements OAuth2User, Serializable {
 
@@ -23,15 +30,15 @@ public class SocialUser implements OAuth2User, Serializable {
     private final String nameAttributeKey;
 
     public SocialUser(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes,
-                             String nameAttributeKey, User user) {
+        String nameAttributeKey, User user) {
         Assert.notEmpty(attributes, "attributes cannot be empty");
         Assert.hasText(nameAttributeKey, "nameAttributeKey cannot be empty");
         if (!attributes.containsKey(nameAttributeKey)) {
             throw new IllegalArgumentException("Missing attribute '" + nameAttributeKey + "' in attributes");
         }
         this.authorities = (authorities != null)
-                ? Collections.unmodifiableSet(new LinkedHashSet<>(this.sortAuthorities(authorities)))
-                : Collections.unmodifiableSet(new LinkedHashSet<>(AuthorityUtils.NO_AUTHORITIES));
+            ? Collections.unmodifiableSet(new LinkedHashSet<>(this.sortAuthorities(authorities)))
+            : Collections.unmodifiableSet(new LinkedHashSet<>(AuthorityUtils.NO_AUTHORITIES));
         this.attributes = Collections.unmodifiableMap(new LinkedHashMap<>(attributes));
         this.nameAttributeKey = nameAttributeKey;
         this.user = user;
@@ -39,7 +46,7 @@ public class SocialUser implements OAuth2User, Serializable {
 
     private Set<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
         SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(
-                Comparator.comparing(GrantedAuthority::getAuthority));
+            Comparator.comparing(GrantedAuthority::getAuthority));
         sortedAuthorities.addAll(authorities);
         return sortedAuthorities;
     }
@@ -59,7 +66,7 @@ public class SocialUser implements OAuth2User, Serializable {
         return this.getAttribute(this.nameAttributeKey).toString();
     }
 
-    public User getUser(){
+    public User getUser() {
         return this.user;
     }
 }

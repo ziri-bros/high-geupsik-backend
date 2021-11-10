@@ -11,11 +11,10 @@ import com.highgeupsik.backend.repository.BoardDetailRepository;
 import com.highgeupsik.backend.repository.UploadFileRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import com.highgeupsik.backend.utils.ErrorMessage;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -29,25 +28,25 @@ public class BoardDetailService {
     public Long savePost(Long userId, String title, String content, Category category) {
         User user = userRepository.findById(userId).get();
         return boardDetailRepository.save(BoardDetail.builder()
-                .user(user)
-                .content(content)
-                .title(title)
-                .category(category)
-                .region(user.getSchoolInfo().getRegion())
-                .build()).getId();
+            .user(user)
+            .content(content)
+            .title(title)
+            .category(category)
+            .region(user.getSchoolInfo().getRegion())
+            .build()).getId();
     }
 
     public Long savePost(Long userId, String title, String content, Category category,
-                         List<UploadFile> uploadFileList) {
+        List<UploadFile> uploadFileList) {
         User user = userRepository.findById(userId).get();
         BoardDetail boardDetail = boardDetailRepository.save(BoardDetail.builder()
-                .user(user)
-                .content(content)
-                .title(title)
-                .category(category)
-                .region(user.getSchoolInfo().getRegion())
-                .thumbnail(uploadFileList.get(0))
-                .build());
+            .user(user)
+            .content(content)
+            .title(title)
+            .category(category)
+            .region(user.getSchoolInfo().getRegion())
+            .thumbnail(uploadFileList.get(0))
+            .build());
         for (UploadFile file : uploadFileList) {
             boardDetail.setFile(file);
         }
@@ -56,7 +55,7 @@ public class BoardDetailService {
 
     public Long updatePost(Long userId, Long postId, String title, String content) {
         BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
+            () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         Long writerId = boardDetail.getUser().getId();
         if (userId.equals(writerId)) {
             return boardDetail.getId();
@@ -66,9 +65,9 @@ public class BoardDetailService {
     }
 
     public Long updatePost(Long userId, Long postId, String title, String content,
-                           List<UploadFile> uploadFileList) {
+        List<UploadFile> uploadFileList) {
         BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
+            () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         Long writerId = boardDetail.getUser().getId();
         if (userId.equals(writerId)) {
             for (UploadFile uploadFile : uploadFileList) {
@@ -93,7 +92,7 @@ public class BoardDetailService {
 
     public void deletePost(Long userId, Long postId) {
         BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
+            () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         Long writerId = boardDetail.getUser().getId();
         if (userId.equals(writerId)) {
             boardDetailRepository.delete(boardDetail);

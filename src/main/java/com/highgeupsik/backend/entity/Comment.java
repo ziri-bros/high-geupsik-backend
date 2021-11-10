@@ -2,15 +2,21 @@ package com.highgeupsik.backend.entity;
 
 
 import com.highgeupsik.backend.dto.CommentReqDTO;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -50,7 +56,7 @@ public class Comment extends TimeEntity {
 
     @Builder
     public Comment(String content, int userCount, User user, BoardDetail boardDetail,
-                   Comment parent) {
+        Comment parent) {
         this.content = content;
         this.userCount = userCount;
         this.user = user;
@@ -70,10 +76,11 @@ public class Comment extends TimeEntity {
     }
 
     public void updateCommentLike(Boolean flag) {
-        if (flag)
+        if (flag) {
             this.likeCount++;
-        else if (!flag && likeCount > 0)
+        } else if (!flag && likeCount > 0) {
             this.likeCount--;
+        }
     }
 
     public void delete() {

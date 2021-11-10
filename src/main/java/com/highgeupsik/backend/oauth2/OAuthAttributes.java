@@ -4,10 +4,9 @@ package com.highgeupsik.backend.oauth2;
 import com.highgeupsik.backend.entity.AuthProvider;
 import com.highgeupsik.backend.entity.Role;
 import com.highgeupsik.backend.entity.User;
+import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +19,7 @@ public class OAuthAttributes {
     private AuthProvider provider;
 
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name,
-                           String email, AuthProvider provider) {
+        String email, AuthProvider provider) {
         this.attributes = attributes;
         this.name = name;
         this.email = email;
@@ -28,7 +27,8 @@ public class OAuthAttributes {
         this.provider = provider;
     }
 
-    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName,
+        Map<String, Object> attributes) {
         if (registrationId.equals("kakao")) {
             return ofKaKao(userNameAttributeName, attributes);
         } else if (registrationId.equals("naver")) {
@@ -41,30 +41,30 @@ public class OAuthAttributes {
         Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
         return new OAuthAttributes(attributes, userNameAttributeName, (String) profile.get("nickname"),
-                (String) kakao_account.get("email"), AuthProvider.KAKAO);
+            (String) kakao_account.get("email"), AuthProvider.KAKAO);
     }
 
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return new OAuthAttributes(attributes, userNameAttributeName,
-                (String) response.get("name"),
-                (String) response.get("email"), AuthProvider.NAVER);
+            (String) response.get("name"),
+            (String) response.get("email"), AuthProvider.NAVER);
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return new OAuthAttributes(attributes, userNameAttributeName,
-                (String) attributes.get("name"),
-                (String) attributes.get("email"),
-                AuthProvider.GOOGLE);
+            (String) attributes.get("name"),
+            (String) attributes.get("email"),
+            AuthProvider.GOOGLE);
     }
 
     public User toEntity() {
         return User.builder()
-                .username(name)
-                .email(email)
-                .role(Role.ROLE_GUEST)
-                .provider(provider)
-                .build();
+            .username(name)
+            .email(email)
+            .role(Role.ROLE_GUEST)
+            .provider(provider)
+            .build();
     }
 
 }

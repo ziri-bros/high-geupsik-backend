@@ -1,6 +1,9 @@
 package com.highgeupsik.backend.service;
 
 
+import static com.highgeupsik.backend.utils.ErrorMessage.CARD_NOT_FOUND;
+import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateASC;
+
 import com.highgeupsik.backend.dto.UserCardResDTO;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.repository.UserCardRepository;
@@ -8,9 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.highgeupsik.backend.utils.ErrorMessage.*;
-import static com.highgeupsik.backend.utils.PagingUtils.*;
 
 
 @Service
@@ -25,9 +25,9 @@ public class UserCardQueryService {
         return userCardRepository.findUserCards(orderByCreatedDateASC(pageNum, CARD_COUNT));
     }
 
-    public Long findUserIdByCardId(Long cardId){
+    public Long findUserIdByCardId(Long cardId) {
         return userCardRepository.findById(cardId).orElseThrow(
-                () -> new NotFoundException(CARD_NOT_FOUND)).getUser().getId();
+            () -> new NotFoundException(CARD_NOT_FOUND)).getUser().getId();
     }
 
 }

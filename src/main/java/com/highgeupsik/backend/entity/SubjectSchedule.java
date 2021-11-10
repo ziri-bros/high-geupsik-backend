@@ -2,15 +2,21 @@ package com.highgeupsik.backend.entity;
 
 
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -35,14 +41,14 @@ public class SubjectSchedule {
 
     public void changeSubjects(SubjectScheduleDTO subjectScheduleDTO) {
         subjectList = subjectScheduleDTO.getSubjectDTOList()
-                .stream().map((subjectDTO -> new Subject(
-                        subjectDTO.getSubjectTime(),subjectDTO.getWeekDay(),subjectDTO.getSubjectName()
-                ))).collect(Collectors.toList());
+            .stream().map((subjectDTO -> new Subject(
+                subjectDTO.getSubjectTime(), subjectDTO.getWeekDay(), subjectDTO.getSubjectName()
+            ))).collect(Collectors.toList());
         subjectList.forEach((subject -> subject.setSubjectSchedule(this)));
     }
 
-    public void setUser(User user){
-        this.user=user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

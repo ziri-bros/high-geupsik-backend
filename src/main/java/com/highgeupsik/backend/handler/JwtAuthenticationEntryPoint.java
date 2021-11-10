@@ -1,19 +1,18 @@
 package com.highgeupsik.backend.handler;
 
-import com.highgeupsik.backend.utils.ApiError;
+import static com.highgeupsik.backend.utils.ApiUtils.error;
+import static com.highgeupsik.backend.utils.ErrorMessage.NOT_USER;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.highgeupsik.backend.utils.ApiError;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import static com.highgeupsik.backend.utils.ApiUtils.error;
-import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
 
 @Component
@@ -24,10 +23,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint { /
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
+        AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(this.objectMapper.writeValueAsString(
-                (error(new ApiError(NOT_USER, HttpStatus.UNAUTHORIZED)))));
+            (error(new ApiError(NOT_USER, HttpStatus.UNAUTHORIZED)))));
     }
 }

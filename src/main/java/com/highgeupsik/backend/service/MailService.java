@@ -1,13 +1,12 @@
 package com.highgeupsik.backend.service;
 
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +20,9 @@ public class MailService {
         MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 
         StringBuilder body = new StringBuilder();
-        if(accept) {
+        if (accept) {
             body.append("<html><p><strong>" + username + "님 HighGeupSik에 오신것을 환영합니다!</strong></p><br/>");
-        }else{
+        } else {
             body.append("<html><p><strong>" + username + "님 가입이 거부되었습니다. 학생증을 다시 제출해 주세요</strong></p><br/>");
         }
         messageHelper.setTo(receiverEmail);
