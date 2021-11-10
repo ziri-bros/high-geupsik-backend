@@ -1,14 +1,24 @@
 package com.highgeupsik.backend.entity;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -55,10 +65,10 @@ public class BoardDetail extends TimeEntity {
 
     @Builder
     public BoardDetail(String title, String content, Category category,
-                       Region region, User user, UploadFile thumbnail) {
+        Region region, User user, UploadFile thumbnail) {
         this.title = title;
         this.content = content;
-        this.category  = category;
+        this.category = category;
         this.user = user;
         this.region = region;
         this.thumbnail = thumbnail;
@@ -70,10 +80,11 @@ public class BoardDetail extends TimeEntity {
     }
 
     public void updateBoardLikeCount(Boolean flag) {
-        if (flag)
+        if (flag) {
             this.likeCount += 1;
-        else if (!flag && this.likeCount > 0)
+        } else if (!flag && this.likeCount > 0) {
             this.likeCount -= 1;
+        }
     }
 
     public void updateBoardUserCount() {
@@ -81,10 +92,11 @@ public class BoardDetail extends TimeEntity {
     }
 
     public void updateBoardCommentCount(Boolean flag) {
-        if (flag)
+        if (flag) {
             this.commentCount += 1;
-        else if (!flag && this.commentCount > 0)
+        } else if (!flag && this.commentCount > 0) {
             this.commentCount -= 1;
+        }
     }
 
     public void setFile(UploadFile file) {

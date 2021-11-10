@@ -1,7 +1,10 @@
 package com.highgeupsik.backend.exception;
 
-public class DuplicateException extends RuntimeException{
-    public DuplicateException(String message) { super (message);}
+public class DuplicateException extends RuntimeException {
+
+    public DuplicateException(String message) {
+        super(message);
+    }
 
 
 }

@@ -18,7 +18,7 @@ public class BoardSearchCondition {
     private Category category;
     private Integer likeCount;
 
-    public void setRegion(Region region){
+    public void setRegion(Region region) {
         this.region = region;
     }
 

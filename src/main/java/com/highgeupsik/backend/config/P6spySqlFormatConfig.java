@@ -3,21 +3,24 @@ package com.highgeupsik.backend.config;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-import org.hibernate.engine.jdbc.internal.FormatStyle;
-
 import java.util.Locale;
+import org.hibernate.engine.jdbc.internal.FormatStyle;
 
 
 public class P6spySqlFormatConfig implements MessageFormattingStrategy {
 
     @Override
-    public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url) {
+    public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared,
+        String sql, String url) {
         sql = formatSql(category, sql);
-        return now + "|" + elapsed + "ms|" + category + "|connection " + connectionId + "|" + P6Util.singleLine(prepared) + sql;
+        return now + "|" + elapsed + "ms|" + category + "|connection " + connectionId + "|" + P6Util.singleLine(
+            prepared) + sql;
     }
 
     private String formatSql(String category, String sql) {
-        if (sql == null || sql.trim().equals("")) return sql;
+        if (sql == null || sql.trim().equals("")) {
+            return sql;
+        }
 
         // Only format Statement, distinguish DDL And DML
         if (Category.STATEMENT.getName().equals(category)) {

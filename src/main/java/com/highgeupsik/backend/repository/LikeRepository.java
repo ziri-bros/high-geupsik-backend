@@ -1,9 +1,8 @@
 package com.highgeupsik.backend.repository;
 
 import com.highgeupsik.backend.entity.Like;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 

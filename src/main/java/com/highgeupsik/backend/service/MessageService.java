@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -22,11 +21,11 @@ public class MessageService {
 
     public Long saveMessage(String content, Long fromUserId, Long toUserId, Long roomId) {
         return messageRepository.save(Message.builder()
-                .content(content)
-                .fromUser(userRepository.findById(fromUserId).get())
-                .toUser(userRepository.findById(toUserId).get())
-                .room(roomRepository.findById(roomId).get())
-                .build()).getId();
+            .content(content)
+            .fromUser(userRepository.findById(fromUserId).get())
+            .toUser(userRepository.findById(toUserId).get())
+            .room(roomRepository.findById(roomId).get())
+            .build()).getId();
     }
 
     public void deleteMessage(Long messageId, Long userId) {
@@ -37,10 +36,10 @@ public class MessageService {
         } else { //받은메세지에서 삭제요청
             message.deleteToUser();
         }
-        if (message.isFromDeleteFlag() && message.isToDeleteFlag())
+        if (message.isFromDeleteFlag() && message.isToDeleteFlag()) {
             messageRepository.delete(message);
+        }
     }
-
 
 
 }

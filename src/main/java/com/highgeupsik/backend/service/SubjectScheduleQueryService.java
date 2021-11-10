@@ -16,9 +16,9 @@ public class SubjectScheduleQueryService {
 
     private final SubjectScheduleRepository subjectScheduleRepository;
 
-    public SubjectScheduleDTO findSubjectSchedule(Long userId){
+    public SubjectScheduleDTO findSubjectSchedule(Long userId) {
         return new SubjectScheduleDTO(subjectScheduleRepository.findOneByUserId(userId).orElseThrow(
-                ()-> new NotFoundException("시간표가 없습니다")));
+            () -> new NotFoundException("시간표가 없습니다")));
     }
 
 }

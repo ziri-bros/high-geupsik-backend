@@ -14,10 +14,10 @@ public class MessageResDTO {
     private Long fromUserId;
     private Long toUserId;
 
-    public MessageResDTO(Message message){
-        id=message.getId();
-        content=message.getContent();
-        fromUserId=message.getFromUser().getId();
-        toUserId=message.getToUser().getId();
+    public MessageResDTO(Message message) {
+        id = message.getId();
+        content = message.getContent();
+        fromUserId = message.getFromUser().getId();
+        toUserId = message.getToUser().getId();
     }
 }

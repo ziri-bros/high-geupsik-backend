@@ -2,12 +2,11 @@ package com.highgeupsik.backend.dto;
 
 
 import com.highgeupsik.backend.entity.Comment;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -27,7 +26,7 @@ public class CommentResDTO {
         userCount = comment.getUserCount();
         likeCount = comment.getLikeCount();
         commentResDTOList = comment.getChildren().stream().map((children) -> new CommentResDTO(children))
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
     }
 
     public CommentResDTO(Long id, Long writerId, String content, int userCount, int likeCount) {

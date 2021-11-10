@@ -12,7 +12,7 @@ public class UserCardResDTO {
     private String email;
     private UploadFileDTO cardImage;
 
-    public UserCardResDTO(UserCard userCard){
+    public UserCardResDTO(UserCard userCard) {
         id = userCard.getId();
         username = userCard.getUser().getUsername();
         email = userCard.getUser().getEmail();

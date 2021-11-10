@@ -1,6 +1,8 @@
 package com.highgeupsik.backend.api;
 
 
+import static com.highgeupsik.backend.utils.ApiUtils.success;
+
 import com.highgeupsik.backend.dto.MessageReqDTO;
 import com.highgeupsik.backend.dto.MessageResDTO;
 import com.highgeupsik.backend.dto.RoomResDTO;
@@ -11,14 +13,16 @@ import com.highgeupsik.backend.service.MessageService;
 import com.highgeupsik.backend.service.RoomQueryService;
 import com.highgeupsik.backend.service.RoomService;
 import com.highgeupsik.backend.utils.ApiResult;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-
-import java.util.List;
-
-import static com.highgeupsik.backend.utils.ApiUtils.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +41,7 @@ public class MessageApiController {
 
     @PostMapping("/messages") //너무길어서 생각다시해보기
     public ApiResult sendMessage(@RequestBody MessageReqDTO messageReqDTO,
-                                 @AuthenticationPrincipal User user) {
+        @AuthenticationPrincipal User user) {
         Long fromRoomId;
         Long toRoomId;
         Long fromUserId = user.getId();
@@ -67,27 +71,27 @@ public class MessageApiController {
 
     @DeleteMapping("/messages/{messageId}") //메세지 삭제 ?? 필요한가
     public ApiResult deleteMessage(@PathVariable("messageId") Long messageId,
-                                   @AuthenticationPrincipal User user) {
+        @AuthenticationPrincipal User user) {
         messageService.deleteMessage(messageId, user.getId());
         return success(null);
     }
 
     @GetMapping("/rooms") //쪽지 대화방 목록 조회
     public ApiResult<List<RoomResDTO>> rooms(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-                                             @AuthenticationPrincipal User user) {
+        @AuthenticationPrincipal User user) {
         return success(roomQueryService.findRooms(user.getId(), pageNum));
     }
 
     @GetMapping("/rooms/{roomId}") //쪽지 대화방 조회
     public ApiResult<List<MessageResDTO>> room(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-                                               @PathVariable("roomId") Long roomId,
-                                               @AuthenticationPrincipal User user) {
+        @PathVariable("roomId") Long roomId,
+        @AuthenticationPrincipal User user) {
         return success(messageQueryService.findMessages(roomId, pageNum));
     }
 
     @DeleteMapping("/rooms/{roomId}") //대화방 삭제
     public ApiResult deleteRoom(@PathVariable("roomId") Long roomId,
-                                @AuthenticationPrincipal User user) {
+        @AuthenticationPrincipal User user) {
         roomService.deleteRoom(roomId);
         return success(null);
     }

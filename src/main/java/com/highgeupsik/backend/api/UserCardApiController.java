@@ -1,17 +1,26 @@
 package com.highgeupsik.backend.api;
 
 
+import static com.highgeupsik.backend.utils.ApiUtils.success;
+
 import com.highgeupsik.backend.dto.UserCardResDTO;
 import com.highgeupsik.backend.dto.UserResDTO;
-import com.highgeupsik.backend.service.*;
+import com.highgeupsik.backend.service.MailService;
+import com.highgeupsik.backend.service.UserCardQueryService;
+import com.highgeupsik.backend.service.UserCardService;
+import com.highgeupsik.backend.service.UserQueryService;
+import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
+import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
-
-import javax.mail.MessagingException;
-
-import static com.highgeupsik.backend.utils.ApiUtils.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RequestMapping("/admin")
@@ -26,7 +35,8 @@ public class UserCardApiController {
     private final MailService mailService;
 
     @GetMapping("/cards")
-    public ApiResult<Page<UserCardResDTO>> userCards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+    public ApiResult<Page<UserCardResDTO>> userCards(
+        @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(userCardQueryService.findUserCards(pageNum));
     }
 

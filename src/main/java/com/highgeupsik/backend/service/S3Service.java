@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.service;
 
-import com.highgeupsik.backend.entity.UploadFile;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -8,19 +7,20 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.highgeupsik.backend.entity.UploadFile;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @NoArgsConstructor
 public class S3Service {
+
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.credentials.accessKey}")
@@ -40,9 +40,9 @@ public class S3Service {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
         s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(this.region)
-                .build();
+            .withCredentials(new AWSStaticCredentialsProvider(credentials))
+            .withRegion(this.region)
+            .build();
     }
 
     public List<UploadFile> uploadFiles(List<MultipartFile> files) throws IOException {
@@ -51,7 +51,7 @@ public class S3Service {
             String fileName = file.getOriginalFilename();
             String url = s3Client.getUrl(bucket, fileName).toString();
             s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+                .withCannedAcl(CannedAccessControlList.PublicRead));
             UploadFile uploadFile = new UploadFile(fileName, url);
             uploadFileList.add(uploadFile);
         }

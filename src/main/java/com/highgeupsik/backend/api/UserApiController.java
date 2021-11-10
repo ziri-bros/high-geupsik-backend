@@ -1,21 +1,31 @@
 package com.highgeupsik.backend.api;
 
 
+import static com.highgeupsik.backend.utils.ApiUtils.success;
+
 import com.highgeupsik.backend.dto.SchoolInfoDTO;
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.dto.TokenDTO;
 import com.highgeupsik.backend.dto.UserCardReqDTO;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.resolver.LoginUser;
-import com.highgeupsik.backend.service.*;
+import com.highgeupsik.backend.service.S3Service;
+import com.highgeupsik.backend.service.SubjectScheduleQueryService;
+import com.highgeupsik.backend.service.SubjectScheduleService;
+import com.highgeupsik.backend.service.UserCardQueryService;
+import com.highgeupsik.backend.service.UserCardService;
+import com.highgeupsik.backend.service.UserQueryService;
+import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.util.List;
-
-import static com.highgeupsik.backend.utils.ApiUtils.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,7 +89,7 @@ public class UserApiController {
 
     @PostMapping("/users/schedule")
     public ApiResult makeSchedule(@LoginUser Long userId,
-                                  @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
+        @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
         return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
     }
 

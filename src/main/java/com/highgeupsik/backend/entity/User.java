@@ -1,23 +1,34 @@
 package com.highgeupsik.backend.entity;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Table(
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = {"email", "provider"}
-                )
-        }
+    uniqueConstraints = {
+        @UniqueConstraint(
+            columnNames = {"email", "provider"}
+        )
+    }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -57,7 +68,7 @@ public class User {
 
     @Builder
     public User(String email, String username, AuthProvider provider,
-                Role role, SchoolInfo schoolInfo) {
+        Role role, SchoolInfo schoolInfo) {
         this.email = email;
         this.username = username;
         this.provider = provider;

@@ -1,10 +1,15 @@
 package com.highgeupsik.backend.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 
 @Entity
@@ -33,7 +38,7 @@ public class Subject {
         this.weekDay = weekDay;
     }
 
-    public void setSubjectSchedule(SubjectSchedule subjectSchedule){
+    public void setSubjectSchedule(SubjectSchedule subjectSchedule) {
         this.subjectSchedule = subjectSchedule;
     }
 
