@@ -30,8 +30,4 @@ public class UserCardQueryService {
                 () -> new NotFoundException(CARD_NOT_FOUND)).getUser().getId();
     }
 
-    public boolean findByUserId(Long userId){
-        return userCardRepository.findById(userId).isPresent();
-    }
-
 }

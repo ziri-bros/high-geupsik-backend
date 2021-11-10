@@ -3,9 +3,8 @@ spring:
     include:
       - aws
       - oauth
-      - file
       - mail
       - test-db
-
 jwt:
   secret: ${JWT_SECRET}
+

@@ -80,31 +80,6 @@ public class BoardDetailService {
         }
     }
 
-    public void updatePostLike(Boolean flag, Long postId) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        boardDetail.updateBoardLikeCount(flag);
-    }
-
-    public void updatePostUserCount(Long postId) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        boardDetail.updateBoardUserCount();
-    }
-
-    public void updatePostCommentCount(Long postId, Boolean flag) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-    }
-
-    public void addFilesInPost(Long postId, List<UploadFile> uploadFileList) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
-                () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        for (UploadFile file : uploadFileList) {
-            boardDetail.setFile(file);
-        }
-    }
-
     public void deleteFilesInPost(Long userId, Long postId) {
         BoardDetail boardDetail = boardDetailRepository.findById(postId).get();
         Long writerId = boardDetail.getUser().getId();

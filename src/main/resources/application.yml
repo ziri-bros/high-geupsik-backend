@@ -12,7 +12,6 @@ spring:
       - oauth
       - db
       - mail
-      - file
       - aws
 
 jwt:
