@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
-public interface BoardDetailRepositoryCustom {
+public interface BoardRepositoryCustom {
 
     Page<BoardDetailResDTO> findAll(BoardSearchCondition condition, Pageable pageable);
 

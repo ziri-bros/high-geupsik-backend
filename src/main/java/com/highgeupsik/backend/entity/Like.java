@@ -32,8 +32,8 @@ public class Like {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_detail_id")
-    private BoardDetail boardDetail;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
@@ -49,10 +49,10 @@ public class Like {
         return this;
     }
 
-    public void setBoardDetail(BoardDetail boardDetail) {
-        this.boardDetail = boardDetail;
-        if (!boardDetail.getLikeList().contains(this)) {
-            boardDetail.getLikeList().add(this);
+    public void setBoard(Board board) {
+        this.board = board;
+        if (!board.getLikeList().contains(this)) {
+            board.getLikeList().add(this);
         }
     }
 

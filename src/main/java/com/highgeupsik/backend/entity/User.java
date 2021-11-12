@@ -60,7 +60,7 @@ public class User {
     private AuthProvider provider;
 
     @OneToMany(mappedBy = "user")
-    private List<BoardDetail> boardDetailList = new ArrayList<>();
+    private List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList = new ArrayList<>();

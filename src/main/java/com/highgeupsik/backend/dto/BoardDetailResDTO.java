@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.dto;
 
-import com.highgeupsik.backend.entity.BoardDetail;
+import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
@@ -38,13 +38,13 @@ public class BoardDetailResDTO {
         }
     }
 
-    public BoardDetailResDTO(BoardDetail boardDetail) {
-        id = boardDetail.getId();
-        title = boardDetail.getTitle();
-        content = boardDetail.getContent();
-        likeCount = boardDetail.getLikeCount();
-        commentCount = boardDetail.getCommentCount();
-        uploadFileDTOList = boardDetail.getUploadFileList().stream().map((uploadFile -> new UploadFileDTO(uploadFile)))
+    public BoardDetailResDTO(Board board) {
+        id = board.getId();
+        title = board.getTitle();
+        content = board.getContent();
+        likeCount = board.getLikeCount();
+        commentCount = board.getCommentCount();
+        uploadFileDTOList = board.getUploadFileList().stream().map((uploadFile -> new UploadFileDTO(uploadFile)))
             .collect(Collectors.toList());
     }
 }

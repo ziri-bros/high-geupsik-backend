@@ -24,7 +24,7 @@ public class CommentQueryService {
     private static final int COMMENT_COUNT = 20;
 
     public List<CommentResDTO> findByBoardId(Long postId, Integer pageNum) { //게시글에 있는 댓글
-        return commentRepository.findByBoardDetailIdAndParent(postId, null,
+        return commentRepository.findByBoardIdAndParent(postId, null,
                 orderByCreatedDateASC(pageNum, COMMENT_COUNT)).getContent()
             .stream().map((comment) -> new CommentResDTO(comment)).collect(Collectors.toList());
     }
@@ -35,7 +35,7 @@ public class CommentQueryService {
     }
 
     public int findUserCountByUserIdAndBoardId(Long userId, Long postId) { //익명번호 조회
-        List<Comment> comments = commentRepository.findByUserIdAndBoardDetailId(userId, postId);
+        List<Comment> comments = commentRepository.findByUserIdAndBoardId(userId, postId);
         return comments.isEmpty() ? 0 : comments.get(0).getUserCount();
     }
 
