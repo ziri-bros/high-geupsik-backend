@@ -15,16 +15,17 @@ import lombok.NoArgsConstructor;
 public class School {
 
     @Id
-    @Column(name = "SCHOOL_ID", updatable = false)
+    @Column(name = "school_id", updatable = false)
     private Long id;
 
-    @Column(name = "NAME", nullable = false, updatable = false)
+    @Column(name = "name", nullable = false, updatable = false)
     private String name;
 
-    @Column(name = "CODE", nullable = false, updatable = false)
+    @Column(name = "code", nullable = false, updatable = false)
     private String code;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "region", nullable = false, updatable = false)
     private Region region;
 
     public School(String name, String code, Region region) {
