@@ -1,13 +1,13 @@
 package com.highgeupsik.backend.service;
 
 
-import com.highgeupsik.backend.entity.BoardDetail;
+import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.exception.NotMatchException;
-import com.highgeupsik.backend.repository.BoardDetailRepository;
+import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.UploadFileRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import com.highgeupsik.backend.utils.ErrorMessage;
@@ -21,13 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BoardDetailService {
 
-    private final BoardDetailRepository boardDetailRepository;
+    private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final UploadFileRepository uploadFileRepository;
 
     public Long savePost(Long userId, String title, String content, Category category) {
         User user = userRepository.findById(userId).get();
-        return boardDetailRepository.save(BoardDetail.builder()
+        return boardRepository.save(Board.builder()
             .user(user)
             .content(content)
             .title(title)
@@ -39,7 +39,7 @@ public class BoardDetailService {
     public Long savePost(Long userId, String title, String content, Category category,
         List<UploadFile> uploadFileList) {
         User user = userRepository.findById(userId).get();
-        BoardDetail boardDetail = boardDetailRepository.save(BoardDetail.builder()
+        Board board = boardRepository.save(Board.builder()
             .user(user)
             .content(content)
             .title(title)
@@ -48,17 +48,17 @@ public class BoardDetailService {
             .thumbnail(uploadFileList.get(0))
             .build());
         for (UploadFile file : uploadFileList) {
-            boardDetail.setFile(file);
+            board.setFile(file);
         }
-        return boardDetail.getId();
+        return board.getId();
     }
 
     public Long updatePost(Long userId, Long postId, String title, String content) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
+        Board board = boardRepository.findById(postId).orElseThrow(
             () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        Long writerId = boardDetail.getUser().getId();
+        Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
-            return boardDetail.getId();
+            return board.getId();
         } else {
             throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
         }
@@ -66,36 +66,36 @@ public class BoardDetailService {
 
     public Long updatePost(Long userId, Long postId, String title, String content,
         List<UploadFile> uploadFileList) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
+        Board board = boardRepository.findById(postId).orElseThrow(
             () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        Long writerId = boardDetail.getUser().getId();
+        Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
             for (UploadFile uploadFile : uploadFileList) {
-                uploadFile.setBoardDetail(boardDetail);
+                uploadFile.setBoard(board);
             }
-            return boardDetail.getId();
+            return board.getId();
         } else {
             throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
         }
     }
 
     public void deleteFilesInPost(Long userId, Long postId) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).get();
-        Long writerId = boardDetail.getUser().getId();
+        Board board = boardRepository.findById(postId).get();
+        Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
-            boardDetail.deleteFiles();
-            uploadFileRepository.deleteByBoardDetailId(postId);
+            board.deleteFiles();
+            uploadFileRepository.deleteByBoardId(postId);
         } else {
             throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
         }
     }
 
     public void deletePost(Long userId, Long postId) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(
+        Board board = boardRepository.findById(postId).orElseThrow(
             () -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        Long writerId = boardDetail.getUser().getId();
+        Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
-            boardDetailRepository.delete(boardDetail);
+            boardRepository.delete(board);
         } else {
             throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
         }

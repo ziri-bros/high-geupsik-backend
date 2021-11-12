@@ -1,12 +1,12 @@
 package com.highgeupsik.backend.service;
 
 import com.highgeupsik.backend.dto.CommentReqDTO;
-import com.highgeupsik.backend.entity.BoardDetail;
+import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.exception.NotMatchException;
-import com.highgeupsik.backend.repository.BoardDetailRepository;
+import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.CommentRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import com.highgeupsik.backend.utils.ErrorMessage;
@@ -20,55 +20,55 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final BoardDetailRepository boardDetailRepository;
+    private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
 
     public Long saveComment(Long userId, String content, Long postId) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId)
+        Board board = boardRepository.findById(postId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.USER_NOT_FOUND));
-        boardDetail.updateBoardCommentCount(true);
-        boardDetail.updateBoardUserCount();
+        board.updateBoardCommentCount(true);
+        board.updateBoardUserCount();
         Comment comment = commentRepository.save(Comment.builder()
             .user(user)
-            .userCount(boardDetail.getUserCount())
+            .userCount(board.getUserCount())
             .content(content)
             .build());
-        comment.setBoardDetail(boardDetail);
+        comment.setBoard(board);
         return comment.getId();
     }
 
     public Long saveComment(Long userId, String content, Long postId, int userCount) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId)
+        Board board = boardRepository.findById(postId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.USER_NOT_FOUND));
-        boardDetail.updateBoardCommentCount(true);
+        board.updateBoardCommentCount(true);
         Comment comment = commentRepository.save(Comment.builder()
             .user(user)
             .userCount(userCount)
             .content(content)
             .build());
-        comment.setBoardDetail(boardDetail);
+        comment.setBoard(board);
         return comment.getId();
     }
 
     public Long saveReplyComment(Long userId, String content, Long boardId, Long postId) {
-        BoardDetail boardDetail = boardDetailRepository.findById(postId)
+        Board board = boardRepository.findById(postId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         Comment parent = commentRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-        boardDetail.updateBoardCommentCount(true);
-        boardDetail.updateBoardUserCount();
+        board.updateBoardCommentCount(true);
+        board.updateBoardUserCount();
         if (parent.getParent() != null) {
             parent = parent.getParent();
         }
         Comment now = commentRepository.save(Comment.builder()
             .user(userRepository.findById(userId).get())
-            .userCount(boardDetail.getUserCount())
-            .boardDetail(boardDetail)
+            .userCount(board.getUserCount())
+            .board(board)
             .content(content)
             .build());
         now.setParent(parent);
@@ -76,18 +76,18 @@ public class CommentService {
     }
 
     public Long saveReplyComment(Long userId, String content, Long parentId, Long boardId, int userCount) {
-        BoardDetail boardDetail = boardDetailRepository.findById(boardId)
+        Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
         Comment parent = commentRepository.findById(parentId)
             .orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-        boardDetail.updateBoardCommentCount(true);
+        board.updateBoardCommentCount(true);
         if (parent.getParent() != null) {
             parent = parent.getParent();
         }
         Comment now = commentRepository.save(Comment.builder()
             .user(userRepository.findById(userId).get())
             .userCount(userCount)
-            .boardDetail(boardDetail)
+            .board(board)
             .content(content)
             .build());
         now.setParent(parent);
@@ -111,7 +111,7 @@ public class CommentService {
         Long writerId = comment.getUser().getId();
         if (userId.equals(writerId)) {
             comment.delete();
-            boardDetailRepository.findById(boardId)
+            boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND))
                 .updateBoardCommentCount(false);
         } else {

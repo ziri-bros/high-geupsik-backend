@@ -15,19 +15,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardDetail extends TimeEntity {
+@Getter
+@Table(name = "BOARD")
+@Entity
+public class Board extends TimeEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "board_detail_id")
+    @Column(name = "board_id")
     private Long id;
 
     private String title;
@@ -54,18 +56,17 @@ public class BoardDetail extends TimeEntity {
     @JoinColumn(name = "upload_file_id")
     private UploadFile thumbnail;
 
-    @OneToMany(mappedBy = "boardDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<UploadFile> uploadFileList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "boardDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "boardDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Like> likeList = new ArrayList<>();
 
     @Builder
-    public BoardDetail(String title, String content, Category category,
-        Region region, User user, UploadFile thumbnail) {
+    public Board(String title, String content, Category category, Region region, User user, UploadFile thumbnail) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -101,8 +102,8 @@ public class BoardDetail extends TimeEntity {
 
     public void setFile(UploadFile file) {
         this.uploadFileList.add(file);
-        if (file.getBoardDetail() != this) {
-            file.setBoardDetail(this);
+        if (file.getBoard() != this) {
+            file.setBoard(this);
         }
     }
 

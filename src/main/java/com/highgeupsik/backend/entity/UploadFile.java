@@ -26,9 +26,9 @@ public class UploadFile {
 
     private String fileDownloadUri;
 
-    @JoinColumn(name = "board_detail_id")
+    @JoinColumn(name = "board_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private BoardDetail boardDetail;
+    private Board board;
 
     @Builder
     public UploadFile(String fileName, String fileDownloadUri) {
@@ -36,10 +36,10 @@ public class UploadFile {
         this.fileDownloadUri = fileDownloadUri;
     }
 
-    public void setBoardDetail(BoardDetail boardDetail) {
-        this.boardDetail = boardDetail;
-        if (!boardDetail.getUploadFileList().contains(this)) {
-            boardDetail.getUploadFileList().add(this);
+    public void setBoard(Board board) {
+        this.board = board;
+        if (!board.getUploadFileList().contains(this)) {
+            board.getUploadFileList().add(this);
         }
     }
 

@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.repository;
 
-import static com.highgeupsik.backend.entity.QBoardDetail.boardDetail;
+import static com.highgeupsik.backend.entity.QBoard.board;
 import static com.highgeupsik.backend.entity.QUploadFile.uploadFile;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -20,24 +20,24 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 
-public class BoardDetailRepositoryImpl implements BoardDetailRepositoryCustom {
+public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public BoardDetailRepositoryImpl(EntityManager em) {
+    public BoardRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
     public Page<BoardDetailResDTO> findAll(BoardSearchCondition condition, Pageable pageable) {
 
-        OrderSpecifier<LocalDateTime> desc = boardDetail.createdDate.desc();
+        OrderSpecifier<LocalDateTime> desc = board.createdDate.desc();
         List<BoardDetailResDTO> content = queryFactory
             .select(new QBoardDetailResDTO(
-                boardDetail.id, boardDetail.title, boardDetail.content, boardDetail.likeCount,
-                boardDetail.commentCount, boardDetail.createdDate, boardDetail.thumbnail))
-            .from(boardDetail)
-            .leftJoin(boardDetail.thumbnail, uploadFile)
+                board.id, board.title, board.content, board.likeCount,
+                board.commentCount, board.createdDate, board.thumbnail))
+            .from(board)
+            .leftJoin(board.thumbnail, uploadFile)
             .where(
                 regionEq(condition.getRegion()),
                 categoryEq(condition.getCategory()),
@@ -45,13 +45,13 @@ public class BoardDetailRepositoryImpl implements BoardDetailRepositoryCustom {
                 contentLike(condition.getKeyword()),
                 likeCountGoe(condition.getLikeCount())
             )
-            .orderBy(boardDetail.createdDate.desc())
+            .orderBy(board.createdDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
 
         long total = queryFactory
-            .selectFrom(boardDetail)
+            .selectFrom(board)
             .where(
                 regionEq(condition.getRegion()),
                 categoryEq(condition.getCategory()),
@@ -64,24 +64,23 @@ public class BoardDetailRepositoryImpl implements BoardDetailRepositoryCustom {
     }
 
     private BooleanExpression regionEq(Region region) {
-        return isEmpty(region) ? null : boardDetail.region.eq(region);
-
+        return isEmpty(region) ? null : board.region.eq(region);
     }
 
     private BooleanExpression likeCountGoe(Integer likeCount) {
-        return likeCount == null ? null : boardDetail.likeCount.goe(likeCount);
+        return likeCount == null ? null : board.likeCount.goe(likeCount);
     }
 
     private BooleanExpression categoryEq(Category category) {
-        return isEmpty(category) ? null : boardDetail.category.eq(category);
+        return isEmpty(category) ? null : board.category.eq(category);
     }
 
     private BooleanExpression titleLike(String keyword) {
-        return isEmpty(keyword) ? null : boardDetail.title.like(keyword);
+        return isEmpty(keyword) ? null : board.title.like(keyword);
     }
 
     private BooleanExpression contentLike(String keyword) {
-        return isEmpty(keyword) ? null : boardDetail.content.like(keyword);
+        return isEmpty(keyword) ? null : board.content.like(keyword);
     }
 
 }

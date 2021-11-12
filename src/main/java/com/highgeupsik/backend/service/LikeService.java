@@ -5,12 +5,12 @@ import static com.highgeupsik.backend.utils.ErrorMessage.COMMENT_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.POST_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 
-import com.highgeupsik.backend.entity.BoardDetail;
+import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.Like;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.repository.BoardDetailRepository;
+import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.CommentRepository;
 import com.highgeupsik.backend.repository.LikeRepository;
 import com.highgeupsik.backend.repository.UserRepository;
@@ -26,13 +26,13 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    private final BoardDetailRepository boardDetailRepository;
+    private final BoardRepository boardRepository;
 
-    public Like saveBoardDetailLike(User user, BoardDetail boardDetail) {
+    public Like saveBoardDetailLike(User user, Board board) {
         Like like = likeRepository.save(Like.builder()
             .user(user)
             .build());
-        like.setBoardDetail(boardDetail);
+        like.setBoard(board);
         return like;
     }
 
@@ -46,11 +46,11 @@ public class LikeService {
 
     public boolean saveOrUpdateBoardDetailLike(Long userId, Long boardId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        BoardDetail boardDetail = boardDetailRepository.findById(boardId).orElseThrow(
+        Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(POST_NOT_FOUND));
-        Like like = likeRepository.findByUserIdAndBoardDetailId(userId, boardId).map((entity) -> entity.update())
-            .orElse(saveBoardDetailLike(user, boardDetail));
-        boardDetail.updateBoardLikeCount(like.getFlag());
+        Like like = likeRepository.findByUserIdAndBoardId(userId, boardId).map((entity) -> entity.update())
+            .orElse(saveBoardDetailLike(user, board));
+        board.updateBoardLikeCount(like.getFlag());
         return like.getFlag();
     }
 
