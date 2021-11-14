@@ -46,7 +46,7 @@ public class BoardDetailService {
             .title(boardDetailReqDTO.getTitle())
             .category(boardDetailReqDTO.getCategory())
             .region(user.getSchoolInfo().getRegion())
-            .thumbnailUrl(boardDetailReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri())
+            .thumbnail(boardDetailReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri())
             .build());
         for (UploadFileDTO uploadFileDTO : boardDetailReqDTO.getUploadFileDTOList()) {
             board.setFile(new UploadFile(uploadFileDTO.getFileName(),
