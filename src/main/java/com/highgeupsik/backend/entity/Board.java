@@ -52,9 +52,7 @@ public class Board extends TimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "upload_file_id")
-    private UploadFile thumbnail;
+    private String thumbnailUrl;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<UploadFile> uploadFileList = new ArrayList<>();
@@ -66,18 +64,23 @@ public class Board extends TimeEntity {
     private List<Like> likeList = new ArrayList<>();
 
     @Builder
-    public Board(String title, String content, Category category, Region region, User user, UploadFile thumbnail) {
+    public Board(String title, String content, Category category, Region region, User user, String thumbnailUrl) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.user = user;
         this.region = region;
-        this.thumbnail = thumbnail;
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public void updateBoard(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+    public void updateBoard(String title, String content, String thumbnailUrl) {
+        this.title = title;
+        this.content = content;
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public void updateBoardLikeCount(Boolean flag) {
