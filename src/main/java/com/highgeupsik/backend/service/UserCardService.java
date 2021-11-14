@@ -3,6 +3,8 @@ package com.highgeupsik.backend.service;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 
+import com.highgeupsik.backend.dto.UploadFileDTO;
+import com.highgeupsik.backend.dto.UserCardReqDTO;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.entity.UserCard;
 import com.highgeupsik.backend.exception.NotFoundException;
@@ -21,11 +23,11 @@ public class UserCardService {
     private final UserCardRepository userCardRepository;
     private final UserRepository userRepository;
 
-    public Long saveUserCard(Long userId, List<UploadFile> uploadFileList) {
+    public Long saveUserCard(Long userId, UploadFileDTO uploadFileDTO) {
         return userCardRepository.save(UserCard.builder()
             .user(userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(USER_NOT_FOUND)))
-            .uploadFile(uploadFileList.get(0))
+            .uploadFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()))
             .build()).getId();
     }
 

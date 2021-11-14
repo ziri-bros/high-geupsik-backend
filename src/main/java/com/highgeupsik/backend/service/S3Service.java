@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.highgeupsik.backend.entity.UploadFile;
+import com.highgeupsik.backend.dto.UploadFileDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,17 +45,15 @@ public class S3Service {
             .build();
     }
 
-    public List<UploadFile> uploadFiles(List<MultipartFile> files) throws IOException {
-        List<UploadFile> uploadFileList = new ArrayList<>();
-        for (MultipartFile file : files) {
+    public List<UploadFileDTO> uploadFiles(List<MultipartFile> imageList) throws IOException {
+        List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
+        for (MultipartFile file : imageList) {
             String fileName = file.getOriginalFilename();
             String url = s3Client.getUrl(bucket, fileName).toString();
             s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-            UploadFile uploadFile = new UploadFile(fileName, url);
-            uploadFileList.add(uploadFile);
+            uploadFileDTOList.add(new UploadFileDTO(fileName, url));
         }
-
-        return uploadFileList;
+        return uploadFileDTOList;
     }
 }

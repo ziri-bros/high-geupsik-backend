@@ -18,24 +18,23 @@ public class BoardDetailResDTO {
     private Long writerId;
     private String title;
     private String content;
+    private String thumbnail;
     private int likeCount;
     private int commentCount;
     private LocalDateTime createdDate;
-    private UploadFileDTO thumbnail;
     private List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
 
     @QueryProjection
-    public BoardDetailResDTO(Long id, String title, String content, int likeCount, int commentCount,
-        LocalDateTime createdDate, UploadFile thumbnail) {
+    public BoardDetailResDTO(Long id, String title, String content, String thumbnail,
+        int likeCount, int commentCount, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.thumbnail = thumbnail;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.createdDate = createdDate;
-        if (thumbnail != null) {
-            this.thumbnail = new UploadFileDTO(thumbnail);
-        }
+
     }
 
     public BoardDetailResDTO(Board board) {

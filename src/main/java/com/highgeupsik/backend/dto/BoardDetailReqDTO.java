@@ -16,6 +16,6 @@ public class BoardDetailReqDTO {
     private String title;
     private String content;
     private Category category;
-    private List<MultipartFile> boardImageList = new ArrayList<>();
+    private List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
 
 }

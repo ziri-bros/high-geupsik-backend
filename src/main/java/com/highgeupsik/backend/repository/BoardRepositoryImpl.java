@@ -34,10 +34,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         OrderSpecifier<LocalDateTime> desc = board.createdDate.desc();
         List<BoardDetailResDTO> content = queryFactory
             .select(new QBoardDetailResDTO(
-                board.id, board.title, board.content, board.likeCount,
-                board.commentCount, board.createdDate, board.thumbnail))
+                board.id, board.title, board.content, board.thumbnail, board.likeCount,
+                board.commentCount, board.createdDate))
             .from(board)
-            .leftJoin(board.thumbnail, uploadFile)
+            .leftJoin(uploadFile)
             .where(
                 regionEq(condition.getRegion()),
                 categoryEq(condition.getCategory()),
