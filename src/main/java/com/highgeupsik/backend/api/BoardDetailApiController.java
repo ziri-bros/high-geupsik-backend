@@ -46,9 +46,9 @@ public class BoardDetailApiController {
     public ApiResult writeBoard(@LoginUser Long userId,
         @RequestBody BoardDetailReqDTO boardDetailReqDTO) {
         if (!boardDetailReqDTO.getUploadFileDTOList().isEmpty()) {
-            return ApiUtils.success(boardDetailService.savePost(userId, boardDetailReqDTO));
+            return ApiUtils.success(boardDetailService.saveBoard(userId, boardDetailReqDTO));
         }
-        return ApiUtils.success(boardDetailService.savePost(userId, boardDetailReqDTO.getTitle(),
+        return ApiUtils.success(boardDetailService.saveBoard(userId, boardDetailReqDTO.getTitle(),
             boardDetailReqDTO.getContent(), boardDetailReqDTO.getCategory()));
     }
 
@@ -68,14 +68,14 @@ public class BoardDetailApiController {
         @LoginUser Long userId, @RequestBody BoardDetailReqDTO boardDetailReqDTO) {
         Long writerId = boardDetailQueryService.findWriterIdByBoardId(boardId);
         if (writerId.equals(userId)) {
-            return ApiUtils.success(boardDetailService.updatePost(boardId, boardDetailReqDTO));
+            return ApiUtils.success(boardDetailService.updateBoard(boardId, boardDetailReqDTO));
         }
         throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
     }
 
     @DeleteMapping("/boards/{boardId}") //게시글 삭제
     public ApiResult deleteBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
-        boardDetailService.deletePost(userId, boardId);
+        boardDetailService.deleteBoard(userId, boardId);
         return ApiUtils.success(null);
     }
 
