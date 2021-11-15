@@ -27,7 +27,7 @@ public class BoardDetailService {
     private final UserRepository userRepository;
     private final UploadFileRepository uploadFileRepository;
 
-    public Long savePost(Long userId, String title, String content, Category category) {
+    public Long saveBoard(Long userId, String title, String content, Category category) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         return boardRepository.save(Board.builder()
             .user(user)
@@ -38,7 +38,7 @@ public class BoardDetailService {
             .build()).getId();
     }
 
-    public Long savePost(Long userId, BoardDetailReqDTO boardDetailReqDTO) {
+    public Long saveBoard(Long userId, BoardDetailReqDTO boardDetailReqDTO) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.save(Board.builder()
             .user(user)
@@ -55,7 +55,7 @@ public class BoardDetailService {
         return board.getId();
     }
 
-    public Long updatePost(Long boardId, BoardDetailReqDTO boardDetailReqDTO) {
+    public Long updateBoard(Long boardId, BoardDetailReqDTO boardDetailReqDTO) {
         Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(POST_NOT_FOUND));
         if(!boardDetailReqDTO.getUploadFileDTOList().isEmpty()) {
@@ -71,19 +71,19 @@ public class BoardDetailService {
         return board.getId();
     }
 
-    public void deleteFilesInPost(Long userId, Long postId) {
-        Board board = boardRepository.findById(postId).get();
+    public void deleteFilesInBoard(Long userId, Long boardId) {
+        Board board = boardRepository.findById(boardId).get();
         Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
             board.deleteFiles();
-            uploadFileRepository.deleteByBoardId(postId);
+            uploadFileRepository.deleteByBoardId(boardId);
         } else {
             throw new NotMatchException(WRITER_NOT_MATCH);
         }
     }
 
-    public void deletePost(Long userId, Long postId) {
-        Board board = boardRepository.findById(postId).orElseThrow(
+    public void deleteBoard(Long userId, Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(POST_NOT_FOUND));
         Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
