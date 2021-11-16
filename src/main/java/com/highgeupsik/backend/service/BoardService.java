@@ -3,7 +3,7 @@ package com.highgeupsik.backend.service;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
-import com.highgeupsik.backend.dto.BoardDetailReqDTO;
+import com.highgeupsik.backend.dto.BoardReqDTO;
 import com.highgeupsik.backend.dto.UploadFileDTO;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Category;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BoardDetailService {
+public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
@@ -38,35 +38,35 @@ public class BoardDetailService {
             .build()).getId();
     }
 
-    public Long saveBoard(Long userId, BoardDetailReqDTO boardDetailReqDTO) {
+    public Long saveBoard(Long userId, BoardReqDTO boardReqDTO) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.save(Board.builder()
             .user(user)
-            .content(boardDetailReqDTO.getContent())
-            .title(boardDetailReqDTO.getTitle())
-            .category(boardDetailReqDTO.getCategory())
+            .content(boardReqDTO.getContent())
+            .title(boardReqDTO.getTitle())
+            .category(boardReqDTO.getCategory())
             .region(user.getSchoolInfo().getRegion())
-            .thumbnail(boardDetailReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri())
+            .thumbnail(boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri())
             .build());
-        for (UploadFileDTO uploadFileDTO : boardDetailReqDTO.getUploadFileDTOList()) {
+        for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
             board.setFile(new UploadFile(uploadFileDTO.getFileName(),
                 uploadFileDTO.getFileDownloadUri()));
         }
         return board.getId();
     }
 
-    public Long updateBoard(Long boardId, BoardDetailReqDTO boardDetailReqDTO) {
+    public Long updateBoard(Long boardId, BoardReqDTO boardReqDTO) {
         Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(POST_NOT_FOUND));
-        if(!boardDetailReqDTO.getUploadFileDTOList().isEmpty()) {
+        if(!boardReqDTO.getUploadFileDTOList().isEmpty()) {
             board.deleteFiles();
-            board.updateBoard(boardDetailReqDTO.getTitle(), boardDetailReqDTO.getContent(),
-                boardDetailReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri());
-            for (UploadFileDTO uploadFileDTO : boardDetailReqDTO.getUploadFileDTOList()) {
+            board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(),
+                boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri());
+            for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
                 board.setFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()));
             }
         }else{
-            board.updateBoard(boardDetailReqDTO.getTitle(), boardDetailReqDTO.getContent());
+            board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent());
         }
         return board.getId();
     }

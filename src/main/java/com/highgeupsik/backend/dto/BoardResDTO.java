@@ -1,7 +1,6 @@
 package com.highgeupsik.backend.dto;
 
 import com.highgeupsik.backend.entity.Board;
-import com.highgeupsik.backend.entity.UploadFile;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class BoardDetailResDTO {
+public class BoardResDTO {
 
     private Long id;
     private Long writerId;
@@ -25,7 +24,7 @@ public class BoardDetailResDTO {
     private List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
 
     @QueryProjection
-    public BoardDetailResDTO(Long id, String title, String content, String thumbnail,
+    public BoardResDTO(Long id, String title, String content, String thumbnail,
         int likeCount, int commentCount, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
@@ -37,7 +36,7 @@ public class BoardDetailResDTO {
 
     }
 
-    public BoardDetailResDTO(Board board) {
+    public BoardResDTO(Board board) {
         id = board.getId();
         title = board.getTitle();
         content = board.getContent();

@@ -5,7 +5,8 @@ import static com.highgeupsik.backend.utils.ErrorMessage.POST_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateDESC;
 
-import com.highgeupsik.backend.dto.BoardDetailResDTO;
+
+import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.dto.BoardSearchCondition;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Region;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BoardDetailQueryService {
+public class BoardQueryService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
@@ -34,22 +35,23 @@ public class BoardDetailQueryService {
             new NotFoundException(POST_NOT_FOUND)).getUser().getId();
     }
 
-    public BoardDetailResDTO findOneById(Long postId) {
-        return new BoardDetailResDTO(boardRepository.findById(postId).orElseThrow(() ->
+    public BoardResDTO findOneById(Long postId) {
+        return new BoardResDTO(boardRepository.findById(postId).orElseThrow(() ->
             new NotFoundException(POST_NOT_FOUND)));
     }
 
-    public List<BoardDetailResDTO> findByMyId(Long userId, Integer pageNum) {
+    public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
         List<Board> boards = boardRepository.findByUserId(userId, orderByCreatedDateDESC(
             pageNum, POST_COUNT)).getContent();
-        return boards.stream().map((post) -> new BoardDetailResDTO(post)).collect(Collectors.toList());
+        return boards.stream().map((post) -> new BoardResDTO(post)).collect(Collectors.toList());
     }
 
-    public Page<BoardDetailResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
+    public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
         Region region = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND))
             .getSchoolInfo().getRegion();
         condition.setRegion(region);
         return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
     }
+
 
 }
