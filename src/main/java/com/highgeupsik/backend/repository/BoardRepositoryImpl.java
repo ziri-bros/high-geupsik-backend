@@ -4,9 +4,10 @@ import static com.highgeupsik.backend.entity.QBoard.board;
 import static com.highgeupsik.backend.entity.QUploadFile.uploadFile;
 import static org.springframework.util.StringUtils.isEmpty;
 
-import com.highgeupsik.backend.dto.BoardDetailResDTO;
+
+import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.dto.BoardSearchCondition;
-import com.highgeupsik.backend.dto.QBoardDetailResDTO;
+import com.highgeupsik.backend.dto.QBoardResDTO;
 import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.Region;
 import com.querydsl.core.types.OrderSpecifier;
@@ -29,11 +30,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public Page<BoardDetailResDTO> findAll(BoardSearchCondition condition, Pageable pageable) {
+    public Page<BoardResDTO> findAll(BoardSearchCondition condition, Pageable pageable) {
 
         OrderSpecifier<LocalDateTime> desc = board.createdDate.desc();
-        List<BoardDetailResDTO> content = queryFactory
-            .select(new QBoardDetailResDTO(
+        List<BoardResDTO> content = queryFactory
+            .select(new QBoardResDTO(
                 board.id, board.title, board.content, board.thumbnail, board.likeCount,
                 board.commentCount, board.createdDate))
             .from(board)
