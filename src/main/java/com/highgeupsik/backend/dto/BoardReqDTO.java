@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BoardDetailReqDTO {
+public class BoardReqDTO {
 
     private String title;
     private String content;

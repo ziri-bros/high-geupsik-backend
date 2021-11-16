@@ -6,7 +6,7 @@ import static com.highgeupsik.backend.utils.ApiUtils.success;
 import com.highgeupsik.backend.dto.CommentReqDTO;
 import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
-import com.highgeupsik.backend.service.BoardDetailQueryService;
+import com.highgeupsik.backend.service.BoardQueryService;
 import com.highgeupsik.backend.service.CommentQueryService;
 import com.highgeupsik.backend.service.CommentService;
 import com.highgeupsik.backend.service.LikeService;
@@ -29,12 +29,12 @@ public class CommentApiController {
     private final LikeService likeService;
     private final CommentService commentService;
     private final CommentQueryService commentQueryService;
-    private final BoardDetailQueryService boardDetailQueryService;
+    private final BoardQueryService boardQueryService;
 
     @PostMapping("/boards/{boardId}/comments") //댓글 달기
     public ApiResult writeComment(@PathVariable("boardId") Long boardId, @RequestBody CommentReqDTO commentReqDTO,
         @LoginUser Long userId) {
-        Long postWriterId = boardDetailQueryService.findWriterIdByBoardId(boardId);
+        Long postWriterId = boardQueryService.findWriterIdByBoardId(boardId);
         if (postWriterId.equals(userId)) { //작성자가 댓글쓸때
             return success(commentService.saveComment(userId, commentReqDTO.getContent(), boardId, -1));
         }
@@ -49,7 +49,7 @@ public class CommentApiController {
     @PostMapping("/boards/{boardId}/comments/{parentId}") //대댓글 달기
     public ApiResult writeReplyComment(@PathVariable("boardId") Long boardId, @PathVariable("parentId") Long parentId,
         @RequestBody CommentReqDTO commentReqDTO, @LoginUser Long userId) {
-        Long postWriterId = boardDetailQueryService.findWriterIdByBoardId(boardId);
+        Long postWriterId = boardQueryService.findWriterIdByBoardId(boardId);
         if (postWriterId.equals(userId)) { //작성자가 댓글쓸때
             return success(commentService.saveReplyComment(userId, commentReqDTO.getContent(),
                 parentId, boardId, -1));
