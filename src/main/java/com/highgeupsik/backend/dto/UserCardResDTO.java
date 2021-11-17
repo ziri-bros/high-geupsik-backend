@@ -10,12 +10,12 @@ public class UserCardResDTO {
     private Long id;
     private String username;
     private String email;
-    private UploadFileDTO cardImage;
+    private UploadFileDTO uploadFileDTO;
 
     public UserCardResDTO(UserCard userCard) {
         id = userCard.getId();
         username = userCard.getUser().getUsername();
         email = userCard.getUser().getEmail();
-        cardImage = new UploadFileDTO(userCard.getUploadFile());
+        uploadFileDTO = new UploadFileDTO(userCard.getUploadFile());
     }
 }
