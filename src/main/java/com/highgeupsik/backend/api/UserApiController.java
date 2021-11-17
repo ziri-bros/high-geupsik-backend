@@ -45,11 +45,10 @@ public class UserApiController {
         return success(userCardQueryService.findUserIdByCardId(userId));
     }
 
-//    @PostMapping("/login/cards") //학생증 제출
-//    public ApiResult sendCard(@LoginUser Long userId, UserCardReqDTO userCardReqDTO) throws IOException {
-//        List<UploadFile> cardList = s3Service.uploadFiles(userCardReqDTO.getCardImages());
-//        return success(userCardService.saveUserCard(userId, cardList));
-//    }
+    @PostMapping("/login/cards") //학생증 제출
+    public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserCardReqDTO userCardReqDTO) {
+        return success(userCardService.saveUserCard(userId, userCardReqDTO.getUploadFileDTO()));
+    }
 
     @DeleteMapping("/login/cards") //학생증 제출 취소
     public ApiResult deleteCard(@LoginUser Long userId) {
