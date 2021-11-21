@@ -11,6 +11,7 @@ import com.highgeupsik.backend.service.CommentQueryService;
 import com.highgeupsik.backend.service.CommentService;
 import com.highgeupsik.backend.service.LikeService;
 import com.highgeupsik.backend.utils.ApiResult;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +32,8 @@ public class CommentApiController {
     private final CommentQueryService commentQueryService;
     private final BoardQueryService boardQueryService;
 
-    @PostMapping("/boards/{boardId}/comments") //댓글 달기
+    @ApiOperation(value = "댓글 작성")
+    @PostMapping("/boards/{boardId}/comments")
     public ApiResult writeComment(@PathVariable("boardId") Long boardId, @RequestBody CommentReqDTO commentReqDTO,
         @LoginUser Long userId) {
         Long postWriterId = boardQueryService.findWriterIdByBoardId(boardId);
@@ -46,7 +48,8 @@ public class CommentApiController {
         return success(commentService.saveComment(userId, commentReqDTO.getContent(), boardId, userCount));
     }
 
-    @PostMapping("/boards/{boardId}/comments/{parentId}") //대댓글 달기
+    @ApiOperation(value = "대댓글 작성")
+    @PostMapping("/boards/{boardId}/comments/{parentId}")
     public ApiResult writeReplyComment(@PathVariable("boardId") Long boardId, @PathVariable("parentId") Long parentId,
         @RequestBody CommentReqDTO commentReqDTO, @LoginUser Long userId) {
         Long postWriterId = boardQueryService.findWriterIdByBoardId(boardId);
@@ -64,26 +67,30 @@ public class CommentApiController {
     }
 
 
-    @GetMapping("/boards/{boardId}/comments") //댓글 리스트 보기
+    @ApiOperation(value = "댓글 목록 조회")
+    @GetMapping("/boards/{boardId}/comments")
     public ApiResult<List<CommentResDTO>> comments(@PathVariable("boardId") Long boardId,
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(commentQueryService.findByBoardId(boardId, pageNum));
     }
 
-    @PutMapping("/comments/{commentId}") //댓글수정
+    @ApiOperation(value = "댓글 편집", notes = "댓글 편집 화면으로 넘어가기 위해 댓글 정보를 리턴")
+    @PutMapping("/comments/{commentId}")
     public ApiResult editComment(@PathVariable("commentId") Long commentId, @RequestBody CommentReqDTO commentReqDTO,
         @LoginUser Long userId) {
         return success(commentService.updateComment(userId, commentId, commentReqDTO));
     }
 
-    @DeleteMapping("/boards/{boardId}/comments/{commentId}") //댓글삭제
+    @ApiOperation(value = "댓글 삭제")
+    @DeleteMapping("/boards/{boardId}/comments/{commentId}")
     public ApiResult deleteComment(@PathVariable("boardId") Long boardId, @PathVariable("commentId") Long commentId,
         @LoginUser Long userId) {
         commentService.deleteComment(userId, commentId, boardId);
         return success(null);
     }
 
-    @PostMapping("/comments/{commentId}/like") //댓글 좋아요
+    @ApiOperation(value = "댓글 좋아요")
+    @PostMapping("/comments/{commentId}/like")
     public ApiResult pressCommentLike(@LoginUser Long userId, @PathVariable Long commentId) {
         return success(likeService.saveOrUpdateCommentLike(userId, commentId));
     }

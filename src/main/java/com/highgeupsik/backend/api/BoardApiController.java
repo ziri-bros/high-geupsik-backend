@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import com.highgeupsik.backend.dto.BoardResDTO;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,18 +32,21 @@ public class BoardApiController {
     private final BoardService boardService;
     private final LikeService likeService;
 
-    @GetMapping("/boards/{boardId}") //게시글 조회
+    @ApiOperation(value = "게시글 단일 조회")
+    @GetMapping("/boards/{boardId}")
     public ApiResult<BoardResDTO> board(@PathVariable("boardId") Long boardId) {
         return ApiUtils.success(boardQueryService.findOneById(boardId));
     }
 
-    @GetMapping("/boards") //게시글목록 조회
+    @ApiOperation(value = "게시글 목록 조회")
+    @GetMapping("/boards")
     public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
         @LoginUser Long userId, BoardSearchCondition condition) {
         return ApiUtils.success(boardQueryService.findAll(userId, pageNum, condition));
     }
 
-    @PostMapping("/boards") //게시글 작성
+    @ApiOperation(value = "게시글 작성")
+    @PostMapping("/boards")
     public ApiResult writeBoard(@LoginUser Long userId,
         @RequestBody BoardReqDTO boardReqDTO) {
         if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
@@ -52,7 +56,8 @@ public class BoardApiController {
             boardReqDTO.getContent(), boardReqDTO.getCategory()));
     }
 
-    @GetMapping("/boards/{boardId}/edit") //게시글 편집창
+    @ApiOperation(value = "게시글 편집", notes = "게시글 편집 화면으로 넘어가기위해 이전 정보를 리턴")
+    @GetMapping("/boards/{boardId}/edit")
     public ApiResult<BoardResDTO> editBoard(@PathVariable("boardId") Long boardId,
         @LoginUser Long userId) {
         BoardResDTO boardResDTO = boardQueryService.findOneById(boardId);
@@ -63,6 +68,7 @@ public class BoardApiController {
         throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
     }
 
+    @ApiOperation(value = "게시글 편집")
     @PutMapping("/boards/{boardId}") //게시글 편집
     public ApiResult editBoard(@PathVariable("boardId") Long boardId,
         @LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
@@ -73,12 +79,14 @@ public class BoardApiController {
         throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
     }
 
+    @ApiOperation(value = "게시글 삭제")
     @DeleteMapping("/boards/{boardId}") //게시글 삭제
     public ApiResult deleteBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
         boardService.deleteBoard(userId, boardId);
         return ApiUtils.success(null);
     }
 
+    @ApiOperation(value = "내가 작성한 게시글 목록 조회")
     @GetMapping("/boards/my") //내가 작성한 게시글
     public ApiResult<List<BoardResDTO>> myBoards(
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
@@ -86,6 +94,7 @@ public class BoardApiController {
         return ApiUtils.success(boardQueryService.findByMyId(userId, pageNum));
     }
 
+    @ApiOperation(value = "게시글 좋아요")
     @PostMapping("/boards/{boardId}/like") //게시글 좋아요
     public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId,
         @LoginUser Long userId) {
