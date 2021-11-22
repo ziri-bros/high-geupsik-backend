@@ -17,6 +17,7 @@ import com.highgeupsik.backend.service.UserCardService;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
+import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,40 +40,46 @@ public class UserApiController {
     private final SubjectScheduleService subjectScheduleService;
     private final SubjectScheduleQueryService subjectScheduleQueryService;
 
-
-    @GetMapping("/login/cards") //학생증 조회
+    @ApiOperation(value = "학생증 조회", notes = "자신이 제출한 학생증을 조회합니다")
+    @GetMapping("/login/cards")
     public ApiResult cards(@LoginUser Long userId) {
         return success(userCardQueryService.findUserIdByCardId(userId));
     }
 
-    @PostMapping("/login/cards") //학생증 제출
+    @ApiOperation(value = "학생증 제출")
+    @PostMapping("/login/cards")
     public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserCardReqDTO userCardReqDTO) {
         return success(userCardService.saveUserCard(userId, userCardReqDTO.getUploadFileDTO()));
     }
 
-    @DeleteMapping("/login/cards") //학생증 제출 취소
+    @ApiOperation(value = "학생증 제출 취소")
+    @DeleteMapping("/login/cards")
     public ApiResult deleteCard(@LoginUser Long userId) {
         userCardService.deleteUserCardByUserId(userId);
         return success(null);
     }
 
-    @PostMapping("/login/schoolInfo") //학교정보 제출
+    @ApiOperation(value = "학교정보 제출")
+    @PostMapping("/login/schoolInfo")
     public ApiResult<TokenDTO> sendSchoolInfo(@LoginUser Long userId, @RequestBody SchoolInfoDTO schoolInfoDTO) {
         userService.updateSchoolInfo(userId, schoolInfoDTO);
         return success(userService.login(userId));
     }
 
-    @PutMapping("/login/schoolInfo") //학교정보 수정
+    @ApiOperation(value = "학교정보 수정")
+    @PutMapping("/login/schoolInfo")
     public ApiResult<TokenDTO> editSchoolInfo(@LoginUser Long userId, @RequestBody SchoolInfoDTO schoolInfoDTO) {
         userService.updateSchoolInfo(userId, schoolInfoDTO);
         return success(null);
     }
 
+    @ApiOperation(value = "로그인", notes = "새로운 토큰을 리턴 받습니다")
     @GetMapping("/login/token") //로그인
     public ApiResult<TokenDTO> login(@RequestBody TokenDTO tokenDTO) {
         return success(userService.updateToken(tokenDTO));
     }
 
+    @ApiOperation(value = "내정보 조회")
     @GetMapping("/users") //내정보 조회
     public ApiResult myInfo(@LoginUser Long userId) {
         return success(userQueryService.findById(userId));
@@ -81,17 +88,20 @@ public class UserApiController {
     /***
      * 시간표 API
      */
+    @ApiOperation(value = "시간표 조회")
     @GetMapping("/users/schedule")
     public ApiResult<SubjectScheduleDTO> schedule(@LoginUser Long userId) {
         return success(subjectScheduleQueryService.findSubjectSchedule(userId));
     }
 
+    @ApiOperation(value = "시간표 제출")
     @PostMapping("/users/schedule")
     public ApiResult makeSchedule(@LoginUser Long userId,
         @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
         return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
     }
 
+    @ApiOperation(value = "시간표 삭제")
     @DeleteMapping("/users/schedule")
     public ApiResult deleteSchedule(@LoginUser Long userId) {
         subjectScheduleService.deleteSchedule(userId);

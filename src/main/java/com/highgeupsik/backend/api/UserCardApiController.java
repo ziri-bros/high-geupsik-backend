@@ -11,6 +11,7 @@ import com.highgeupsik.backend.service.UserCardService;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
+import io.swagger.annotations.ApiOperation;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,12 +35,14 @@ public class UserCardApiController {
     private final UserCardQueryService userCardQueryService;
     private final MailService mailService;
 
+    @ApiOperation(value = "학생증 목록 조회", notes = "관리자가 학생증 목록을 조회합니다")
     @GetMapping("/cards")
     public ApiResult<Page<UserCardResDTO>> userCards(
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(userCardQueryService.findUserCards(pageNum));
     }
 
+    @ApiOperation(value = "학생증 허가")
     @PatchMapping("/cards/{cardId}") //수락
     public ApiResult acceptCard(@PathVariable("cardId") Long cardId) throws MessagingException {
         Long userId = userCardQueryService.findUserIdByCardId(cardId);
@@ -50,6 +53,7 @@ public class UserCardApiController {
         return success(null);
     }
 
+    @ApiOperation(value = "학생증 거부")
     @DeleteMapping("/cards/{cardId}") //거부
     public ApiResult denyCard(@PathVariable("cardId") Long cardId) throws MessagingException {
         UserResDTO user = userQueryService.findById(userCardQueryService.findUserIdByCardId(cardId));

@@ -4,6 +4,7 @@ import com.highgeupsik.backend.dto.UploadFileDTO;
 import com.highgeupsik.backend.service.S3Service;
 import com.highgeupsik.backend.utils.ApiResult;
 import com.highgeupsik.backend.utils.ApiUtils;
+import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,8 @@ public class ImageApiController {
 
     private final S3Service s3Service;
 
-    @PostMapping("/images") //이미지 업로드
+    @ApiOperation(value = "이미지 업로드")
+    @PostMapping("/images")
     public ApiResult<List<UploadFileDTO>> images(List<MultipartFile> imageList) throws IOException {
         return ApiUtils.success(s3Service.uploadFiles(imageList));
     }
