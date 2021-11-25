@@ -53,7 +53,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .httpBasic().disable()
             .csrf().disable()
             .formLogin().disable()
+            .cors()
 
+            .and()
             .exceptionHandling()
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .accessDeniedHandler(jwtAccessDeniedHandler)
@@ -66,6 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/login").permitAll()
             .antMatchers("/login/**").permitAll()
+            .antMatchers("/images").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
             .anyRequest()
