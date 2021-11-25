@@ -1,7 +1,7 @@
 package com.highgeupsik.backend.service;
 
 
-import static com.highgeupsik.backend.utils.ErrorMessage.CARD_NOT_FOUND;
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
 import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateASC;
 
 import com.highgeupsik.backend.dto.UserCardResDTO;
@@ -27,7 +27,12 @@ public class UserCardQueryService {
 
     public Long findUserIdByCardId(Long cardId) {
         return userCardRepository.findById(cardId).orElseThrow(
-            () -> new NotFoundException(CARD_NOT_FOUND)).getUser().getId();
+            () -> new NotFoundException(USER_NOT_FOUND)).getUser().getId();
+    }
+
+    public UserCardResDTO findByUserId(Long userId) {
+        return new UserCardResDTO(userCardRepository.findByUserId(userId).orElseThrow(
+            () -> new NotFoundException(CARD_NOT_FOUND)));
     }
 
 }
