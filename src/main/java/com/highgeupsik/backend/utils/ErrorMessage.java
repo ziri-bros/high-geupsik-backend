@@ -12,5 +12,6 @@ public class ErrorMessage {
     public static final String RESOURCE_EXIST = "이미 존재하는 리소스 입니다.";
     public static final String ROOM_NOT_FOUND = "방이 존재하지 않습니다.";
     public static final String CARD_NOT_FOUND = "없는 카드입니다.";
+    public static final String SCHOOL_NOT_FOUND = "없는 학교입니다";
 
 }
