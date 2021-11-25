@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
 
             .exceptionHandling()
-            //    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .accessDeniedHandler(jwtAccessDeniedHandler)
 
             .and()
@@ -74,6 +74,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
                 UsernamePasswordAuthenticationFilter.class)
             .oauth2Login()
+            .authorizationEndpoint()
+            .baseUri("/oauth2/authorize")
+
+            .and()
             .userInfoEndpoint()
             .userService(customOAuth2UserService)
 
