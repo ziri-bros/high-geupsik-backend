@@ -1,8 +1,7 @@
 package com.highgeupsik.backend.service;
 
 
-import static com.highgeupsik.backend.utils.ErrorMessage.POST_NOT_FOUND;
-import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
 import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateDESC;
 
 
@@ -12,7 +11,7 @@ import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.UserRepository;
+import com.highgeupsik.backend.repository.UserCardRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardQueryService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final UserCardRepository userCardRepository;
 
     private static final int POST_COUNT = 20;
 
@@ -47,8 +46,8 @@ public class BoardQueryService {
     }
 
     public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
-        Region region = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND))
-            .getSchoolInfo().getRegion();
+        Region region = userCardRepository.findByUserId(userId).orElseThrow(
+            () -> new NotFoundException(CARD_NOT_FOUND)).getSchool().getRegion();
         condition.setRegion(region);
         return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
     }
