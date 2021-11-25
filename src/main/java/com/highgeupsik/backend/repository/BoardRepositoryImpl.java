@@ -38,7 +38,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 board.id, board.title, board.content, board.thumbnail, board.likeCount,
                 board.commentCount, board.createdDate))
             .from(board)
-            .leftJoin(uploadFile)
             .where(
                 regionEq(condition.getRegion()),
                 categoryEq(condition.getCategory()),
