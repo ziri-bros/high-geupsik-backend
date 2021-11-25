@@ -3,28 +3,21 @@ package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 
-import com.highgeupsik.backend.dto.SchoolInfoDTO;
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.dto.TokenDTO;
 import com.highgeupsik.backend.dto.UserCardReqDTO;
-import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.resolver.LoginUser;
-import com.highgeupsik.backend.service.S3Service;
 import com.highgeupsik.backend.service.SubjectScheduleQueryService;
 import com.highgeupsik.backend.service.SubjectScheduleService;
-import com.highgeupsik.backend.service.UserCardQueryService;
 import com.highgeupsik.backend.service.UserCardService;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
 import io.swagger.annotations.ApiOperation;
-import java.io.IOException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,44 +25,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserApiController {
 
-    private final S3Service s3Service;
     private final UserService userService;
     private final UserQueryService userQueryService;
     private final UserCardService userCardService;
-    private final UserCardQueryService userCardQueryService;
     private final SubjectScheduleService subjectScheduleService;
     private final SubjectScheduleQueryService subjectScheduleQueryService;
-
-    @ApiOperation(value = "학생증 조회", notes = "자신이 제출한 학생증을 조회합니다")
-    @GetMapping("/login/cards")
-    public ApiResult cards(@LoginUser Long userId) {
-        return success(userCardQueryService.findUserIdByCardId(userId));
-    }
 
     @ApiOperation(value = "학생증 제출")
     @PostMapping("/login/cards")
     public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserCardReqDTO userCardReqDTO) {
-        return success(userCardService.saveUserCard(userId, userCardReqDTO.getUploadFileDTO()));
+        return success(userCardService.saveUserCard(userId, userCardReqDTO.getThumbnail(),
+            userCardReqDTO.getSchoolDTO()));
     }
 
     @ApiOperation(value = "학생증 제출 취소")
     @DeleteMapping("/login/cards")
     public ApiResult deleteCard(@LoginUser Long userId) {
         userCardService.deleteUserCardByUserId(userId);
-        return success(null);
-    }
-
-    @ApiOperation(value = "학교정보 제출")
-    @PostMapping("/login/schoolInfo")
-    public ApiResult<TokenDTO> sendSchoolInfo(@LoginUser Long userId, @RequestBody SchoolInfoDTO schoolInfoDTO) {
-        userService.updateSchoolInfo(userId, schoolInfoDTO);
-        return success(userService.login(userId));
-    }
-
-    @ApiOperation(value = "학교정보 수정")
-    @PutMapping("/login/schoolInfo")
-    public ApiResult<TokenDTO> editSchoolInfo(@LoginUser Long userId, @RequestBody SchoolInfoDTO schoolInfoDTO) {
-        userService.updateSchoolInfo(userId, schoolInfoDTO);
         return success(null);
     }
 

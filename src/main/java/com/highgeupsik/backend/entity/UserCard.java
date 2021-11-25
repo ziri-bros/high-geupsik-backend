@@ -24,17 +24,21 @@ public class UserCard extends TimeEntity {
     @Column(name = "user_card_id")
     private Long id;
 
+    private String thumbnail;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "upload_file_id")
-    private UploadFile uploadFile;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id")
+    private School school;
 
     @Builder
-    public UserCard(User user, UploadFile uploadFile) {
+    public UserCard(String thumbnail, User user, School school) {
+        this.thumbnail = thumbnail;
         this.user = user;
-        this.uploadFile = uploadFile;
+        this.school = school;
     }
+
 }

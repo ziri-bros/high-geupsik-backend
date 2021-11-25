@@ -8,14 +8,14 @@ import lombok.Getter;
 public class UserCardResDTO {
 
     private Long id;
-    private String username;
-    private String email;
-    private UploadFileDTO uploadFileDTO;
+    private String thumbnail;
+    private UserResDTO userResDTO;
+    private SchoolDTO schoolDTO;
 
     public UserCardResDTO(UserCard userCard) {
         id = userCard.getId();
-        username = userCard.getUser().getUsername();
-        email = userCard.getUser().getEmail();
-        uploadFileDTO = new UploadFileDTO(userCard.getUploadFile());
+        thumbnail = userCard.getThumbnail();
+        userResDTO = new UserResDTO(userCard.getUser());
+        schoolDTO = new SchoolDTO(userCard.getSchool());
     }
 }
