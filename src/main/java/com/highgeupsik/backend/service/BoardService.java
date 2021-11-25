@@ -7,12 +7,14 @@ import com.highgeupsik.backend.dto.BoardReqDTO;
 import com.highgeupsik.backend.dto.UploadFileDTO;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Category;
+import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.exception.NotMatchException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.UploadFileRepository;
+import com.highgeupsik.backend.repository.UserCardRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,16 +27,18 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final UserCardRepository userCardRepository;
     private final UploadFileRepository uploadFileRepository;
 
     public Long saveBoard(Long userId, String title, String content, Category category) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         return boardRepository.save(Board.builder()
-            .user(user)
+            .user(userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException(USER_NOT_FOUND)))
             .content(content)
             .title(title)
             .category(category)
-            .region(user.getSchoolInfo().getRegion())
+            .region(userCardRepository.findByUserId(userId).orElseThrow(
+                () -> new NotFoundException(CARD_NOT_FOUND)).getSchool().getRegion())
             .build()).getId();
     }
 
@@ -45,7 +49,9 @@ public class BoardService {
             .content(boardReqDTO.getContent())
             .title(boardReqDTO.getTitle())
             .category(boardReqDTO.getCategory())
-            .region(user.getSchoolInfo().getRegion())
+            .region(userCardRepository.findByUserId(userId).orElseThrow(
+                () -> new NotFoundException(CARD_NOT_FOUND)).getSchool().getRegion())
+            .region(Region.SEOUL)
             .thumbnail(boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri())
             .build());
         for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {

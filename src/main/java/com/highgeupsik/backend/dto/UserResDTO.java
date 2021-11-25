@@ -2,7 +2,6 @@ package com.highgeupsik.backend.dto;
 
 
 import com.highgeupsik.backend.entity.Role;
-import com.highgeupsik.backend.entity.SchoolInfo;
 import com.highgeupsik.backend.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +14,11 @@ public class UserResDTO {
     private String email;
     private String username;
     private Role role;
-    private SchoolInfo schoolInfo;
 
     public UserResDTO(User user) {
         id = user.getId();
         email = user.getEmail();
         username = user.getUsername();
         role = user.getRole();
-        schoolInfo = user.getSchoolInfo();
     }
 }

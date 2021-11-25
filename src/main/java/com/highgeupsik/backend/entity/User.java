@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -46,9 +45,6 @@ public class User {
 
     private String refreshToken;
 
-    @Embedded
-    private SchoolInfo schoolInfo;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subject_schedule_id")
     private SubjectSchedule subjectSchedule;
@@ -68,12 +64,11 @@ public class User {
 
     @Builder
     public User(String email, String username, AuthProvider provider,
-        Role role, SchoolInfo schoolInfo) {
+        Role role) {
         this.email = email;
         this.username = username;
         this.provider = provider;
         this.role = role;
-        this.schoolInfo = schoolInfo;
     }
 
     public void updateRole() {
@@ -83,10 +78,6 @@ public class User {
     public User updateName(String username) {
         this.username = username;
         return this;
-    }
-
-    public void updateSchoolInfo(SchoolInfo schoolInfo) {
-        this.schoolInfo = schoolInfo;
     }
 
     public void setSubjectSchedule(SubjectSchedule subjectSchedule) {
