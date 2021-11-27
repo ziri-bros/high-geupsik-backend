@@ -5,7 +5,10 @@ import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
 import com.highgeupsik.backend.oauth2.SocialUser;
 import com.highgeupsik.backend.service.UserCardQueryService;
+import com.highgeupsik.backend.utils.CookieUtils;
 import java.io.IOException;
+import java.util.Optional;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +36,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) {
-        String targetUrl = "http://10.21.20.153:3000/oauth2/redirect?";
+        String targetUrl = "http://localhost:3000/oauth2/redirect?";
         SocialUser socialUser = (SocialUser) authentication.getPrincipal();
         User user = socialUser.getUser();
         String accessToken = jwtTokenProvider.createNewToken(user.getId(), user.getRole().toString(), "access");
