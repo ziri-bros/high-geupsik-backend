@@ -9,6 +9,7 @@ import com.highgeupsik.backend.dto.UserCardReqDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.SubjectScheduleQueryService;
 import com.highgeupsik.backend.service.SubjectScheduleService;
+import com.highgeupsik.backend.service.UserCardQueryService;
 import com.highgeupsik.backend.service.UserCardService;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
@@ -26,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApiController {
 
     private final UserService userService;
-    private final UserQueryService userQueryService;
     private final UserCardService userCardService;
+    private final UserCardQueryService userCardQueryService;
     private final SubjectScheduleService subjectScheduleService;
     private final SubjectScheduleQueryService subjectScheduleQueryService;
 
@@ -54,7 +55,7 @@ public class UserApiController {
     @ApiOperation(value = "내정보 조회")
     @GetMapping("/users") //내정보 조회
     public ApiResult myInfo(@LoginUser Long userId) {
-        return success(userQueryService.findById(userId));
+        return success(userCardQueryService.findByUserId(userId));
     }
 
     /***
