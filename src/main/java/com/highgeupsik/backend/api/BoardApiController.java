@@ -100,4 +100,10 @@ public class BoardApiController {
         @LoginUser Long userId) {
         return ApiUtils.success(likeService.saveOrUpdateBoardDetailLike(userId, boardId));
     }
+
+    @ApiOperation(value = "좋아요 조회")
+    @GetMapping("/boards/{boardId}/like")
+    public ApiResult boardLike(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
+        return ApiUtils.success(likeService.isExistedBoardLike(userId, boardId));
+    }
 }

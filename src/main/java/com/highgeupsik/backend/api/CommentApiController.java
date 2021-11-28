@@ -11,6 +11,7 @@ import com.highgeupsik.backend.service.CommentQueryService;
 import com.highgeupsik.backend.service.CommentService;
 import com.highgeupsik.backend.service.LikeService;
 import com.highgeupsik.backend.utils.ApiResult;
+import com.highgeupsik.backend.utils.ApiUtils;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -93,5 +94,11 @@ public class CommentApiController {
     @PostMapping("/comments/{commentId}/like")
     public ApiResult pressCommentLike(@LoginUser Long userId, @PathVariable Long commentId) {
         return success(likeService.saveOrUpdateCommentLike(userId, commentId));
+    }
+
+    @ApiOperation(value = "좋아요 조회")
+    @GetMapping("/comments/{commentId}/like")
+    public ApiResult boardLike(@PathVariable("commentId") Long commentId, @LoginUser Long userId) {
+        return ApiUtils.success(likeService.isExistedCommentLike(userId, commentId));
     }
 }

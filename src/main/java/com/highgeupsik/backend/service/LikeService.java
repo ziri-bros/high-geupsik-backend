@@ -64,4 +64,12 @@ public class LikeService {
         return like.getFlag();
     }
 
+    public boolean isExistedBoardLike(Long userId, Long boardId) {
+        return likeRepository.findByUserIdAndBoardId(userId, boardId).isPresent();
+    }
+
+    public boolean isExistedCommentLike(Long userId, Long commentId) {
+        return likeRepository.findByUserIdAndBoardId(userId, commentId).isPresent();
+    }
+
 }
