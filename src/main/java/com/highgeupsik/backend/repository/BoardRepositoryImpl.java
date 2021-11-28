@@ -35,7 +35,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         OrderSpecifier<LocalDateTime> desc = board.createdDate.desc();
         List<BoardResDTO> content = queryFactory
             .select(new QBoardResDTO(
-                board.id, board.title, board.content, board.thumbnail, board.likeCount,
+                board.id, board.user.id, board.title, board.content, board.thumbnail, board.likeCount,
                 board.commentCount, board.createdDate))
             .from(board)
             .where(

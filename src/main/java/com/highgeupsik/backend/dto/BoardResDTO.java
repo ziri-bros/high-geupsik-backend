@@ -24,25 +24,27 @@ public class BoardResDTO {
     private List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
 
     @QueryProjection
-    public BoardResDTO(Long id, String title, String content, String thumbnail,
+    public BoardResDTO(Long id, Long writerId, String title, String content, String thumbnail,
         int likeCount, int commentCount, LocalDateTime createdDate) {
         this.id = id;
+        this.writerId = writerId;
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.createdDate = createdDate;
-
     }
 
     public BoardResDTO(Board board) {
         id = board.getId();
+        writerId = board.getUser().getId();
         title = board.getTitle();
         content = board.getContent();
         likeCount = board.getLikeCount();
         commentCount = board.getCommentCount();
         uploadFileDTOList = board.getUploadFileList().stream().map((uploadFile -> new UploadFileDTO(uploadFile)))
             .collect(Collectors.toList());
+        createdDate = board.getCreatedDate();
     }
 }
