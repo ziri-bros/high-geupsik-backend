@@ -13,12 +13,14 @@ public class UserResDTO {
     private Long id;
     private String email;
     private String username;
-    private Role role;
+    private String studentCardImage;
+    private SchoolDTO schoolDTO;
 
     public UserResDTO(User user) {
         id = user.getId();
         email = user.getEmail();
         username = user.getUsername();
-        role = user.getRole();
+        studentCardImage = user.getStudentCard().getStudentCardImage();
+        schoolDTO = new SchoolDTO(user.getSchool());
     }
 }
