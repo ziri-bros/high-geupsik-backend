@@ -13,5 +13,6 @@ public class ErrorMessage {
     public static final String ROOM_NOT_FOUND = "방이 존재하지 않습니다.";
     public static final String CARD_NOT_FOUND = "없는 카드입니다.";
     public static final String SCHOOL_NOT_FOUND = "없는 학교입니다";
+    public static final String LIKE_NOT_FOUND = "좋아요가 없습니다";
 
 }
