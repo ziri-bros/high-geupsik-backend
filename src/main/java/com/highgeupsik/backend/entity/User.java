@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -45,6 +46,14 @@ public class User {
 
     private String refreshToken;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_card_id")
+    private StudentCard studentCard;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id")
+    private School school;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subject_schedule_id")
     private SubjectSchedule subjectSchedule;
@@ -61,7 +70,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList = new ArrayList<>();
 
-
     @Builder
     public User(String email, String username, AuthProvider provider,
         Role role) {
@@ -69,6 +77,15 @@ public class User {
         this.username = username;
         this.provider = provider;
         this.role = role;
+    }
+
+    public void updateStudentCard(StudentCard studentCard) {
+        this.studentCard = studentCard;
+        studentCard.setUser(this);
+    }
+
+    public void updateSchool(School school) {
+        this.school = school;
     }
 
     public void updateRole() {
