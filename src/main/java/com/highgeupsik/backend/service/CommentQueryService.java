@@ -1,14 +1,10 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.PagingUtils.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.repository.CommentRepository;
 
@@ -25,7 +21,7 @@ public class CommentQueryService {
 
 	public int findUserCountByUserIdAndBoardId(Long userId, Long postId) { //익명번호 조회
 		List<Comment> comments = commentRepository.findByUserIdAndBoardId(userId, postId);
-		return comments.isEmpty() ? 0 : comments.get(0).getUserCount();
+		return comments.isEmpty() ? 0 : comments.get(0).getAnonymousNumber();
 	}
 
 }

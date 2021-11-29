@@ -21,7 +21,7 @@ public class CommentResDTO {
 		this.id = comment.getId();
 		this.writerId = comment.getUser().getId();
 		this.content = comment.getContent();
-		this.userCount = comment.getUserCount();
+		this.userCount = comment.getAnonymousNumber();
 		this.likeCount = comment.getLikeCount();
 		this.isUserLike = isUserLike;
 		this.isParent = comment.isParent();

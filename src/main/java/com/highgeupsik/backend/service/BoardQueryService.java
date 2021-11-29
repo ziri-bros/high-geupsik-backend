@@ -31,12 +31,12 @@ public class BoardQueryService {
 	private static final int POST_COUNT = 20;
 
 	public Long findWriterIdByBoardId(Long boardId) {
-		return boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND)).getUser().getId();
+		return boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)).getUser().getId();
 	}
 
 	public BoardResDTO findOneById(Long postId) {
 		return new BoardResDTO(
-			boardRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND)));
+			boardRepository.findById(postId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)));
 	}
 
 	public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {

@@ -1,6 +1,10 @@
 package com.highgeupsik.backend.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.highgeupsik.backend.dto.CommentReqDTO;
+import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.User;
@@ -10,113 +14,80 @@ import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.CommentRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import com.highgeupsik.backend.utils.ErrorMessage;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final CommentRepository commentRepository;
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+	private final CommentRepository commentRepository;
+	private final BoardRepository boardRepository;
+	private final UserRepository userRepository;
 
+	public CommentResDTO saveComment(Long userId, Long boardId, CommentReqDTO dto) {
+		User writer = userRepository.findById(userId)
+			.orElseThrow(() -> new NotFoundException(ErrorMessage.USER_NOT_FOUND));
+		Board board = boardRepository.findById(boardId)
+			.orElseThrow(() -> new NotFoundException(ErrorMessage.BOARD_NOT_FOUND));
 
-    public Long saveComment(Long userId, String content, Long postId) {
-        Board board = boardRepository.findById(postId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.USER_NOT_FOUND));
-        board.updateBoardCommentCount(true);
-        board.updateBoardUserCount();
-        Comment comment = commentRepository.save(Comment.builder()
-            .user(user)
-            .userCount(board.getUserCount())
-            .content(content)
-            .build());
-        comment.setBoard(board);
-        return comment.getId();
-    }
+		Comment comment = commentRepository.save(
+			Comment.builder()
+				.content(dto.getContent())
+				.user(writer)
+				.board(board)
+				.build()
+		);
 
-    public Long saveComment(Long userId, String content, Long postId, int userCount) {
-        Board board = boardRepository.findById(postId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.USER_NOT_FOUND));
-        board.updateBoardCommentCount(true);
-        Comment comment = commentRepository.save(Comment.builder()
-            .user(user)
-            .userCount(userCount)
-            .content(content)
-            .build());
-        comment.setBoard(board);
-        return comment.getId();
-    }
+		comment.setAnonymousNumber(getAnonymousNumberFrom(board, writer));
+		if (board.isWriter(writer)) {
+			comment.setAnonymousNumber(-1);
+		}
 
-    public Long saveReplyComment(Long userId, String content, Long boardId, Long postId) {
-        Board board = boardRepository.findById(postId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        Comment parent = commentRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-        board.updateBoardCommentCount(true);
-        board.updateBoardUserCount();
-        if (parent.getParent() != null) {
-            parent = parent.getParent();
-        }
-        Comment now = commentRepository.save(Comment.builder()
-            .user(userRepository.findById(userId).get())
-            .userCount(board.getUserCount())
-            .board(board)
-            .content(content)
-            .build());
-        now.setParent(parent);
-        return now.getId();
-    }
+		comment.transformToParent();
+		if (dto.getParentId() != null) {
+			transformToReply(comment, dto.getParentId());
+		}
 
-    public Long saveReplyComment(Long userId, String content, Long parentId, Long boardId, int userCount) {
-        Board board = boardRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND));
-        Comment parent = commentRepository.findById(parentId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-        board.updateBoardCommentCount(true);
-        if (parent.getParent() != null) {
-            parent = parent.getParent();
-        }
-        Comment now = commentRepository.save(Comment.builder()
-            .user(userRepository.findById(userId).get())
-            .userCount(userCount)
-            .board(board)
-            .content(content)
-            .build());
-        now.setParent(parent);
-        return now.getId();
-    }
+		return new CommentResDTO(comment, false);
+	}
 
-    public Long updateComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
-        Comment comment = commentRepository.findById(commentId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-        Long writerId = comment.getUser().getId();
-        if (userId.equals(writerId)) {
-            comment.updateContent(commentReqDTO);
-            return commentId;
-        }
-        throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
-    }
+	private int getAnonymousNumberFrom(Board board, User writer) {
+		return commentRepository.findFirstByBoardAndUser(board, writer)
+			.map(Comment::getAnonymousNumber)
+			.orElse(board.getNextAnonymousNumber());
+	}
 
-    public void deleteComment(Long userId, Long commentId, Long boardId) {
-        Comment comment = commentRepository.findById(commentId)
-            .orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-        Long writerId = comment.getUser().getId();
-        if (userId.equals(writerId)) {
-            comment.delete();
-            boardRepository.findById(boardId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.POST_NOT_FOUND))
-                .updateBoardCommentCount(false);
-        } else {
-            throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
-        }
-    }
+	private void transformToReply(Comment reply, Long parentId) {
+		Comment parent = commentRepository.findById(parentId)
+			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
+		reply.setParent(parent);
+	}
+
+	public Long updateComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
+		Long writerId = comment.getUser().getId();
+		if (userId.equals(writerId)) {
+			comment.updateContent(commentReqDTO);
+			return commentId;
+		}
+		throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+	}
+
+	public void deleteComment(Long userId, Long commentId, Long boardId) {
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
+		Long writerId = comment.getUser().getId();
+		if (userId.equals(writerId)) {
+			comment.delete();
+			boardRepository.findById(boardId)
+				.orElseThrow(() -> new NotFoundException(ErrorMessage.BOARD_NOT_FOUND))
+				.updateBoardCommentCount(false);
+		} else {
+			throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+		}
+	}
 
 }

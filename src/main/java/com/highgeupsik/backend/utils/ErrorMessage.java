@@ -4,7 +4,7 @@ public class ErrorMessage {
 
     public static final String USER_NOT_FOUND = "없는 사용자 입니다.";
     public static final String TOKEN_EXPIRED = "만료된 토큰입니다.";
-    public static final String POST_NOT_FOUND = "없는 게시글 입니다.";
+    public static final String BOARD_NOT_FOUND = "없는 게시글 입니다.";
     public static final String COMMENT_NOT_FOUND = "없는 댓글 입니다.";
     public static final String WRITER_NOT_MATCH = "작성자가 아닙니다.";
     public static final String NOT_USER = "사용자가 아닙니다.";

@@ -2,7 +2,7 @@ package com.highgeupsik.backend.service;
 
 
 import static com.highgeupsik.backend.utils.ErrorMessage.COMMENT_NOT_FOUND;
-import static com.highgeupsik.backend.utils.ErrorMessage.POST_NOT_FOUND;
+import static com.highgeupsik.backend.utils.ErrorMessage.BOARD_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 
 import com.highgeupsik.backend.entity.Board;
@@ -47,7 +47,7 @@ public class LikeService {
     public boolean saveOrUpdateBoardDetailLike(Long userId, Long boardId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.findById(boardId).orElseThrow(
-            () -> new NotFoundException(POST_NOT_FOUND));
+            () -> new NotFoundException(BOARD_NOT_FOUND));
         Like like = likeRepository.findByUserIdAndBoardId(userId, boardId).map((entity) -> entity.update())
             .orElse(saveBoardDetailLike(user, board));
         board.updateBoardLikeCount(like.getFlag());
