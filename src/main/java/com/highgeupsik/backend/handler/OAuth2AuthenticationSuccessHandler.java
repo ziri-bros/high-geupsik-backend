@@ -42,6 +42,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = jwtTokenProvider.createNewToken(user.getId(), user.getRole().toString(), "access");
         String refreshToken = jwtTokenProvider.createRefreshToken();
         boolean isSubmittedCard = checkUserCard(user.getId());
+        System.out.println("accessToken = " + accessToken);
         return UriComponentsBuilder.fromUriString(targetUrl)
             .queryParam("role", user.getRole())
             .queryParam("isSubmittedCard", isSubmittedCard)

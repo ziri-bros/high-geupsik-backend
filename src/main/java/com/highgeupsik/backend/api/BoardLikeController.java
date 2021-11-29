@@ -21,8 +21,7 @@ public class BoardLikeController {
 
 	@ApiOperation(value = "게시글 좋아요")
 	@PostMapping("/boards/{boardId}/like") //게시글 좋아요
-	public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId,
-		@LoginUser Long userId) {
+	public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
 		return ApiUtils.success(likeService.saveOrUpdateBoardDetailLike(userId, boardId));
 	}
 

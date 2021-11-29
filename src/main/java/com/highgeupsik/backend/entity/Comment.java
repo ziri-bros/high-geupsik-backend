@@ -48,15 +48,14 @@ public class Comment extends TimeEntity {
     private List<Like> likeList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id", nullable = false, updatable = false)
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Comment> children = new ArrayList<>();
 
     @Builder
-    public Comment(String content, int userCount, User user, Board board,
-        Comment parent) {
+    public Comment(String content, int userCount, User user, Board board, Comment parent) {
         this.content = content;
         this.userCount = userCount;
         this.user = user;
