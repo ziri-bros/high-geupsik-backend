@@ -1,14 +1,10 @@
 package com.highgeupsik.backend.handler;
 
 import com.highgeupsik.backend.entity.User;
-import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
 import com.highgeupsik.backend.oauth2.SocialUser;
-import com.highgeupsik.backend.service.UserCardQueryService;
-import com.highgeupsik.backend.utils.CookieUtils;
+import com.highgeupsik.backend.repository.UserConfirmRepository;
 import java.io.IOException;
-import java.util.Optional;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserCardQueryService userCardQueryService;
+    private final UserConfirmRepository userConfirmRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -41,7 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         User user = socialUser.getUser();
         String accessToken = jwtTokenProvider.createNewToken(user.getId(), user.getRole().toString(), "access");
         String refreshToken = jwtTokenProvider.createRefreshToken();
-        boolean isSubmittedCard = checkUserCard(user.getId());
+        boolean isSubmittedCard = checkUserConfirm(user.getId());
         return UriComponentsBuilder.fromUriString(targetUrl)
             .queryParam("role", user.getRole())
             .queryParam("isSubmittedCard", isSubmittedCard)
@@ -51,12 +47,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             .toUriString();
     }
 
-    public boolean checkUserCard(Long userId) {
-        try {
-            userCardQueryService.findByUserId(userId);
-            return true;
-        } catch (NotFoundException e) {
-            return false;
-        }
+    public boolean checkUserConfirm(Long userId) {
+        return userConfirmRepository.findByUserId(userId).isPresent();
     }
 }
