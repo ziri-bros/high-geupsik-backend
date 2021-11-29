@@ -63,6 +63,10 @@ public class Comment extends TimeEntity {
         this.board = board;
     }
 
+    public boolean isParent() {
+        return this == parent;
+    }
+
     public void setBoard(Board board) {
         this.board = board;
         if (!board.getCommentList().contains(this)) {

@@ -15,6 +15,7 @@ public class CommentResDTO {
 	private int userCount;
 	private int likeCount;
 	private boolean isUserLike;
+	private boolean isParent;
 
 	public CommentResDTO(Comment comment, boolean isUserLike) {
 		this.id = comment.getId();
@@ -23,6 +24,7 @@ public class CommentResDTO {
 		this.userCount = comment.getUserCount();
 		this.likeCount = comment.getLikeCount();
 		this.isUserLike = isUserLike;
+		this.isParent = comment.isParent();
 	}
 
 }

@@ -29,8 +29,11 @@ public class CommentController {
 
 	@ApiOperation(value = "댓글 작성")
 	@PostMapping("/boards/{boardId}/comments")
-	public ApiResult writeComment(@PathVariable("boardId") Long boardId, @RequestBody CommentReqDTO commentReqDTO,
-		@LoginUser Long userId) {
+	public ApiResult writeComment(
+		@LoginUser Long userId,
+		@PathVariable("boardId") Long boardId,
+		@RequestBody CommentReqDTO commentReqDTO
+	) {
 		Long postWriterId = boardQueryService.findWriterIdByBoardId(boardId);
 		if (postWriterId.equals(userId)) { //작성자가 댓글쓸때
 			return success(commentService.saveComment(userId, commentReqDTO.getContent(), boardId, -1));
