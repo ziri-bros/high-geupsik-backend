@@ -17,18 +17,18 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class BoardLikeController {
 
-	private final LikeService likeService;
+    private final LikeService likeService;
 
-	@ApiOperation(value = "게시글 좋아요")
-	@PostMapping("/boards/{boardId}/like") //게시글 좋아요
-	public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId,
-		@LoginUser Long userId) {
-		return ApiUtils.success(likeService.saveOrUpdateBoardDetailLike(userId, boardId));
-	}
+    @ApiOperation(value = "게시글 좋아요")
+    @PostMapping("/boards/{boardId}/like") //게시글 좋아요
+    public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId,
+        @LoginUser Long userId) {
+        return ApiUtils.success(likeService.saveOrUpdateBoardDetailLike(userId, boardId));
+    }
 
-	@ApiOperation(value = "게시글 좋아요 조회")
-	@GetMapping("/boards/{boardId}/like")
-	public ApiResult boardLike(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
-		return ApiUtils.success(likeService.isExistedBoardLike(userId, boardId));
-	}
+    @ApiOperation(value = "게시글 좋아요 조회")
+    @GetMapping("/boards/{boardId}/like")
+    public ApiResult boardLike(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
+        return ApiUtils.success(likeService.findBoardLikeDTO(userId, boardId));
+    }
 }
