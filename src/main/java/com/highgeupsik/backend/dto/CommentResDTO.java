@@ -17,6 +17,7 @@ public class CommentResDTO {
     private String content;
     private int userCount;
     private int likeCount;
+    private boolean deleteFlag;
     private List<CommentResDTO> commentResDTOList = new ArrayList<>();
 
     public CommentResDTO(Comment comment) {
@@ -25,6 +26,7 @@ public class CommentResDTO {
         content = comment.getContent();
         userCount = comment.getUserCount();
         likeCount = comment.getLikeCount();
+        deleteFlag = comment.isDeleteFlag();
         commentResDTOList = comment.getChildren().stream().map((children) -> new CommentResDTO(children))
             .collect(Collectors.toList());
     }
@@ -35,6 +37,7 @@ public class CommentResDTO {
         this.content = content;
         this.userCount = userCount;
         this.likeCount = likeCount;
+
     }
 
 }
