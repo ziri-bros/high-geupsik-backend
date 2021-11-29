@@ -2,9 +2,11 @@ package com.highgeupsik.backend.service;
 
 
 import static com.highgeupsik.backend.utils.ErrorMessage.COMMENT_NOT_FOUND;
+import static com.highgeupsik.backend.utils.ErrorMessage.LIKE_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.POST_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 
+import com.highgeupsik.backend.dto.LikeDTO;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.Like;
@@ -14,6 +16,7 @@ import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.CommentRepository;
 import com.highgeupsik.backend.repository.LikeRepository;
 import com.highgeupsik.backend.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +31,7 @@ public class LikeService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
-    public Like saveBoardDetailLike(User user, Board board) {
+    public Like saveBoardLike(User user, Board board) {
         Like like = likeRepository.save(Like.builder()
             .user(user)
             .build());
@@ -48,28 +51,47 @@ public class LikeService {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(POST_NOT_FOUND));
-        Like like = likeRepository.findByUserIdAndBoardId(userId, boardId).map((entity) -> entity.update())
-            .orElse(saveBoardDetailLike(user, board));
-        board.updateBoardLikeCount(like.getFlag());
-        return like.getFlag();
+        Optional<Like> boardLike = findBoardLike(userId, boardId);
+        if (!boardLike.isPresent()) {
+            Like like = saveBoardLike(user, board);
+            board.updateBoardLikeCount(like.getFlag());
+            return like.getFlag();
+        } else {
+            Like like = boardLike.get();
+            like.update();
+            board.updateBoardLikeCount(like.getFlag());
+            return like.getFlag();
+        }
     }
 
     public boolean saveOrUpdateCommentLike(Long userId, Long commentId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId).orElseThrow(
             () -> new NotFoundException(COMMENT_NOT_FOUND));
-        Like like = likeRepository.findByUserIdAndCommentId(userId, commentId).map((entity) -> entity.update())
-            .orElse(saveCommentLike(user, comment));
-        comment.updateCommentLike(like.getFlag());
-        return like.getFlag();
+        Optional<Like> commentLike = findCommentLike(userId, commentId);
+        if (!commentLike.isPresent()) {
+            Like like = saveCommentLike(user, comment);
+            comment.updateCommentLike(like.getFlag());
+            return like.getFlag();
+        } else {
+            Like like = commentLike.get();
+            like.update();
+            comment.updateCommentLike(like.getFlag());
+            return like.getFlag();
+        }
     }
 
-    public boolean isExistedBoardLike(Long userId, Long boardId) {
-        return likeRepository.findByUserIdAndBoardId(userId, boardId).isPresent();
+    public Optional<Like> findBoardLike(Long userId, Long boardId) {
+        return likeRepository.findByUserIdAndBoardId(userId, boardId);
     }
 
-    public boolean isExistedCommentLike(Long userId, Long commentId) {
-        return likeRepository.findByUserIdAndBoardId(userId, commentId).isPresent();
+    public Optional<Like> findCommentLike(Long userId, Long commentId) {
+        return likeRepository.findByUserIdAndCommentId(userId, commentId);
+    }
+
+    public LikeDTO findBoardLikeDTO(Long userId, Long boardId) {
+        return new LikeDTO(likeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
+            () -> new NotFoundException(LIKE_NOT_FOUND)));
     }
 
 }
