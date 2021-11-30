@@ -1,12 +1,14 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.highgeupsik.backend.dto.CommentReqDTO;
@@ -46,10 +48,13 @@ public class CommentController {
 	}
 
 	@ApiOperation(value = "댓글 삭제")
+	@ResponseStatus(NO_CONTENT)
 	@DeleteMapping("/boards/{boardId}/comments/{commentId}")
-	public ApiResult deleteComment(@PathVariable("boardId") Long boardId, @PathVariable("commentId") Long commentId,
-		@LoginUser Long userId) {
-		commentService.deleteComment(userId, commentId, boardId);
-		return success(null);
+	public void deleteComment(
+		@PathVariable("boardId") Long boardId,
+		@PathVariable("commentId") Long commentId,
+		@LoginUser Long userId
+	) {
+		commentService.deleteComment(userId, boardId, commentId);
 	}
 }
