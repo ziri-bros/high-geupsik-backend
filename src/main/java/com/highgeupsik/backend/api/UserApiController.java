@@ -36,7 +36,7 @@ public class UserApiController {
     @ApiOperation(value = "학생증 제출")
     @PostMapping("/login/cards")
     public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-        userService.updateUserInfo(userId, userReqDTO.getStudentCardImage(), userReqDTO.getSchoolDTO());
+        userService.updateUserInfo(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
         userConfirmService.saveUserConfirm(userId);
         return success(null);
     }

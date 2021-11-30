@@ -8,9 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserReqDTO {
+public class StudentCardDTO {
 
-    private StudentCardDTO studentCardDTO;
-    private SchoolDTO schoolDTO;
+    private int grade;
+    private int classNum;
+    private String studentCardImage;
 
 }
