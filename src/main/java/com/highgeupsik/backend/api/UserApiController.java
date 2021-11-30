@@ -3,7 +3,6 @@ package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 
-import com.highgeupsik.backend.dto.SchoolDTO;
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.dto.TokenDTO;
 import com.highgeupsik.backend.dto.UserReqDTO;
@@ -56,8 +55,9 @@ public class UserApiController {
 
     @ApiOperation(value = "내정보 수정")
     @PatchMapping("/users")
-    public ApiResult editMyInfo(@LoginUser Long userId, @RequestBody SchoolDTO schoolDTO) {
-        userService.updateSchool(userId, schoolDTO);
+    public ApiResult editMyInfo(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
+        userService.editUserInfo(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
+        userConfirmService.saveUserConfirm(userId);
         return success(null);
     }
 

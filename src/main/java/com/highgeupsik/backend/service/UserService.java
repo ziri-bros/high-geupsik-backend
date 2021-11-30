@@ -35,23 +35,24 @@ public class UserService {
     public void updateUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
-        user.updateSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
+        user.setSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
             () -> new NotFoundException(SCHOOL_NOT_FOUND)));
-        user.updateStudentCard(studentCardRepository.save(new StudentCard(
-            GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(), studentCardDTO.getStudentCardImage())));
+        user.setStudentCard(studentCardRepository.save(new StudentCard(
+            GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(),
+            studentCardDTO.getStudentCardImage())));
     }
 
-    public void updateSchool(Long userId, SchoolDTO schoolDTO) {
+    public void editUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
-        user.updateSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
-            () -> new NotFoundException(SCHOOL_NOT_FOUND)));
+        user.updateRoleGuest();
+        updateUserInfo(userId, studentCardDTO, schoolDTO);
     }
 
     public void updateRole(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
             new NotFoundException(USER_NOT_FOUND));
-        user.updateRole();
+        user.updateRoleUser();
     }
 
     public TokenDTO updateToken(TokenDTO tokenDTO) {
@@ -67,15 +68,6 @@ public class UserService {
             jwtTokenProvider.createRefreshToken());
         user.updateToken(jwtTokenProvider.createNewToken(userId, role, "refresh"));
         return newTokenDTO;
-    }
-
-    public TokenDTO login(Long userId) {
-        User user = userRepository.findById(userId).get();
-        String role = user.getRole().toString();
-        String accessToken = jwtTokenProvider.createNewToken(userId, role, "access");
-        String refreshToken = jwtTokenProvider.createRefreshToken();
-        user.updateToken(jwtTokenProvider.createNewToken(userId, role, "refresh"));
-        return new TokenDTO(accessToken, refreshToken);
     }
 
 }
