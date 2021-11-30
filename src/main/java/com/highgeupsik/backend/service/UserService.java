@@ -35,15 +35,17 @@ public class UserService {
     public void updateUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
-        user.updateRoleGuest();
         user.setSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
             () -> new NotFoundException(SCHOOL_NOT_FOUND)));
         user.setStudentCard(studentCardRepository.save(new StudentCard(
-            GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(), studentCardDTO.getStudentCardImage())));
+            GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(),
+            studentCardDTO.getStudentCardImage())));
     }
 
-    public void updateUser(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
-        studentCardRepository.deleteByUserId(userId);
+    public void editUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new NotFoundException(USER_NOT_FOUND));
+        user.updateRoleGuest();
         updateUserInfo(userId, studentCardDTO, schoolDTO);
     }
 
@@ -66,15 +68,6 @@ public class UserService {
             jwtTokenProvider.createRefreshToken());
         user.updateToken(jwtTokenProvider.createNewToken(userId, role, "refresh"));
         return newTokenDTO;
-    }
-
-    public TokenDTO login(Long userId) {
-        User user = userRepository.findById(userId).get();
-        String role = user.getRole().toString();
-        String accessToken = jwtTokenProvider.createNewToken(userId, role, "access");
-        String refreshToken = jwtTokenProvider.createRefreshToken();
-        user.updateToken(jwtTokenProvider.createNewToken(userId, role, "refresh"));
-        return new TokenDTO(accessToken, refreshToken);
     }
 
 }

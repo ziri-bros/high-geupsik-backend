@@ -56,7 +56,7 @@ public class UserApiController {
     @ApiOperation(value = "내정보 수정")
     @PatchMapping("/users")
     public ApiResult editMyInfo(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-        userService.updateUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
+        userService.editUserInfo(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
         userConfirmService.saveUserConfirm(userId);
         return success(null);
     }
