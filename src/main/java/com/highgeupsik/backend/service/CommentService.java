@@ -81,14 +81,16 @@ public class CommentService {
 
 		checkWriter(comment, userId);
 		comment.disable();
-		if (comment.canDelete()) {
-			board.deleteComment(comment);
-		}
+		deleteCommentIfCan(comment, board);
 		if (comment.isReply()) {
 			parent.deleteReply(comment);
+			deleteCommentIfCan(parent, board);
 		}
-		if (parent.isDisabled()) {
-			board.deleteComment(parent);
+	}
+
+	private void deleteCommentIfCan(Comment comment, Board board) {
+		if (comment.isDisabled()) {
+			board.deleteComment(comment);
 		}
 	}
 
