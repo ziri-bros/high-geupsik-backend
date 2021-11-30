@@ -111,6 +111,11 @@ public class Board extends TimeEntity {
         }
     }
 
+    public void deleteComment(Comment comment) {
+        commentList.remove(comment);
+        commentCount -= 1;
+    }
+
     public void setFile(UploadFile file) {
         this.uploadFileList.add(file);
         if (file.getBoard() != this) {
