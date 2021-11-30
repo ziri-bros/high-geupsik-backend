@@ -1,10 +1,11 @@
 package com.highgeupsik.backend.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,15 +50,15 @@ public class Comment extends TimeEntity {
 	@JoinColumn(name = "board_id")
 	private Board board;
 
-	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "comment")
 	private List<Like> likeList = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_id")
 	private Comment parent;
 
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-	private List<Comment> children = new ArrayList<>();
+	@OneToMany(mappedBy = "parent")
+	private Set<Comment> children = new HashSet<>();
 
 	@Builder
 	public Comment(String content, int anonymousId, User user, Board board) {
@@ -65,6 +66,21 @@ public class Comment extends TimeEntity {
 		this.anonymousId = anonymousId;
 		this.user = user;
 		this.board = board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+		if (!board.getCommentList().contains(this)) {
+			board.getCommentList().add(this);
+		}
+	}
+
+	public void setAnonymousId(int anonymousNumber) {
+		this.anonymousId = anonymousNumber;
+	}
+
+	public boolean isWriter(Long userId) {
+		return user.getId().equals(userId);
 	}
 
 	public boolean isParent() {
@@ -75,9 +91,26 @@ public class Comment extends TimeEntity {
 		return !isParent();
 	}
 
-	public void toParentComment() {
-		this.parent = this;
-		children.add(this);
+	public void toParent() {
+		toReply(this);
+	}
+
+	public void toReply(Comment parent) {
+		this.parent = parent;
+		parent.addReply(this);
+	}
+
+	private void addReply(Comment comment) {
+		children.add(comment);
+		replyCount++;
+	}
+
+	public void deleteReply(Comment comment) {
+		children.remove(comment);
+	}
+
+	public boolean isDisabled() {
+		return deleteFlag;
 	}
 
 	public void disable() {
@@ -85,14 +118,7 @@ public class Comment extends TimeEntity {
 	}
 
 	public boolean canDelete() {
-		return children.isEmpty();
-	}
-
-	public void setBoard(Board board) {
-		this.board = board;
-		if (!board.getCommentList().contains(this)) {
-			board.getCommentList().add(this);
-		}
+		return children.size() == 1;
 	}
 
 	public void updateContent(CommentReqDTO commentReqDTO) {
@@ -105,29 +131,6 @@ public class Comment extends TimeEntity {
 		} else if (!flag && likeCount > 0) {
 			this.likeCount--;
 		}
-	}
-
-	public void toReply(Comment parent) {
-		this.parent = parent;
-		parent.addReply(parent);
-	}
-
-	private void addReply(Comment comment) {
-		children.add(comment);
-		replyCount++;
-	}
-
-	public void deleteReply(Comment comment) {
-		children.remove(comment);
-		replyCount--;
-	}
-
-	public void setAnonymousId(int anonymousNumber) {
-		this.anonymousId = anonymousNumber;
-	}
-
-	public boolean isWriter(Long userId) {
-		return user.getId().equals(userId);
 	}
 
 	@Override
