@@ -68,9 +68,18 @@ public class Comment extends TimeEntity {
 		return this.equals(parent);
 	}
 
-	public void transformToParent() {
+	public void toParentComment() {
 		this.parent = this;
 		children.add(this);
+	}
+
+	public void disable() {
+		deleteFlag = true;
+		board.deleteComment(this);
+	}
+
+	public boolean canDelete() {
+		return children.isEmpty();
 	}
 
 	public void setBoard(Board board) {
@@ -92,10 +101,6 @@ public class Comment extends TimeEntity {
 		}
 	}
 
-	public void delete() {
-		deleteFlag = true;
-	}
-
 	public void setParent(Comment parent) {
 		this.parent = parent;
 		if (!parent.getChildren().contains(this)) {
@@ -105,5 +110,9 @@ public class Comment extends TimeEntity {
 
 	public void setAnonymousNumber(int anonymousNumber) {
 		this.anonymousNumber = anonymousNumber;
+	}
+
+	public boolean isWriter(Long userId) {
+		return user.getId().equals(userId);
 	}
 }

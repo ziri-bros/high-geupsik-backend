@@ -15,5 +15,6 @@ public class ErrorMessage {
     public static final String CARD_NOT_FOUND = "없는 카드입니다.";
     public static final String SCHOOL_NOT_FOUND = "없는 학교입니다";
     public static final String LIKE_NOT_FOUND = "좋아요가 없습니다";
+    public static final String GRADE_NOT_FOUND = "잘못된 학년 입니다";
 
 }
