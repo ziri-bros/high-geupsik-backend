@@ -16,7 +16,7 @@ import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.UserCardRepository;
+import com.highgeupsik.backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,12 +26,15 @@ import lombok.RequiredArgsConstructor;
 public class BoardQueryService {
 
 	private final BoardRepository boardRepository;
-	private final UserCardRepository userCardRepository;
+	private final UserRepository userRepository;
 
 	private static final int POST_COUNT = 20;
 
 	public Long findWriterIdByBoardId(Long boardId) {
-		return boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)).getUser().getId();
+		return boardRepository.findById(boardId)
+			.orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND))
+			.getUser()
+			.getId();
 	}
 
 	public BoardResDTO findOneById(Long postId) {
@@ -46,8 +49,8 @@ public class BoardQueryService {
 	}
 
 	public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
-		Region region = userCardRepository.findByUserId(userId).orElseThrow(
-			() -> new NotFoundException(CARD_NOT_FOUND)).getSchool().getRegion();
+		Region region = userRepository.findById(userId).orElseThrow(
+			() -> new NotFoundException(USER_NOT_FOUND)).getSchool().getRegion();
 		condition.setRegion(region);
 		return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
 	}

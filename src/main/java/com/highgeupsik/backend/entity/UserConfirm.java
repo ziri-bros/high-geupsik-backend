@@ -1,7 +1,6 @@
 package com.highgeupsik.backend.entity;
 
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,28 +16,25 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserCard extends TimeEntity {
+public class UserConfirm extends TimeEntity{
 
     @Id
     @GeneratedValue
-    @Column(name = "user_card_id")
+    @Column(name = "user_confirm_id")
     private Long id;
-
-    private String thumbnail;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id")
-    private School school;
+    @JoinColumn(name = "student_card_id")
+    private StudentCard studentCard;
 
     @Builder
-    public UserCard(String thumbnail, User user, School school) {
-        this.thumbnail = thumbnail;
+    public UserConfirm(User user, StudentCard studentCard) {
         this.user = user;
-        this.school = school;
+        this.studentCard = studentCard;
     }
 
 }

@@ -3,14 +3,14 @@ package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 
+import com.highgeupsik.backend.dto.SchoolDTO;
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.dto.TokenDTO;
-import com.highgeupsik.backend.dto.UserCardReqDTO;
+import com.highgeupsik.backend.dto.UserReqDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.SubjectScheduleQueryService;
 import com.highgeupsik.backend.service.SubjectScheduleService;
-import com.highgeupsik.backend.service.UserCardQueryService;
-import com.highgeupsik.backend.service.UserCardService;
+import com.highgeupsik.backend.service.UserConfirmService;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,22 +28,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApiController {
 
     private final UserService userService;
-    private final UserCardService userCardService;
-    private final UserCardQueryService userCardQueryService;
+    private final UserQueryService userQueryService;
+    private final UserConfirmService userConfirmService;
     private final SubjectScheduleService subjectScheduleService;
     private final SubjectScheduleQueryService subjectScheduleQueryService;
 
     @ApiOperation(value = "학생증 제출")
     @PostMapping("/login/cards")
-    public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserCardReqDTO userCardReqDTO) {
-        return success(userCardService.saveUserCard(userId, userCardReqDTO.getThumbnail(),
-            userCardReqDTO.getSchoolDTO()));
-    }
-
-    @ApiOperation(value = "학생증 제출 취소")
-    @DeleteMapping("/login/cards")
-    public ApiResult deleteCard(@LoginUser Long userId) {
-        userCardService.deleteUserCardByUserId(userId);
+    public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
+        userService.updateUserInfo(userId, userReqDTO.getStudentCardImage(), userReqDTO.getSchoolDTO());
+        userConfirmService.saveUserConfirm(userId);
         return success(null);
     }
 
@@ -55,7 +50,15 @@ public class UserApiController {
     @ApiOperation(value = "내정보 조회")
     @GetMapping("/users") //내정보 조회
     public ApiResult myInfo(@LoginUser Long userId) {
-        return success(userCardQueryService.findByUserId(userId));
+        return success(userQueryService.findById(userId));
+    }
+
+
+    @ApiOperation(value = "내정보 수정")
+    @PatchMapping("/users")
+    public ApiResult editMyInfo(@LoginUser Long userId, @RequestBody SchoolDTO schoolDTO) {
+        userService.updateSchool(userId, schoolDTO);
+        return success(null);
     }
 
     /***

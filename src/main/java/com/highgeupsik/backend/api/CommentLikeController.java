@@ -27,9 +27,4 @@ public class CommentLikeController {
 		return success(likeService.saveOrUpdateCommentLike(userId, commentId));
 	}
 
-	@ApiOperation(value = "좋아요 조회")
-	@GetMapping("/comments/{commentId}/like")
-	public ApiResult boardLike(@PathVariable("commentId") Long commentId, @LoginUser Long userId) {
-		return ApiUtils.success(likeService.isExistedCommentLike(userId, commentId));
-	}
 }

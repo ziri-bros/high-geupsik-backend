@@ -7,11 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    //    findAll(Pageable pageable)
-    Optional<User> findByEmail(String email);
-
     Optional<User> findByEmailAndProvider(String email, AuthProvider provider);
-
-    boolean existsByEmail(String email);
 
 }
