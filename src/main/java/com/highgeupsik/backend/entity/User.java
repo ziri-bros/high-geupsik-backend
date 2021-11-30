@@ -46,7 +46,7 @@ public class User {
 
     private String refreshToken;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "student_card_id")
     private StudentCard studentCard;
 
