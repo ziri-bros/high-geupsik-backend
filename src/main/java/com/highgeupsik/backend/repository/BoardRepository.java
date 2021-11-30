@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
-    public Page<Board> findByUserId(Long userId, Pageable pageable);
+    Page<Board> findByUserId(Long userId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"uploadFileList"})
-    public Optional<Board> findById(Long boardId);
+    Optional<Board> findById(Long boardId);
 
 }

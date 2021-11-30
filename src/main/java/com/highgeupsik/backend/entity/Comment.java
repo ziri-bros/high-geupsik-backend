@@ -32,7 +32,9 @@ public class Comment extends TimeEntity {
 
 	private String content;
 
-	private int anonymousNumber;
+	private int anonymousId;
+
+	private int replyCount = 0;
 
 	private int likeCount = 0;
 
@@ -57,15 +59,19 @@ public class Comment extends TimeEntity {
 	private List<Comment> children = new ArrayList<>();
 
 	@Builder
-	public Comment(String content, int anonymousNumber, User user, Board board) {
+	public Comment(String content, int anonymousId, User user, Board board) {
 		this.content = content;
-		this.anonymousNumber = anonymousNumber;
+		this.anonymousId = anonymousId;
 		this.user = user;
 		this.board = board;
 	}
 
 	public boolean isParent() {
 		return this.equals(parent);
+	}
+
+	public boolean isReply() {
+		return !isParent();
 	}
 
 	public void toParentComment() {
@@ -75,7 +81,6 @@ public class Comment extends TimeEntity {
 
 	public void disable() {
 		deleteFlag = true;
-		board.deleteComment(this);
 	}
 
 	public boolean canDelete() {
@@ -101,15 +106,23 @@ public class Comment extends TimeEntity {
 		}
 	}
 
-	public void setParent(Comment parent) {
+	public void toReply(Comment parent) {
 		this.parent = parent;
-		if (!parent.getChildren().contains(this)) {
-			parent.getChildren().add(this);
-		}
+		parent.addReply(parent);
 	}
 
-	public void setAnonymousNumber(int anonymousNumber) {
-		this.anonymousNumber = anonymousNumber;
+	private void addReply(Comment comment) {
+		children.add(comment);
+		replyCount++;
+	}
+
+	public void deleteReply(Comment comment) {
+		children.remove(comment);
+		replyCount--;
+	}
+
+	public void setAnonymousId(int anonymousNumber) {
+		this.anonymousId = anonymousNumber;
 	}
 
 	public boolean isWriter(Long userId) {
