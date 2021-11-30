@@ -11,5 +11,5 @@ import lombok.Setter;
 public class CommentReqDTO {
 
     private String content;
-
+    private Long parentId;
 }

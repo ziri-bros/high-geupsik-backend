@@ -1,5 +1,5 @@
 package com.highgeupsik.backend.entity;
 
 public enum Category {
-    FREE, HOT, INFORMATION, PROMOTION, AUTH
+    FREE, HOT, INFORMATION, PROMOTION
 }

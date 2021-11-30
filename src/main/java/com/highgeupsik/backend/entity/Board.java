@@ -43,7 +43,7 @@ public class Board extends TimeEntity {
 
     private int likeCount = 0;
 
-    private int userCount = 0;
+    private int nextAnonymousNumber = 0;
 
     private int commentCount = 0;
 
@@ -90,8 +90,13 @@ public class Board extends TimeEntity {
         }
     }
 
-    public void updateBoardUserCount() {
-        this.userCount += 1;
+    public int getNextAnonymousNumber() {
+        increaseAnonymousNumber();
+        return nextAnonymousNumber;
+    }
+
+    private void increaseAnonymousNumber() {
+        this.nextAnonymousNumber += 1;
     }
 
     public void updateBoardCommentCount(Boolean flag) {
@@ -113,4 +118,7 @@ public class Board extends TimeEntity {
         this.uploadFileList.clear();
     }
 
+    public boolean isWriter(User user) {
+        return this.user.equals(user);
+    }
 }

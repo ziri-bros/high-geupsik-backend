@@ -1,9 +1,14 @@
 package com.highgeupsik.backend.service;
 
-
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
-import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateDESC;
+import static com.highgeupsik.backend.utils.PagingUtils.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.dto.BoardSearchCondition;
@@ -12,44 +17,42 @@ import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.UserRepository;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@RequiredArgsConstructor
+import lombok.RequiredArgsConstructor;
+
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
+@Service
 public class BoardQueryService {
 
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+	private final BoardRepository boardRepository;
+	private final UserRepository userRepository;
 
-    private static final int POST_COUNT = 20;
+	private static final int POST_COUNT = 20;
 
-    public Long findWriterIdByBoardId(Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(() ->
-            new NotFoundException(POST_NOT_FOUND)).getUser().getId();
-    }
+	public Long findWriterIdByBoardId(Long boardId) {
+		return boardRepository.findById(boardId)
+			.orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND))
+			.getUser()
+			.getId();
+	}
 
-    public BoardResDTO findOneById(Long postId) {
-        return new BoardResDTO(boardRepository.findById(postId).orElseThrow(() ->
-            new NotFoundException(POST_NOT_FOUND)));
-    }
+	public BoardResDTO findOneById(Long postId) {
+		return new BoardResDTO(
+			boardRepository.findById(postId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)));
+	}
 
-    public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
-        List<Board> boards = boardRepository.findByUserId(userId, orderByCreatedDateDESC(
-            pageNum, POST_COUNT)).getContent();
-        return boards.stream().map((post) -> new BoardResDTO(post)).collect(Collectors.toList());
-    }
+	public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
+		List<Board> boards = boardRepository.findByUserId(userId, orderByCreatedDateDESC(pageNum, POST_COUNT))
+			.getContent();
+		return boards.stream().map(BoardResDTO::new).collect(Collectors.toList());
+	}
 
-    public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
-        Region region = userRepository.findById(userId).orElseThrow(
-            () -> new NotFoundException(USER_NOT_FOUND)).getSchool().getRegion();
-        condition.setRegion(region);
-        return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
-    }
+	public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
+		Region region = userRepository.findById(userId).orElseThrow(
+			() -> new NotFoundException(USER_NOT_FOUND)).getSchool().getRegion();
+		condition.setRegion(region);
+		return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
+	}
 
 }

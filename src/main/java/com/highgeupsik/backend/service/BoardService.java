@@ -58,7 +58,7 @@ public class BoardService {
 
     public Long updateBoard(Long boardId, BoardReqDTO boardReqDTO) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-            () -> new NotFoundException(POST_NOT_FOUND));
+            () -> new NotFoundException(BOARD_NOT_FOUND));
         if(!boardReqDTO.getUploadFileDTOList().isEmpty()) {
             board.deleteFiles();
             board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(),
@@ -85,7 +85,7 @@ public class BoardService {
 
     public void deleteBoard(Long userId, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-            () -> new NotFoundException(POST_NOT_FOUND));
+            () -> new NotFoundException(BOARD_NOT_FOUND));
         Long writerId = board.getUser().getId();
         if (userId.equals(writerId)) {
             boardRepository.delete(board);

@@ -1,13 +1,18 @@
 package com.highgeupsik.backend.repository;
 
-import com.highgeupsik.backend.entity.Like;
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.highgeupsik.backend.entity.Comment;
+import com.highgeupsik.backend.entity.Like;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    public Optional<Like> findByUserIdAndBoardId(Long userId, Long boardId);
+	Optional<Like> findByUserIdAndBoardId(Long userId, Long boardId);
 
-    public Optional<Like> findByUserIdAndCommentId(Long userId, Long commentId);
+	Optional<Like> findByUserIdAndCommentId(Long userId, Long commentId);
 
+	List<Like> findAllByUserIdAndCommentIn(Long userId, List<Comment> comments);
 }
