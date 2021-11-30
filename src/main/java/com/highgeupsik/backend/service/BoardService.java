@@ -57,30 +57,20 @@ public class BoardService {
     }
 
     public Long updateBoard(Long boardId, BoardReqDTO boardReqDTO) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
-            () -> new NotFoundException(BOARD_NOT_FOUND));
-        if(!boardReqDTO.getUploadFileDTOList().isEmpty()) {
-            board.deleteFiles();
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        board.deleteFiles();
+        uploadFileRepository.deleteByBoardId(boardId);
+        if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
             board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(),
-                boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri());
+                boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri(),
+                boardReqDTO.getCategory());
             for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
                 board.setFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()));
             }
-        }else{
-            board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent());
+        } else {
+            board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
         }
         return board.getId();
-    }
-
-    public void deleteFilesInBoard(Long userId, Long boardId) {
-        Board board = boardRepository.findById(boardId).get();
-        Long writerId = board.getUser().getId();
-        if (userId.equals(writerId)) {
-            board.deleteFiles();
-            uploadFileRepository.deleteByBoardId(boardId);
-        } else {
-            throw new NotMatchException(WRITER_NOT_MATCH);
-        }
     }
 
     public void deleteBoard(Long userId, Long boardId) {
