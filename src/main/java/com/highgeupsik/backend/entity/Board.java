@@ -72,14 +72,17 @@ public class Board extends TimeEntity {
         this.thumbnail = thumbnail;
     }
 
-    public void updateBoard(String title, String content) {
+    public void updateBoard(String title, String content, Category category) {
         this.title = title;
         this.content = content;
+        this.category = category;
     }
-    public void updateBoard(String title, String content, String thumbnail) {
+
+    public void updateBoard(String title, String content, String thumbnail, Category category) {
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
+        this.category = category;
     }
 
     public void updateBoardLikeCount(Boolean flag) {
@@ -115,6 +118,7 @@ public class Board extends TimeEntity {
     }
 
     public void deleteFiles() {
+        this.thumbnail = null;
         this.uploadFileList.clear();
     }
 
