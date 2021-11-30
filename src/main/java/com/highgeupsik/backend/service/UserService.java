@@ -35,23 +35,22 @@ public class UserService {
     public void updateUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
-        user.updateSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
+        user.updateRoleGuest();
+        user.setSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
             () -> new NotFoundException(SCHOOL_NOT_FOUND)));
-        user.updateStudentCard(studentCardRepository.save(new StudentCard(
+        user.setStudentCard(studentCardRepository.save(new StudentCard(
             GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(), studentCardDTO.getStudentCardImage())));
     }
 
-    public void updateSchool(Long userId, SchoolDTO schoolDTO) {
-        User user = userRepository.findById(userId).orElseThrow(
-            () -> new NotFoundException(USER_NOT_FOUND));
-        user.updateSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
-            () -> new NotFoundException(SCHOOL_NOT_FOUND)));
+    public void updateUser(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
+        studentCardRepository.deleteByUserId(userId);
+        updateUserInfo(userId, studentCardDTO, schoolDTO);
     }
 
     public void updateRole(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
             new NotFoundException(USER_NOT_FOUND));
-        user.updateRole();
+        user.updateRoleUser();
     }
 
     public TokenDTO updateToken(TokenDTO tokenDTO) {

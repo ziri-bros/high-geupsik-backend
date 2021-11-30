@@ -79,17 +79,21 @@ public class User {
         this.role = role;
     }
 
-    public void updateStudentCard(StudentCard studentCard) {
+    public void setStudentCard(StudentCard studentCard) {
         this.studentCard = studentCard;
         studentCard.setUser(this);
     }
 
-    public void updateSchool(School school) {
+    public void setSchool(School school) {
         this.school = school;
     }
 
-    public void updateRole() {
+    public void updateRoleUser() {
         role = Role.ROLE_USER;
+    }
+
+    public void updateRoleGuest() {
+        role = Role.ROLE_GUEST;
     }
 
     public User updateName(String username) {

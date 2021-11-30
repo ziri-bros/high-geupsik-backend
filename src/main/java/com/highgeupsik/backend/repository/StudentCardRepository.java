@@ -9,4 +9,5 @@ public interface StudentCardRepository extends JpaRepository<StudentCard, Long> 
 
     Optional<StudentCard> findByUserId(Long userId);
 
+    void deleteByUserId(Long userId);
 }
