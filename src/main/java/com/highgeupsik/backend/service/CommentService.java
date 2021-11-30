@@ -40,9 +40,9 @@ public class CommentService {
 				.build()
 		);
 
-		comment.setAnonymousNumber(getAnonymousNumberFrom(board, writer));
+		comment.setAnonymousId(getAnonymousNumberFrom(board, writer));
 		if (board.isWriter(writer)) {
-			comment.setAnonymousNumber(-1);
+			comment.setAnonymousId(-1);
 		}
 
 		comment.toParentComment();
@@ -55,35 +55,41 @@ public class CommentService {
 
 	private int getAnonymousNumberFrom(Board board, User writer) {
 		return commentRepository.findFirstByBoardAndUser(board, writer)
-			.map(Comment::getAnonymousNumber)
+			.map(Comment::getAnonymousId)
 			.orElse(board.getNextAnonymousNumber());
 	}
 
-	private void transformToReply(Comment reply, Long parentId) {
+	private void transformToReply(Comment comment, Long parentId) {
 		Comment parent = commentRepository.findById(parentId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-		reply.setParent(parent);
+		comment.toReply(parent);
 	}
 
 	public Long updateComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-		Long writerId = comment.getUser().getId();
-		if (userId.equals(writerId)) {
-			comment.updateContent(commentReqDTO);
-			return commentId;
-		}
-		throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+		checkWriter(comment, userId);
+		comment.updateContent(commentReqDTO);
+		return commentId;
 	}
 
 	public void deleteComment(Long userId, Long boardId, Long commentId) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
+		Board board = comment.getBoard();
 		checkWriter(comment, userId);
 		comment.disable();
 		if (comment.canDelete()) {
-			commentRepository.delete(comment);
+			deleteComment(comment, board);
 		}
+	}
+
+	private void deleteComment(Comment comment, Board board) {
+		if (comment.isReply()) {
+			Comment parent = comment.getParent();
+			parent.deleteReply(comment);
+		}
+		board.deleteComment(comment);
 	}
 
 	private void checkWriter(Comment comment, Long userId) {

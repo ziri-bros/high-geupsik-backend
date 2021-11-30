@@ -21,7 +21,7 @@ public class CommentQueryService {
 
 	public int findUserCountByUserIdAndBoardId(Long userId, Long postId) { //익명번호 조회
 		List<Comment> comments = commentRepository.findByUserIdAndBoardId(userId, postId);
-		return comments.isEmpty() ? 0 : comments.get(0).getAnonymousNumber();
+		return comments.isEmpty() ? 0 : comments.get(0).getAnonymousId();
 	}
 
 }
