@@ -45,7 +45,7 @@ public class CommentService {
 			comment.setAnonymousId(-1);
 		}
 
-		comment.toParentComment();
+		comment.toParent();
 		if (dto.getParentId() != null) {
 			transformToReply(comment, dto.getParentId());
 		}
@@ -76,20 +76,20 @@ public class CommentService {
 	public void deleteComment(Long userId, Long boardId, Long commentId) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
+		Comment parent = comment.getParent();
 		Board board = comment.getBoard();
+
 		checkWriter(comment, userId);
 		comment.disable();
 		if (comment.canDelete()) {
-			deleteComment(comment, board);
+			board.deleteComment(comment);
 		}
-	}
-
-	private void deleteComment(Comment comment, Board board) {
 		if (comment.isReply()) {
-			Comment parent = comment.getParent();
 			parent.deleteReply(comment);
 		}
-		board.deleteComment(comment);
+		if (parent.isDisabled()) {
+			board.deleteComment(parent);
+		}
 	}
 
 	private void checkWriter(Comment comment, Long userId) {
@@ -97,5 +97,4 @@ public class CommentService {
 			throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
 		}
 	}
-
 }
