@@ -2,6 +2,7 @@ package com.highgeupsik.backend.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -127,5 +128,19 @@ public class Comment extends TimeEntity {
 
 	public boolean isWriter(Long userId) {
 		return user.getId().equals(userId);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !o.getClass().equals(Comment.class)) {
+			return false;
+		}
+		Comment other = (Comment)o;
+		return id.equals(other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
