@@ -32,20 +32,13 @@ public class CommentService {
 		Board board = boardRepository.findById(boardId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.BOARD_NOT_FOUND));
 
-		Comment comment = commentRepository.save(
-			Comment.builder()
-				.content(dto.getContent())
-				.user(writer)
-				.board(board)
-				.build()
-		);
+		Comment comment = commentRepository.save(Comment.of(dto.getContent(), writer, board));
 
 		comment.setAnonymousId(getAnonymousNumberFrom(board, writer));
 		if (board.isWriter(writer)) {
 			comment.setAnonymousId(-1);
 		}
 
-		comment.toParent();
 		if (dto.getParentId() != null) {
 			transformToReply(comment, dto.getParentId());
 		}
@@ -89,7 +82,7 @@ public class CommentService {
 	}
 
 	private void deleteCommentIfCan(Comment comment, Board board) {
-		if (comment.isDisabled()) {
+		if (comment.isDisabled() && comment.canDelete()) {
 			board.deleteComment(comment);
 		}
 	}
