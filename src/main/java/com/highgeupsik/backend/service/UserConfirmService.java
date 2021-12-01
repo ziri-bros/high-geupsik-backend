@@ -1,13 +1,10 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
 import com.highgeupsik.backend.dto.UserConfirmDTO;
+import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.entity.UserConfirm;
-import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.repository.StudentCardRepository;
 import com.highgeupsik.backend.repository.UserConfirmRepository;
-import com.highgeupsik.backend.repository.UserRepository;
 import com.highgeupsik.backend.utils.PagingUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,16 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserConfirmService {
 
     private final UserConfirmRepository userConfirmRepository;
-    private final UserRepository userRepository;
-    private final StudentCardRepository studentCardRepository;
     private static final int USER_CONFIRM_COUNT = 20;
 
-    public Long saveUserConfirm(Long userId) {
+    public Long saveUserConfirm(User user) {
         return userConfirmRepository.save(UserConfirm.builder()
-            .user(userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException(USER_NOT_FOUND)))
-            .studentCard(studentCardRepository.findByUserId(userId).orElseThrow(
-                () -> new NotFoundException(CARD_NOT_FOUND)))
+            .user(user)
+            .studentCard(user.getStudentCard())
             .build()).getId();
     }
 
