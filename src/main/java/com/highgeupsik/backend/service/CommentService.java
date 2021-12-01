@@ -9,7 +9,6 @@ import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.exception.NotMatchException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.CommentRepository;
 import com.highgeupsik.backend.repository.UserRepository;
@@ -61,7 +60,7 @@ public class CommentService {
 	public Long updateComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
-		checkWriter(comment, userId);
+		comment.checkWriter(userId);
 		comment.updateContent(commentReqDTO);
 		return commentId;
 	}
@@ -70,26 +69,13 @@ public class CommentService {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND));
 		Comment parent = comment.getParent();
-		Board board = comment.getBoard();
 
-		checkWriter(comment, userId);
+		comment.checkWriter(userId);
 		comment.disable();
-		deleteCommentIfCan(comment, board);
+		comment.deleteIfCan();
 		if (comment.isReply()) {
 			parent.deleteReply(comment);
-			deleteCommentIfCan(parent, board);
-		}
-	}
-
-	private void deleteCommentIfCan(Comment comment, Board board) {
-		if (comment.isDisabled() && comment.canDelete()) {
-			board.deleteComment(comment);
-		}
-	}
-
-	private void checkWriter(Comment comment, Long userId) {
-		if (!comment.isWriter(userId)) {
-			throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+			parent.deleteIfCan();
 		}
 	}
 }

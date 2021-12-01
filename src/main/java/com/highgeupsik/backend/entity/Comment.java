@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.highgeupsik.backend.dto.CommentReqDTO;
+import com.highgeupsik.backend.exception.NotMatchException;
+import com.highgeupsik.backend.utils.ErrorMessage;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -92,7 +94,13 @@ public class Comment extends TimeEntity {
 		this.anonymousId = anonymousNumber;
 	}
 
-	public boolean isWriter(Long userId) {
+	public void checkWriter(Long userId) {
+		if (!isWriter(userId)) {
+			throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+		}
+	}
+
+	private boolean isWriter(Long userId) {
 		return user.getId().equals(userId);
 	}
 
@@ -129,6 +137,12 @@ public class Comment extends TimeEntity {
 
 	public boolean canDelete() {
 		return replyCount == 1;
+	}
+
+	public void deleteIfCan() {
+		if (isDisabled() && canDelete()) {
+			board.deleteComment(this);
+		}
 	}
 
 	public void updateContent(CommentReqDTO commentReqDTO) {
