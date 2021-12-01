@@ -45,7 +45,7 @@ public class AdminApiController {
 	@PatchMapping("/users/{userId}/authorize") //수락
 	public ApiResult acceptCard(@PathVariable("userId") Long userId) throws MessagingException {
 		UserResDTO userResDTO = userQueryService.findById(userId);
-		userService.updateRole(userId);
+		userService.updateRoleUser(userId);
 		userConfirmService.deleteUserConfirmByUserId(userId);
 		mailService.sendEmail(userResDTO.getUsername(), userResDTO.getEmail(), true);
 		return success(null);
