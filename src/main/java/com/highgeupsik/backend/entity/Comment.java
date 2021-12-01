@@ -1,10 +1,8 @@
 package com.highgeupsik.backend.entity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +34,7 @@ public class Comment extends TimeEntity {
 
 	private int anonymousId;
 
-	private int replyCount = 0;
+	private int replyCount = 1;
 
 	private int likeCount = 0;
 
@@ -58,7 +56,7 @@ public class Comment extends TimeEntity {
 	private Comment parent;
 
 	@OneToMany(mappedBy = "parent")
-	private Set<Comment> children = new HashSet<>();
+	private List<Comment> children = new ArrayList<>();
 
 	@Builder
 	public Comment(String content, int anonymousId, User user, Board board) {
@@ -66,6 +64,17 @@ public class Comment extends TimeEntity {
 		this.anonymousId = anonymousId;
 		this.user = user;
 		this.board = board;
+	}
+
+	public static Comment of(String content, User user, Board board) {
+		Comment comment = Comment.builder()
+			.content(content)
+			.user(user)
+			.board(board)
+			.build();
+		comment.parent = comment;
+		comment.children.add(comment);
+		return comment;
 	}
 
 	public int getReplyCount() {
@@ -95,10 +104,6 @@ public class Comment extends TimeEntity {
 		return !isParent();
 	}
 
-	public void toParent() {
-		toReply(this);
-	}
-
 	public void toReply(Comment parent) {
 		this.parent = parent;
 		parent.addReply(this);
@@ -111,6 +116,7 @@ public class Comment extends TimeEntity {
 
 	public void deleteReply(Comment comment) {
 		children.remove(comment);
+		replyCount--;
 	}
 
 	public boolean isDisabled() {
@@ -122,7 +128,7 @@ public class Comment extends TimeEntity {
 	}
 
 	public boolean canDelete() {
-		return children.size() == 1;
+		return replyCount == 1;
 	}
 
 	public void updateContent(CommentReqDTO commentReqDTO) {
