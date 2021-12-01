@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.highgeupsik.backend.dto.CommentReqDTO;
 import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
-import com.highgeupsik.backend.service.BoardQueryService;
-import com.highgeupsik.backend.service.CommentQueryService;
 import com.highgeupsik.backend.service.CommentService;
 import com.highgeupsik.backend.utils.ApiResult;
 
@@ -27,8 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class CommentController {
 
 	private final CommentService commentService;
-	private final CommentQueryService commentQueryService;
-	private final BoardQueryService boardQueryService;
 
 	@ApiOperation(value = "댓글 작성")
 	@PostMapping("/boards/{boardId}/comments")

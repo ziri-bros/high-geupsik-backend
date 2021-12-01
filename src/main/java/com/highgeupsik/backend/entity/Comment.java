@@ -85,9 +85,6 @@ public class Comment extends TimeEntity {
 
 	public void setBoard(Board board) {
 		this.board = board;
-		if (!board.getCommentList().contains(this)) {
-			board.getCommentList().add(this);
-		}
 	}
 
 	public void setAnonymousId(int anonymousNumber) {
@@ -124,7 +121,9 @@ public class Comment extends TimeEntity {
 
 	public void deleteReply(Comment comment) {
 		children.remove(comment);
-		replyCount--;
+		if (replyCount > 0) {
+			replyCount--;
+		}
 	}
 
 	public boolean isDisabled() {
