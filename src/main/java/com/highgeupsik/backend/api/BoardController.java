@@ -1,5 +1,7 @@
 package com.highgeupsik.backend.api;
 
+import static org.springframework.http.HttpStatus.*;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.highgeupsik.backend.dto.BoardReqDTO;
@@ -79,9 +82,9 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시글 삭제")
+	@ResponseStatus(NO_CONTENT)
 	@DeleteMapping("/boards/{boardId}") //게시글 삭제
-	public ApiResult deleteBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
+	public void deleteBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
 		boardService.deleteBoard(userId, boardId);
-		return ApiUtils.success(null);
 	}
 }
