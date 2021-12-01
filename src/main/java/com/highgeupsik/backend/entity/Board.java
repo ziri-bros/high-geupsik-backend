@@ -103,9 +103,17 @@ public class Board extends TimeEntity {
 		this.nextAnonymousNumber += 1;
 	}
 
+	public void addComment(Comment comment) {
+		commentList.add(comment);
+		comment.setBoard(this);
+		commentCount++;
+	}
+
 	public void deleteComment(Comment comment) {
 		commentList.remove(comment);
-		commentCount -= 1;
+		if (commentCount > 0) {
+			commentCount--;
+		}
 	}
 
 	public void setFile(UploadFile file) {

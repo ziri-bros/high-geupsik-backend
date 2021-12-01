@@ -31,7 +31,8 @@ public class CommentService {
 		Board board = boardRepository.findById(boardId)
 			.orElseThrow(() -> new NotFoundException(ErrorMessage.BOARD_NOT_FOUND));
 
-		Comment comment = commentRepository.save(Comment.of(dto.getContent(), writer, board));
+		Comment comment = Comment.of(dto.getContent(), writer, board);
+		board.addComment(comment);
 
 		comment.setAnonymousId(getAnonymousNumberFrom(board, writer));
 		if (board.isWriter(writer)) {
