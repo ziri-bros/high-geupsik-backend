@@ -25,31 +25,20 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class UserProfileController {
 
-	private final UserService userService;
-	private final UserConfirmService userConfirmService;
-	private final UserQueryService userQueryService;
+    private final UserService userService;
+    private final UserQueryService userQueryService;
 
-	@ApiOperation(value = "내정보 조회")
-	@ResponseStatus(OK)
-	@GetMapping("/users") //내정보 조회
-	public ApiResult myInfo(@LoginUser Long userId) {
-		return success(userQueryService.findById(userId));
-	}
+    @ApiOperation(value = "내정보 조회")
+    @ResponseStatus(OK)
+    @GetMapping("/users") //내정보 조회
+    public ApiResult myInfo(@LoginUser Long userId) {
+        return success(userQueryService.findById(userId));
+    }
 
-	@ApiOperation(value = "내정보 수정")
-	@ResponseStatus(OK)
-	@PatchMapping("/users")
-	public ApiResult editMyInfo(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-		userService.editUserInfo(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
-		userConfirmService.saveUserConfirm(userId);
-		return success(null);
-	}
-
-	@ApiOperation(value = "학생증 제출")
-	@PostMapping("/login/cards")
-	public ApiResult sendCard(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-		userService.updateUserInfo(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
-		userConfirmService.saveUserConfirm(userId);
-		return success(null);
-	}
+    @ApiOperation(value = "내정보 수정")
+    @PatchMapping("/users")
+    public ApiResult updateUser(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
+        userService.updateUserInfo(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
+        return success(null);
+    }
 }
