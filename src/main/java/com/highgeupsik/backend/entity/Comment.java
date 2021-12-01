@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,7 +51,7 @@ public class Comment extends TimeEntity {
 	@JoinColumn(name = "board_id")
 	private Board board;
 
-	@OneToMany(mappedBy = "comment")
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Like> likeList = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
