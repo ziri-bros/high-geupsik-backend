@@ -30,26 +30,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final SchoolRepository schoolRepository;
     private final StudentCardRepository studentCardRepository;
+    private final UserConfirmService userConfirmService;
     private final JwtTokenProvider jwtTokenProvider;
 
     public void updateUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
+        user.updateRoleGuest();
         user.setSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
             () -> new NotFoundException(SCHOOL_NOT_FOUND)));
         user.setStudentCard(studentCardRepository.save(new StudentCard(
             GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(),
             studentCardDTO.getStudentCardImage())));
+        userConfirmService.saveUserConfirm(user);
     }
 
-    public void editUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
-        User user = userRepository.findById(userId).orElseThrow(
-            () -> new NotFoundException(USER_NOT_FOUND));
-        user.updateRoleGuest();
-        updateUserInfo(userId, studentCardDTO, schoolDTO);
-    }
-
-    public void updateRole(Long userId) {
+    public void updateRoleUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
             new NotFoundException(USER_NOT_FOUND));
         user.updateRoleUser();
