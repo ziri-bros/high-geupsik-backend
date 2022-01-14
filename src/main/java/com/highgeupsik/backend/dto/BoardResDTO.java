@@ -47,6 +47,7 @@ public class BoardResDTO {
         category = board.getCategory();
         likeCount = board.getLikeCount();
         commentCount = board.getCommentCount();
+        thumbnail = board.getThumbnail();
         uploadFileDTOList = board.getUploadFileList().stream().map((uploadFile -> new UploadFileDTO(uploadFile)))
             .collect(Collectors.toList());
         createdDate = board.getCreatedDate();
