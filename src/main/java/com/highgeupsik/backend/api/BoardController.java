@@ -31,60 +31,55 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class BoardController {
 
-	private final BoardService boardService;
-	private final BoardQueryService boardQueryService;
+    private final BoardService boardService;
+    private final BoardQueryService boardQueryService;
 
-	@ApiOperation(value = "게시글 단일 조회")
-	@GetMapping("/boards/{boardId}")
-	public ApiResult<BoardResDTO> board(@PathVariable("boardId") Long boardId) {
-		return ApiUtils.success(boardQueryService.findOneById(boardId));
-	}
+    @ApiOperation(value = "게시글 단일 조회")
+    @GetMapping("/boards/{boardId}")
+    public ApiResult<BoardResDTO> board(@PathVariable("boardId") Long boardId) {
+        return ApiUtils.success(boardQueryService.findOneById(boardId));
+    }
 
-	@ApiOperation(value = "게시글 목록 조회")
-	@GetMapping("/boards")
-	public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-		@LoginUser Long userId, BoardSearchCondition condition) {
-		return ApiUtils.success(boardQueryService.findAll(userId, pageNum, condition));
-	}
+    @ApiOperation(value = "게시글 목록 조회")
+    @GetMapping("/boards")
+    public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+        @LoginUser Long userId, BoardSearchCondition condition) {
+        return ApiUtils.success(boardQueryService.findAll(userId, pageNum, condition));
+    }
 
-	@ApiOperation(value = "게시글 작성")
-	@PostMapping("/boards")
-	public ApiResult writeBoard(@LoginUser Long userId,
-		@RequestBody BoardReqDTO boardReqDTO) {
-		if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
-			return ApiUtils.success(boardService.saveBoard(userId, boardReqDTO));
-		}
-		return ApiUtils.success(boardService.saveBoard(userId, boardReqDTO.getTitle(),
-			boardReqDTO.getContent(), boardReqDTO.getCategory()));
-	}
+    @ApiOperation(value = "게시글 작성")
+    @PostMapping("/boards")
+    public ApiResult writeBoard(@LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
+        return ApiUtils.success(boardService.makeBoard(userId, boardReqDTO));
+    }
 
-	@ApiOperation(value = "게시글 편집", notes = "게시글 편집 화면으로 넘어가기위해 이전 정보를 리턴")
-	@GetMapping("/boards/{boardId}/edit")
-	public ApiResult<BoardResDTO> editBoard(@PathVariable("boardId") Long boardId,
-		@LoginUser Long userId) {
-		BoardResDTO boardResDTO = boardQueryService.findOneById(boardId);
-		Long writerId = boardResDTO.getWriterId();
-		if (writerId.equals(userId)) {
-			return ApiUtils.success(boardResDTO);
-		}
-		throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
-	}
+    @ApiOperation(value = "게시글 편집", notes = "게시글 편집 화면으로 넘어가기위해 이전 정보를 리턴")
+    @GetMapping("/boards/{boardId}/edit")
+    public ApiResult<BoardResDTO> editBoard(@PathVariable("boardId") Long boardId,
+        @LoginUser Long userId) {
+        BoardResDTO boardResDTO = boardQueryService.findOneById(boardId);
+        Long writerId = boardResDTO.getWriterId();
+        if (writerId.equals(userId)) {
+            return ApiUtils.success(boardResDTO);
+        }
+        throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+    }
 
-	@ApiOperation(value = "게시글 편집")
-	@PutMapping("/boards/{boardId}") //게시글 편집
-	public ApiResult editBoard(@PathVariable("boardId") Long boardId,
-		@LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
-		Long writerId = boardQueryService.findWriterIdByBoardId(boardId);
-		if (writerId.equals(userId)) {
-			return ApiUtils.success(boardService.updateBoard(boardId, boardReqDTO));
-		}
-		throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
-	}
+    @ApiOperation(value = "게시글 편집")
+    @PutMapping("/boards/{boardId}") //게시글 편집
+    public ApiResult editBoard(@PathVariable("boardId") Long boardId,
+        @LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
+        Long writerId = boardQueryService.findWriterIdByBoardId(boardId);
+        if (writerId.equals(userId)) {
+            return ApiUtils.success(boardService.updateBoard(boardId, boardReqDTO));
+        }
+        throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+    }
 
-	@ApiOperation(value = "게시글 삭제")
-	@ResponseStatus(NO_CONTENT)
-	@DeleteMapping("/boards/{boardId}") //게시글 삭제
-	public void deleteBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
-		boardService.deleteBoard(userId, boardId);
-	}
+    @ApiOperation(value = "게시글 삭제")
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/boards/{boardId}") //게시글 삭제
+    public void deleteBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
+        boardService.deleteBoard(userId, boardId);
+    }
 }
