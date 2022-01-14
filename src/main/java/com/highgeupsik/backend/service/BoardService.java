@@ -27,7 +27,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final UploadFileRepository uploadFileRepository;
 
-    public Long saveBoard(Long userId, String title, String content, Category category) {
+    public Board saveBoard(Long userId, String title, String content, Category category){
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
         return boardRepository.save(Board.builder()
@@ -36,23 +36,20 @@ public class BoardService {
             .title(title)
             .category(category)
             .region(user.getSchool().getRegion())
-            .build()).getId();
+            .build());
     }
 
-    public Long saveBoard(Long userId, BoardReqDTO boardReqDTO) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        Board board = boardRepository.save(Board.builder()
-            .user(user)
-            .content(boardReqDTO.getContent())
-            .title(boardReqDTO.getTitle())
-            .category(boardReqDTO.getCategory())
-            .region(user.getSchool().getRegion())
-            .thumbnail(boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri())
-            .build());
-        for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
-            board.setFile(new UploadFile(uploadFileDTO.getFileName(),
-                uploadFileDTO.getFileDownloadUri()));
+    public Long makeBoard(Long userId, BoardReqDTO boardReqDTO){
+        Board board = saveBoard(userId, boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
+
+        if(!boardReqDTO.getUploadFileDTOList().isEmpty()){
+            board.setThumbnail(boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri());
+            for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
+                board.setFile(new UploadFile(uploadFileDTO.getFileName(),
+                    uploadFileDTO.getFileDownloadUri()));
+            }
         }
+
         return board.getId();
     }
 

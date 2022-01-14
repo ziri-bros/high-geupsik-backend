@@ -116,6 +116,10 @@ public class Board extends TimeEntity {
 		}
 	}
 
+	public void setThumbnail(String thumbnail){
+		this.thumbnail = thumbnail;
+	}
+
 	public void setFile(UploadFile file) {
 		this.uploadFileList.add(file);
 		if (file.getBoard() != this) {
