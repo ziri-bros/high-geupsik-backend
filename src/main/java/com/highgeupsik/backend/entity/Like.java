@@ -44,6 +44,12 @@ public class Like {
         this.user = user;
     }
 
+    public static Like of(User user) {
+        return Like.builder()
+            .user(user)
+            .build();
+    }
+
     public Like update() {
         this.flag = !this.flag;
         return this;
@@ -62,4 +68,5 @@ public class Like {
             comment.getLikeList().add(this);
         }
     }
+
 }
