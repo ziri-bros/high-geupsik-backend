@@ -25,71 +25,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LikeService {
 
-	private final LikeRepository likeRepository;
-	private final UserRepository userRepository;
-	private final CommentRepository commentRepository;
-	private final BoardRepository boardRepository;
+    private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final BoardRepository boardRepository;
 
-	public Like saveBoardLike(User user, Board board) {
-		Like like = likeRepository.save(Like.builder()
-			.user(user)
-			.build());
-		like.setBoard(board);
-		return like;
-	}
+    public boolean saveOrUpdateBoardLike(Long userId, Long boardId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        Like like = likeRepository.findByUserIdAndBoardId(userId, boardId)
+            .map(Like::update).orElse(Like.of(user));
+        like.setBoard(board);
+        board.updateBoardLikeCount(like.getFlag());
+        likeRepository.save(like);
+        return like.getFlag();
+    }
 
-	public Like saveCommentLike(User user, Comment comment) {
-		Like like = likeRepository.save(Like.builder()
-			.user(user)
-			.build());
-		like.setComment(comment);
-		return like;
-	}
+    public boolean saveOrUpdateCommentLike(Long userId, Long commentId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+            () -> new NotFoundException(COMMENT_NOT_FOUND));
+        Like like = likeRepository.findByUserIdAndCommentId(userId, commentId)
+            .map(Like::update).orElse(Like.of(user));
+        like.setComment(comment);
+        comment.updateCommentLike(like.getFlag());
+        likeRepository.save(like);
+        return like.getFlag();
+    }
 
-	public boolean saveOrUpdateBoardDetailLike(Long userId, Long boardId) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-		Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
-		Optional<Like> boardLike = findBoardLike(userId, boardId);
-		if (!boardLike.isPresent()) {
-			Like like = saveBoardLike(user, board);
-			board.updateBoardLikeCount(like.getFlag());
-			return like.getFlag();
-		} else {
-			Like like = boardLike.get();
-			like.update();
-			board.updateBoardLikeCount(like.getFlag());
-			return like.getFlag();
-		}
-	}
-
-	public boolean saveOrUpdateCommentLike(Long userId, Long commentId) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-		Comment comment = commentRepository.findById(commentId).orElseThrow(
-			() -> new NotFoundException(COMMENT_NOT_FOUND));
-		Optional<Like> commentLike = findCommentLike(userId, commentId);
-		if (!commentLike.isPresent()) {
-			Like like = saveCommentLike(user, comment);
-			comment.updateCommentLike(like.getFlag());
-			return like.getFlag();
-		} else {
-			Like like = commentLike.get();
-			like.update();
-			comment.updateCommentLike(like.getFlag());
-			return like.getFlag();
-		}
-	}
-
-	public Optional<Like> findBoardLike(Long userId, Long boardId) {
-		return likeRepository.findByUserIdAndBoardId(userId, boardId);
-	}
-
-	public Optional<Like> findCommentLike(Long userId, Long commentId) {
-		return likeRepository.findByUserIdAndCommentId(userId, commentId);
-	}
-
-	public LikeDTO findBoardLikeDTO(Long userId, Long boardId) {
-		return new LikeDTO(likeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
-			() -> new NotFoundException(LIKE_NOT_FOUND)));
-	}
+    public LikeDTO findBoardLikeDTO(Long userId, Long boardId) {
+        return new LikeDTO(likeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
+            () -> new NotFoundException(LIKE_NOT_FOUND)));
+    }
 
 }
