@@ -12,8 +12,8 @@ import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.exception.NotMatchException;
 import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.UploadFileRepository;
 import com.highgeupsik.backend.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +25,8 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final UploadFileRepository uploadFileRepository;
 
-    public Board saveBoard(Long userId, String title, String content, Category category){
+    public Board saveBoard(Long userId, String title, String content, Category category) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
         return boardRepository.save(Board.builder()
@@ -39,34 +38,21 @@ public class BoardService {
             .build());
     }
 
-    public Long makeBoard(Long userId, BoardReqDTO boardReqDTO){
+    public Long makeBoard(Long userId, BoardReqDTO boardReqDTO) {
         Board board = saveBoard(userId, boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
-
-        if(!boardReqDTO.getUploadFileDTOList().isEmpty()){
-            board.setThumbnail(boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri());
-            for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
-                board.setFile(new UploadFile(uploadFileDTO.getFileName(),
-                    uploadFileDTO.getFileDownloadUri()));
-            }
+        if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
+            addUploadFiles(board,boardReqDTO.getUploadFileDTOList());
         }
-
         return board.getId();
     }
 
     public Long updateBoard(Long boardId, BoardReqDTO boardReqDTO) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
         board.deleteFiles();
-        uploadFileRepository.deleteByBoardId(boardId);
         if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
-            board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(),
-                boardReqDTO.getUploadFileDTOList().get(0).getFileDownloadUri(),
-                boardReqDTO.getCategory());
-            for (UploadFileDTO uploadFileDTO : boardReqDTO.getUploadFileDTOList()) {
-                board.setFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()));
-            }
-        } else {
-            board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
+            addUploadFiles(board,boardReqDTO.getUploadFileDTOList());
         }
+        board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
         return board.getId();
     }
 
@@ -74,10 +60,16 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(BOARD_NOT_FOUND));
         Long writerId = board.getUser().getId();
-        if (userId.equals(writerId)) {
-            boardRepository.delete(board);
-        } else {
+        if (!userId.equals(writerId)) {
             throw new NotMatchException(WRITER_NOT_MATCH);
+        }
+        boardRepository.delete(board);
+    }
+
+    public void addUploadFiles(Board board, List<UploadFileDTO> uploadFileDTOList) {
+        board.setThumbnail(uploadFileDTOList.get(0).getFileDownloadUri());
+        for (UploadFileDTO uploadFileDTO : uploadFileDTOList) {
+            board.setFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()));
         }
     }
 
