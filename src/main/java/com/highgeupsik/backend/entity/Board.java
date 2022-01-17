@@ -54,7 +54,7 @@ public class Board extends TimeEntity {
 
 	private String thumbnail;
 
-	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UploadFile> uploadFileList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
