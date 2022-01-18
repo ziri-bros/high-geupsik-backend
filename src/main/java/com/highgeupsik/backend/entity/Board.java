@@ -1,5 +1,7 @@
 package com.highgeupsik.backend.entity;
 
+import com.highgeupsik.backend.exception.NotMatchException;
+import com.highgeupsik.backend.utils.ErrorMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,23 +75,26 @@ public class Board extends TimeEntity {
 		this.thumbnail = thumbnail;
 	}
 
+	public void checkWriter(Long userId) {
+		if (!isWriter(userId)) {
+			throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+		}
+	}
+
+	public boolean isWriter(Long userId){
+		return user.getId().equals(userId);
+	}
+
 	public void updateBoard(String title, String content, Category category) {
 		this.title = title;
 		this.content = content;
 		this.category = category;
 	}
 
-	public void updateBoard(String title, String content, String thumbnail, Category category) {
-		this.title = title;
-		this.content = content;
-		this.thumbnail = thumbnail;
-		this.category = category;
-	}
-
 	public void updateBoardLikeCount(Boolean flag) {
 		if (flag) {
 			this.likeCount += 1;
-		} else if (!flag && this.likeCount > 0) {
+		} else if (this.likeCount > 0) {
 			this.likeCount -= 1;
 		}
 	}
