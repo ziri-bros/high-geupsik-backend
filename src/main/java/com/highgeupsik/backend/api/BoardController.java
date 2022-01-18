@@ -53,27 +53,11 @@ public class BoardController {
         return ApiUtils.success(boardService.makeBoard(userId, boardReqDTO));
     }
 
-    @ApiOperation(value = "게시글 편집", notes = "게시글 편집 화면으로 넘어가기위해 이전 정보를 리턴")
-    @GetMapping("/boards/{boardId}/edit")
-    public ApiResult<BoardResDTO> editBoard(@PathVariable("boardId") Long boardId,
-        @LoginUser Long userId) {
-        BoardResDTO boardResDTO = boardQueryService.findOneById(boardId);
-        Long writerId = boardResDTO.getWriterId();
-        if (writerId.equals(userId)) {
-            return ApiUtils.success(boardResDTO);
-        }
-        throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
-    }
-
     @ApiOperation(value = "게시글 편집")
     @PutMapping("/boards/{boardId}") //게시글 편집
-    public ApiResult editBoard(@PathVariable("boardId") Long boardId,
-        @LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
-        Long writerId = boardQueryService.findWriterIdByBoardId(boardId);
-        if (writerId.equals(userId)) {
-            return ApiUtils.success(boardService.updateBoard(boardId, boardReqDTO));
-        }
-        throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+    public ApiResult editBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId,
+        @RequestBody BoardReqDTO boardReqDTO) {
+        return ApiUtils.success(boardService.updateBoard(userId, boardId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 삭제")
