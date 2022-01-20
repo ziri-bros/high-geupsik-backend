@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +17,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SubjectSchedule {
 
     @Id
@@ -50,5 +49,4 @@ public class SubjectSchedule {
     public void setUser(User user) {
         this.user = user;
     }
-
 }

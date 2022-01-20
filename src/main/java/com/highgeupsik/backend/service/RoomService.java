@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.service;
 
-
 import static com.highgeupsik.backend.utils.ErrorMessage.ROOM_NOT_FOUND;
 
 import com.highgeupsik.backend.entity.Room;
@@ -11,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class RoomService {
 
     private final RoomRepository roomRepository;

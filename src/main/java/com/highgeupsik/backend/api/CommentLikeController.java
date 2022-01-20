@@ -19,12 +19,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class CommentLikeController {
 
-	private final LikeService likeService;
+    private final LikeService likeService;
 
-	@ApiOperation(value = "댓글 좋아요")
-	@PostMapping("/comments/{commentId}/like")
-	public ApiResult pressCommentLike(@LoginUser Long userId, @PathVariable Long commentId) {
-		return success(likeService.saveOrUpdateCommentLike(userId, commentId));
-	}
-
+    @ApiOperation(value = "댓글 좋아요")
+    @PostMapping("/comments/{commentId}/likes")
+    public ApiResult pressCommentLike(@LoginUser Long userId, @PathVariable Long commentId) {
+        return success(likeService.saveOrUpdateCommentLike(userId, commentId));
+    }
 }

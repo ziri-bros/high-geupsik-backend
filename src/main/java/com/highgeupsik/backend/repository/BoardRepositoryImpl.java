@@ -3,7 +3,6 @@ package com.highgeupsik.backend.repository;
 import static com.highgeupsik.backend.entity.QBoard.*;
 import static org.springframework.util.StringUtils.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,7 +16,6 @@ import com.highgeupsik.backend.dto.BoardSearchCondition;
 import com.highgeupsik.backend.dto.QBoardResDTO;
 import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.Region;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -32,7 +30,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     @Override
     public Page<BoardResDTO> findAll(BoardSearchCondition condition, Pageable pageable) {
 
-        OrderSpecifier<LocalDateTime> desc = board.createdDate.desc();
         List<BoardResDTO> content = queryFactory
             .select(new QBoardResDTO(board.id, board.user.id, board.title, board.content,
                 board.thumbnail, board.category, board.likeCount, board.commentCount, board.createdDate))
@@ -81,5 +78,4 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private BooleanExpression contentLike(String keyword) {
         return isEmpty(keyword) ? null : board.content.like(keyword);
     }
-
 }

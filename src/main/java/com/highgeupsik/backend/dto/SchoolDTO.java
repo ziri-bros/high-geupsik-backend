@@ -1,15 +1,13 @@
 package com.highgeupsik.backend.dto;
 
-
 import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.entity.School;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
+@Getter @Setter
 public class SchoolDTO {
 
     private String name;
@@ -23,5 +21,4 @@ public class SchoolDTO {
         regionCode = school.getRegionCode();
         region = school.getRegion();
     }
-
 }

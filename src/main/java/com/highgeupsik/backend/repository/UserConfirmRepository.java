@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserConfirmRepository extends JpaRepository<UserConfirm, Long> {
 
-    @EntityGraph(attributePaths = {"user","studentCard"})
+    @EntityGraph(attributePaths = {"user", "studentCard"})
     Page<UserConfirm> findAll(Pageable pageable);
 
     Optional<UserConfirm> findByUserId(Long userId);

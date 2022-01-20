@@ -15,8 +15,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint { //인증 정보 없을때 401 UNAUTHORIZED
 
     private final ObjectMapper objectMapper;

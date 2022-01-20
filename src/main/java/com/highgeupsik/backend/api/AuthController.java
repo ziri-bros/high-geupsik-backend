@@ -19,12 +19,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class AuthController {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@ApiOperation(value = "로그인", notes = "새로운 토큰을 리턴 받습니다")
-	@ResponseStatus(OK)
-	@GetMapping("/login/token")
-	public ApiResult<TokenDTO> login(@RequestBody TokenDTO tokenDTO) {
-		return success(userService.updateToken(tokenDTO));
-	}
+    @ApiOperation(value = "로그인", notes = "새로운 토큰을 리턴 받습니다")
+    @ResponseStatus(OK)
+    @GetMapping("/login/token")
+    public ApiResult<TokenDTO> login(@RequestBody TokenDTO tokenDTO) {
+        return success(userService.updateToken(tokenDTO));
+    }
 }

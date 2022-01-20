@@ -21,27 +21,26 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class ScheduleController {
 
-	private final SubjectScheduleService subjectScheduleService;
-	private final SubjectScheduleQueryService subjectScheduleQueryService;
+    private final SubjectScheduleService subjectScheduleService;
+    private final SubjectScheduleQueryService subjectScheduleQueryService;
 
-	@ApiOperation(value = "시간표 조회")
-	@GetMapping("/users/schedule")
-	public ApiResult<SubjectScheduleDTO> schedule(@LoginUser Long userId) {
-		return success(subjectScheduleQueryService.findSubjectSchedule(userId));
-	}
+    @ApiOperation(value = "시간표 조회")
+    @GetMapping("/users/schedule")
+    public ApiResult<SubjectScheduleDTO> schedule(@LoginUser Long userId) {
+        return success(subjectScheduleQueryService.findSubjectSchedule(userId));
+    }
 
-	@ApiOperation(value = "시간표 제출")
-	@PostMapping("/users/schedule")
-	public ApiResult makeSchedule(@LoginUser Long userId,
-		@RequestBody SubjectScheduleDTO subjectScheduleDTO) {
-		return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
-	}
+    @ApiOperation(value = "시간표 제출")
+    @PostMapping("/users/schedule")
+    public ApiResult makeSchedule(@LoginUser Long userId,
+        @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
+        return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
+    }
 
-	@ApiOperation(value = "시간표 삭제")
-	@DeleteMapping("/users/schedule")
-	public ApiResult deleteSchedule(@LoginUser Long userId) {
-		subjectScheduleService.deleteSchedule(userId);
-		return success(null);
-	}
-
+    @ApiOperation(value = "시간표 삭제")
+    @DeleteMapping("/users/schedule")
+    public ApiResult deleteSchedule(@LoginUser Long userId) {
+        subjectScheduleService.deleteSchedule(userId);
+        return success(null);
+    }
 }

@@ -36,7 +36,7 @@ public class CommentController {
         return success(commentService.saveComment(userId, boardId, dto));
     }
 
-    @ApiOperation(value = "댓글 편집", notes = "댓글 편집 화면으로 넘어가기 위해 댓글 정보를 리턴")
+    @ApiOperation(value = "댓글 편집")
     @PutMapping("/comments/{commentId}")
     public ApiResult editComment(@PathVariable("commentId") Long commentId, @RequestBody CommentReqDTO commentReqDTO,
         @LoginUser Long userId) {
@@ -45,12 +45,8 @@ public class CommentController {
 
     @ApiOperation(value = "댓글 삭제")
     @ResponseStatus(NO_CONTENT)
-    @DeleteMapping("/boards/{boardId}/comments/{commentId}")
-    public void deleteComment(
-        @PathVariable("boardId") Long boardId,
-        @PathVariable("commentId") Long commentId,
-        @LoginUser Long userId
-    ) {
+    @DeleteMapping("/comments/{commentId}")
+    public void deleteComment(@PathVariable("commentId") Long commentId, @LoginUser Long userId) {
         commentService.deleteComment(userId, commentId);
     }
 }

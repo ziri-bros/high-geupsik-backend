@@ -19,11 +19,11 @@ public class BoardLikeController {
 
     private final LikeService likeService;
 
-	@ApiOperation(value = "게시글 좋아요")
-	@PostMapping("/boards/{boardId}/like") //게시글 좋아요
-	public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
-		return ApiUtils.success(likeService.saveOrUpdateBoardLike(userId, boardId));
-	}
+    @ApiOperation(value = "게시글 좋아요")
+    @PostMapping("/boards/{boardId}/like") //게시글 좋아요
+    public ApiResult pressBoardLike(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
+        return ApiUtils.success(likeService.saveOrUpdateBoardLike(userId, boardId));
+    }
 
     @ApiOperation(value = "게시글 좋아요 조회")
     @GetMapping("/boards/{boardId}/like")

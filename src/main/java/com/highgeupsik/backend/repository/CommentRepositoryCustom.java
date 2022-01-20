@@ -7,5 +7,5 @@ import com.highgeupsik.backend.entity.Comment;
 
 public interface CommentRepositoryCustom {
 
-	Page<Comment> findCommentsBy(Long boardId, Pageable pageable);
+    Page<Comment> findCommentsBy(Long boardId, Pageable pageable);
 }

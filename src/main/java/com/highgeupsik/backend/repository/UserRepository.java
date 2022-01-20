@@ -8,9 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @EntityGraph(attributePaths = {"studentCard","school"})
+    @EntityGraph(attributePaths = {"studentCard", "school"})
     Optional<User> findById(Long userId);
 
     Optional<User> findByEmailAndProvider(String email, AuthProvider provider);
-
 }

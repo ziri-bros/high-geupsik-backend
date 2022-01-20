@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.api;
 
-
 import static com.highgeupsik.backend.utils.ApiUtils.error;
 
 import com.highgeupsik.backend.exception.DuplicateException;
@@ -35,5 +34,4 @@ public class ErrorApiController {
     public ApiResult tokenExpiredException(TokenExpiredException e) {
         return error(new ApiError(e.getMessage(), HttpStatus.FORBIDDEN));
     }
-
 }

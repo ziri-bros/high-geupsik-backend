@@ -8,8 +8,8 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
+@Getter
 public class OAuthAttributes {
 
     private Map<String, Object> attributes;
@@ -66,6 +66,5 @@ public class OAuthAttributes {
             .provider(provider)
             .build();
     }
-
 }
 

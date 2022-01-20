@@ -4,9 +4,8 @@ import com.highgeupsik.backend.entity.Message;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-@Getter
 @NoArgsConstructor
+@Getter
 public class MessageResDTO {
 
     private Long id;

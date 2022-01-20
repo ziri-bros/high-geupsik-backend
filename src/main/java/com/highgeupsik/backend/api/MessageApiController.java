@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.api;
 
-
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 
 import com.highgeupsik.backend.dto.MessageReqDTO;
@@ -24,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class MessageApiController {
 
     private final RoomService roomService;
@@ -95,5 +94,4 @@ public class MessageApiController {
         roomService.deleteRoom(roomId);
         return success(null);
     }
-
 }

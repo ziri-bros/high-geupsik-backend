@@ -20,9 +20,9 @@ import com.highgeupsik.backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class LikeService {
 
     private final LikeRepository likeRepository;
@@ -57,5 +57,4 @@ public class LikeService {
         return new LikeDTO(likeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
             () -> new NotFoundException(LIKE_NOT_FOUND)));
     }
-
 }

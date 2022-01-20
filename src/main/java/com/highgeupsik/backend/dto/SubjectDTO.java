@@ -1,14 +1,12 @@
 package com.highgeupsik.backend.dto;
 
-
 import com.highgeupsik.backend.entity.Subject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
+@Getter @Setter
 public class SubjectDTO {
 
     private int weekDay;
@@ -20,5 +18,4 @@ public class SubjectDTO {
         subjectTime = subject.getSubjectTime();
         subjectName = subject.getSubjectName();
     }
-
 }

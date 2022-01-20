@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.utils;
 
-
 public class ApiUtils {
 
     public static <T> ApiResult<T> success(T data) {

@@ -7,15 +7,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "SCHOOL")
-@Entity
 @Getter
+@Entity
 public class School {
 
     @Id
@@ -42,5 +40,4 @@ public class School {
         this.regionCode = regionCode;
         this.region = region;
     }
-
 }

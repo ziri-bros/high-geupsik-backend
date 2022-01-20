@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -14,8 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
 
     @EntityGraph(attributePaths = {"board", "parent"})
     Optional<Comment> findById(Long commentId);
-
-    List<Comment> findByUserIdAndBoardId(Long userId, Long boardId);
 
     Optional<Comment> findFirstByBoardAndUser(Board board, User user);
 }

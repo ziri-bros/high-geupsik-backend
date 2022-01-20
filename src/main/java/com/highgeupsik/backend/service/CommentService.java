@@ -17,9 +17,9 @@ import com.highgeupsik.backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class CommentService {
 
     private final CommentRepository commentRepository;

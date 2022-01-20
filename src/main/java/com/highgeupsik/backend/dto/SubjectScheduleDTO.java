@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.dto;
 
-
 import com.highgeupsik.backend.entity.SubjectSchedule;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 public class SubjectScheduleDTO {
 
     private List<SubjectDTO> subjectDTOList = new ArrayList<>();
@@ -20,5 +19,4 @@ public class SubjectScheduleDTO {
         subjectDTOList = subjectSchedule.getSubjectList().stream().map((subject) -> new SubjectDTO(subject))
             .collect(Collectors.toList());
     }
-
 }

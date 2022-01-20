@@ -19,5 +19,4 @@ public class RoomResDTO {
         toUserId = room.getToUser().getId();
         firstMessage = room.getFirstMessage();
     }
-
 }

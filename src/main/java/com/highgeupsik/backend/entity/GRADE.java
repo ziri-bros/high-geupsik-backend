@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import static com.highgeupsik.backend.utils.ErrorMessage.GRADE_NOT_FOUND;
 
 import com.highgeupsik.backend.exception.NotFoundException;

@@ -11,10 +11,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Entity
 public class Subject {
 
     @Column(name = "subject_id")
@@ -41,5 +40,4 @@ public class Subject {
     public void setSubjectSchedule(SubjectSchedule subjectSchedule) {
         this.subjectSchedule = subjectSchedule;
     }
-
 }

@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    public Optional<Room> findOneByFromUserIdAndToUserId(Long fromUserId, Long toUserId);
+    Optional<Room> findOneByFromUserIdAndToUserId(Long fromUserId, Long toUserId);
 
-    public Page<Room> findByFromUserId(Long fromUserId, Pageable pageable);
-
+    Page<Room> findByFromUserId(Long fromUserId, Pageable pageable);
 }

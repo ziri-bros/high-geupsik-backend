@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.service;
 
-
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
 import com.highgeupsik.backend.dto.BoardReqDTO;
@@ -18,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -41,7 +40,7 @@ public class BoardService {
     public Long makeBoard(Long userId, BoardReqDTO boardReqDTO) {
         Board board = saveBoard(userId, boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
         if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
-            addUploadFiles(board,boardReqDTO.getUploadFileDTOList());
+            addUploadFiles(board, boardReqDTO.getUploadFileDTOList());
         }
         return board.getId();
     }
@@ -51,7 +50,7 @@ public class BoardService {
         board.checkWriter(userId);
         board.deleteFiles();
         if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
-            addUploadFiles(board,boardReqDTO.getUploadFileDTOList());
+            addUploadFiles(board, boardReqDTO.getUploadFileDTOList());
         }
         board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
         return board.getId();
@@ -70,5 +69,4 @@ public class BoardService {
             board.setFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()));
         }
     }
-
 }

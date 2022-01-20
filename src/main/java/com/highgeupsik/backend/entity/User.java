@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -21,7 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(
     uniqueConstraints = {
@@ -30,7 +29,7 @@ import lombok.NoArgsConstructor;
         )
     }
 )
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class User {
 
     @Id
@@ -109,5 +108,4 @@ public class User {
     public void updateToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
-
 }

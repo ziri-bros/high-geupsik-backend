@@ -6,7 +6,6 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import java.util.Locale;
 import org.hibernate.engine.jdbc.internal.FormatStyle;
 
-
 public class P6spySqlFormatConfig implements MessageFormattingStrategy {
 
     @Override
