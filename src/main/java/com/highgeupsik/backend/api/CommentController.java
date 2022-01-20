@@ -24,33 +24,33 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class CommentController {
 
-	private final CommentService commentService;
+    private final CommentService commentService;
 
-	@ApiOperation(value = "댓글 작성")
-	@PostMapping("/boards/{boardId}/comments")
-	public ApiResult<CommentResDTO> writeComment(
-		@LoginUser Long userId,
-		@PathVariable("boardId") Long boardId,
-		@RequestBody CommentReqDTO dto
-	) {
-		return success(commentService.saveComment(userId, boardId, dto));
-	}
+    @ApiOperation(value = "댓글 작성")
+    @PostMapping("/boards/{boardId}/comments")
+    public ApiResult<CommentResDTO> writeComment(
+        @LoginUser Long userId,
+        @PathVariable("boardId") Long boardId,
+        @RequestBody CommentReqDTO dto
+    ) {
+        return success(commentService.saveComment(userId, boardId, dto));
+    }
 
-	@ApiOperation(value = "댓글 편집", notes = "댓글 편집 화면으로 넘어가기 위해 댓글 정보를 리턴")
-	@PutMapping("/comments/{commentId}")
-	public ApiResult editComment(@PathVariable("commentId") Long commentId, @RequestBody CommentReqDTO commentReqDTO,
-		@LoginUser Long userId) {
-		return success(commentService.updateComment(userId, commentId, commentReqDTO));
-	}
+    @ApiOperation(value = "댓글 편집", notes = "댓글 편집 화면으로 넘어가기 위해 댓글 정보를 리턴")
+    @PutMapping("/comments/{commentId}")
+    public ApiResult editComment(@PathVariable("commentId") Long commentId, @RequestBody CommentReqDTO commentReqDTO,
+        @LoginUser Long userId) {
+        return success(commentService.updateComment(userId, commentId, commentReqDTO));
+    }
 
-	@ApiOperation(value = "댓글 삭제")
-	@ResponseStatus(NO_CONTENT)
-	@DeleteMapping("/boards/{boardId}/comments/{commentId}")
-	public void deleteComment(
-		@PathVariable("boardId") Long boardId,
-		@PathVariable("commentId") Long commentId,
-		@LoginUser Long userId
-	) {
-		commentService.deleteComment(userId, boardId, commentId);
-	}
+    @ApiOperation(value = "댓글 삭제")
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/boards/{boardId}/comments/{commentId}")
+    public void deleteComment(
+        @PathVariable("boardId") Long boardId,
+        @PathVariable("commentId") Long commentId,
+        @LoginUser Long userId
+    ) {
+        commentService.deleteComment(userId, commentId);
+    }
 }

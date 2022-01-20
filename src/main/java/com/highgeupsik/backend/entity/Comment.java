@@ -28,146 +28,151 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Comment extends TimeEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "comment_id")
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "comment_id")
+    private Long id;
 
-	private String content;
+    private String content;
 
-	private int anonymousId;
+    private int anonymousId;
 
-	private int replyCount = 1;
+    private int replyCount = 1;
 
-	private int likeCount = 0;
+    private int likeCount = 0;
 
-	private boolean deleteFlag = false;
+    private boolean deleteFlag = false;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id")
-	private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 
-	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Like> likeList = new ArrayList<>();
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likeList = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_id")
-	private Comment parent;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
 
-	@OneToMany(mappedBy = "parent")
-	private List<Comment> children = new ArrayList<>();
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> children = new ArrayList<>();
 
-	@Builder
-	public Comment(String content, int anonymousId, User user, Board board) {
-		this.content = content;
-		this.anonymousId = anonymousId;
-		this.user = user;
-		this.board = board;
-	}
+    @Builder
+    public Comment(String content, int anonymousId, User user, Board board) {
+        this.content = content;
+        this.anonymousId = anonymousId;
+        this.user = user;
+        this.board = board;
+    }
 
-	public static Comment of(String content, User user, Board board) {
-		Comment comment = Comment.builder()
-			.content(content)
-			.user(user)
-			.board(board)
-			.build();
-		comment.parent = comment;
-		comment.children.add(comment);
-		return comment;
-	}
+    public static Comment of(String content, User user, Board board) {
+        Comment comment = Comment.builder()
+            .content(content)
+            .user(user)
+            .board(board)
+            .build();
+        comment.parent = comment;
+        comment.children.add(comment);
+        return comment;
+    }
 
-	public int getReplyCount() {
-		return children.size() - 1;
-	}
+    public int getReplyCount() {
+        return children.size() - 1;
+    }
 
-	public void setBoard(Board board) {
-		this.board = board;
-	}
+    public void setBoard(Board board) {
+        this.board = board;
+        board.addComment(this);
+    }
 
-	public void setAnonymousId(int anonymousNumber) {
-		this.anonymousId = anonymousNumber;
-	}
+    public void setAnonymousId(int anonymousNumber) {
+        this.anonymousId = anonymousNumber;
+    }
 
-	public void checkWriter(Long userId) {
-		if (!isWriter(userId)) {
-			throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
-		}
-	}
+    public int getAnonymousId() {
+        return anonymousId;
+    }
 
-	private boolean isWriter(Long userId) {
-		return user.getId().equals(userId);
-	}
+    public void checkWriter(Long userId) {
+        if (!isWriter(userId)) {
+            throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+        }
+    }
 
-	public boolean isParent() {
-		return this.equals(parent);
-	}
+    private boolean isWriter(Long userId) {
+        return user.getId().equals(userId);
+    }
 
-	public boolean isReply() {
-		return !isParent();
-	}
+    public boolean isParent() {
+        return this.equals(parent);
+    }
 
-	public void toReply(Comment parent) {
-		this.parent = parent;
-		parent.addReply(this);
-	}
+    public boolean isReply() {
+        return !isParent();
+    }
 
-	private void addReply(Comment comment) {
-		children.add(comment);
-		replyCount++;
-	}
+    public void toReply(Comment parent) {
+        this.parent = parent;
+        parent.addReply(this);
+    }
 
-	public void deleteReply(Comment comment) {
-		children.remove(comment);
-		if (replyCount > 0) {
-			replyCount--;
-		}
-	}
+    private void addReply(Comment comment) {
+        children.add(comment);
+        replyCount++;
+    }
 
-	public boolean isDisabled() {
-		return deleteFlag;
-	}
+    public void deleteReply(Comment comment) {
+        children.remove(comment);
+        if (replyCount > 0) {
+            replyCount--;
+        }
+    }
 
-	public void disable() {
-		deleteFlag = true;
-	}
+    public boolean isDisabled() {
+        return deleteFlag;
+    }
 
-	public boolean canDelete() {
-		return replyCount == 1;
-	}
+    public void disable() {
+        deleteFlag = true;
+    }
 
-	public void deleteIfCan() {
-		if (isDisabled() && canDelete()) {
-			board.deleteComment(this);
-		}
-	}
+    public boolean canDelete() {
+        return replyCount == 1;
+    }
 
-	public void updateContent(CommentReqDTO commentReqDTO) {
-		content = commentReqDTO.getContent();
-	}
+    public void deleteIfCan() {
+        if (isDisabled() && canDelete()) {
+            board.deleteComment(this);
+        }
+    }
 
-	public void updateCommentLike(Boolean flag) {
-		if (flag) {
-			this.likeCount++;
-		} else if (!flag && likeCount > 0) {
-			this.likeCount--;
-		}
-	}
+    public void updateContent(CommentReqDTO commentReqDTO) {
+        content = commentReqDTO.getContent();
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (o == null || !o.getClass().equals(Comment.class)) {
-			return false;
-		}
-		Comment other = (Comment)o;
-		return id.equals(other.id);
-	}
+    public void updateCommentLike(Boolean flag) {
+        if (flag) {
+            this.likeCount++;
+        } else if (!flag && likeCount > 0) {
+            this.likeCount--;
+        }
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !o.getClass().equals(Comment.class)) {
+            return false;
+        }
+        Comment other = (Comment) o;
+        return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

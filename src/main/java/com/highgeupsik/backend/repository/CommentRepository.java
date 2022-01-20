@@ -12,10 +12,10 @@ import com.highgeupsik.backend.entity.User;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom {
 
-	@EntityGraph(attributePaths = {"board", "parent"})
-	Optional<Comment> findById(Long commentId);
+    @EntityGraph(attributePaths = {"board", "parent"})
+    Optional<Comment> findById(Long commentId);
 
-	List<Comment> findByUserIdAndBoardId(Long userId, Long postId);
+    List<Comment> findByUserIdAndBoardId(Long userId, Long boardId);
 
-	Optional<Comment> findFirstByBoardAndUser(Board board, User user);
+    Optional<Comment> findFirstByBoardAndUser(Board board, User user);
 }
