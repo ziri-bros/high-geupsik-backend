@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Service
 public class RoomQueryService {
 
     private final RoomRepository roomRepository;
@@ -32,5 +32,4 @@ public class RoomQueryService {
         return roomRepository.findByFromUserId(userId, orderByModifiedDate(pageNum, ROOM_COUNT)).getContent()
             .stream().map((room) -> new RoomResDTO(room)).collect(Collectors.toList());
     }
-
 }

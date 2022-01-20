@@ -19,13 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class UserBoardController {
 
-	private final BoardQueryService boardQueryService;
+    private final BoardQueryService boardQueryService;
 
-	@ApiOperation(value = "내가 작성한 게시글 목록 조회")
-	@GetMapping("/boards/my") //내가 작성한 게시글
-	public ApiResult<List<BoardResDTO>> myBoards(
-		@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-		@LoginUser Long userId) {
-		return ApiUtils.success(boardQueryService.findByMyId(userId, pageNum));
-	}
+    @ApiOperation(value = "내가 작성한 게시글 목록 조회")
+    @GetMapping("/boards/my") //내가 작성한 게시글
+    public ApiResult<List<BoardResDTO>> myBoards(
+        @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+        @LoginUser Long userId) {
+        return ApiUtils.success(boardQueryService.findByMyId(userId, pageNum));
+    }
 }

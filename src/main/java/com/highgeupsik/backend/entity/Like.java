@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,10 +13,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Table(name = "likes")
+@Entity
 public class Like {
 
     @Id
@@ -68,5 +67,4 @@ public class Like {
             comment.getLikeList().add(this);
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,10 +12,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserConfirm extends TimeEntity{
+@Getter
+@Entity
+public class UserConfirm extends TimeEntity {
 
     @Id
     @GeneratedValue
@@ -36,5 +35,4 @@ public class UserConfirm extends TimeEntity{
         this.user = user;
         this.studentCard = studentCard;
     }
-
 }

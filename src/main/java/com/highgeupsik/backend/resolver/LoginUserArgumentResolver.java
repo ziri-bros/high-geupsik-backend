@@ -9,9 +9,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-
-@Component
 @RequiredArgsConstructor
+@Component
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
 

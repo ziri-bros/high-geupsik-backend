@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.BoardCommentService;
-import com.highgeupsik.backend.service.CommentQueryService;
 import com.highgeupsik.backend.utils.ApiResult;
 
 import io.swagger.annotations.ApiOperation;
@@ -22,16 +21,16 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class BoardCommentController {
 
-	private final BoardCommentService boardCommentService;
+    private final BoardCommentService boardCommentService;
 
-	@ApiOperation(value = "게시글의 댓글 목록 조회")
-	@GetMapping("/boards/{boardId}/comments")
-	public ApiResult<Page<CommentResDTO>> findBoardComments(
-		@LoginUser Long userId,
-		@PathVariable("boardId") Long boardId,
-		@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-		@RequestParam(value = "pageSize", defaultValue = "10") int pageSize
-	) {
-		return success(boardCommentService.findCommentsBy(userId, boardId, PageRequest.of(pageNum, pageSize)));
-	}
+    @ApiOperation(value = "게시글의 댓글 목록 조회")
+    @GetMapping("/boards/{boardId}/comments")
+    public ApiResult<Page<CommentResDTO>> findBoardComments(
+        @LoginUser Long userId,
+        @PathVariable("boardId") Long boardId,
+        @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
+    ) {
+        return success(boardCommentService.findCommentsBy(userId, boardId, PageRequest.of(pageNum, pageSize)));
+    }
 }

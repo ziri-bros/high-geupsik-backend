@@ -10,9 +10,9 @@ import com.highgeupsik.backend.entity.Like;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-	Optional<Like> findByUserIdAndBoardId(Long userId, Long boardId);
+    Optional<Like> findByUserIdAndBoardId(Long userId, Long boardId);
 
-	Optional<Like> findByUserIdAndCommentId(Long userId, Long commentId);
+    Optional<Like> findByUserIdAndCommentId(Long userId, Long commentId);
 
-	List<Like> findAllByUserIdAndCommentIn(Long userId, List<Comment> comments);
+    List<Like> findAllByUserIdAndCommentIn(Long userId, List<Comment> comments);
 }

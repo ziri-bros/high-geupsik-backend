@@ -1,12 +1,11 @@
 package com.highgeupsik.backend.dto;
 
-
 import com.highgeupsik.backend.entity.UserConfirm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
+@Getter
 public class UserConfirmDTO {
 
     private Long userId;
@@ -14,7 +13,7 @@ public class UserConfirmDTO {
     private String email;
     private String studentCardImage;
 
-    public UserConfirmDTO(UserConfirm userConfirm){
+    public UserConfirmDTO(UserConfirm userConfirm) {
         userId = userConfirm.getUser().getId();
         username = userConfirm.getUser().getUsername();
         email = userConfirm.getUser().getEmail();

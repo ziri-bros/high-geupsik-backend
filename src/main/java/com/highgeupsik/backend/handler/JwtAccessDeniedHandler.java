@@ -14,8 +14,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     private final ObjectMapper objectMapper;
@@ -29,5 +29,4 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.getWriter().write(this.objectMapper
             .writeValueAsString((error(new ApiError(NOT_ROLE_USER, HttpStatus.FORBIDDEN)))));
     }
-
 }

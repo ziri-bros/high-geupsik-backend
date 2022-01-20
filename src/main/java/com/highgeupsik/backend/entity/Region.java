@@ -18,5 +18,4 @@ public enum Region {
     GYEONGNAM,
     GYEONGBUK,
     JEJU
-
 }

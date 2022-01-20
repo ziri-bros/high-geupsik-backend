@@ -20,5 +20,4 @@ public class PagingUtils {
     public static PageRequest orderByModifiedDate(Integer pageNum, int count) {
         return PageRequest.of(pageNum - 1, count, Sort.by(Sort.Direction.DESC, "modifiedDate"));
     }
-
 }

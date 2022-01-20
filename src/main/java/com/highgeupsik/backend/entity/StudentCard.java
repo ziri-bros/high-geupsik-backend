@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,9 +12,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Entity
 public class StudentCard extends TimeEntity {
 
     @Id
@@ -43,5 +42,4 @@ public class StudentCard extends TimeEntity {
     public void setUser(User user) {
         this.user = user;
     }
-
 }

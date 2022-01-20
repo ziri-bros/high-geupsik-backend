@@ -20,39 +20,31 @@ import com.highgeupsik.backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class BoardQueryService {
 
-	private final BoardRepository boardRepository;
-	private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
-	private static final int POST_COUNT = 20;
+    private static final int POST_COUNT = 20;
 
-	public Long findWriterIdByBoardId(Long boardId) {
-		return boardRepository.findById(boardId)
-			.orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND))
-			.getUser()
-			.getId();
-	}
+    public BoardResDTO findOneById(Long postId) {
+        return new BoardResDTO(
+            boardRepository.findById(postId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)));
+    }
 
-	public BoardResDTO findOneById(Long postId) {
-		return new BoardResDTO(
-			boardRepository.findById(postId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)));
-	}
+    public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
+        List<Board> boards = boardRepository.findByUserId(userId, orderByCreatedDateDESC(pageNum, POST_COUNT))
+            .getContent();
+        return boards.stream().map(BoardResDTO::new).collect(Collectors.toList());
+    }
 
-	public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
-		List<Board> boards = boardRepository.findByUserId(userId, orderByCreatedDateDESC(pageNum, POST_COUNT))
-			.getContent();
-		return boards.stream().map(BoardResDTO::new).collect(Collectors.toList());
-	}
-
-	public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
-		Region region = userRepository.findById(userId).orElseThrow(
-			() -> new NotFoundException(USER_NOT_FOUND)).getSchool().getRegion();
-		condition.setRegion(region);
-		return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
-	}
-
+    public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
+        Region region = userRepository.findById(userId).orElseThrow(
+            () -> new NotFoundException(USER_NOT_FOUND)).getSchool().getRegion();
+        condition.setRegion(region);
+        return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
+    }
 }

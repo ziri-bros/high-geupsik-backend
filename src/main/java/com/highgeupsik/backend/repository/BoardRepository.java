@@ -13,5 +13,4 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
     @EntityGraph(attributePaths = {"uploadFileList"})
     Optional<Board> findById(Long boardId);
-
 }

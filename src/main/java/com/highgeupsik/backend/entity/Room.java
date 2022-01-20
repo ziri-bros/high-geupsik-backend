@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,9 +12,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Entity
 public class Room extends TimeEntity {
 
     @Id
@@ -42,5 +41,4 @@ public class Room extends TimeEntity {
     public void updateMessage(String firstMessage) {
         this.firstMessage = firstMessage;
     }
-
 }

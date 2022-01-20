@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class ImageApiController {
 
     private final S3Service s3Service;
@@ -23,5 +23,4 @@ public class ImageApiController {
     public ApiResult<List<UploadFileDTO>> images(List<MultipartFile> imageList) throws IOException {
         return ApiUtils.success(s3Service.uploadFiles(imageList));
     }
-
 }

@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    public Page<Message> findByRoomId(Long roomId, Pageable pageable);
+    Page<Message> findByRoomId(Long roomId, Pageable pageable);
 
-    public Page<Message> findByFromUserIdAndFromDeleteFlag(Long fromUserId, boolean fromDeleteFlag, Pageable pageable);
+    Page<Message> findByFromUserIdAndFromDeleteFlag(Long fromUserId, boolean fromDeleteFlag, Pageable pageable);
 
-    public Page<Message> findByToUserIdAndToDeleteFlag(Long toUserId, boolean toDeleteFlag, Pageable pageable);
+    Page<Message> findByToUserIdAndToDeleteFlag(Long toUserId, boolean toDeleteFlag, Pageable pageable);
 }

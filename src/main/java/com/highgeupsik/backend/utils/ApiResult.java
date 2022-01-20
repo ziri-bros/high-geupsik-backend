@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.utils;
 
-
 import lombok.Getter;
 
 @Getter
@@ -15,5 +14,4 @@ public class ApiResult<T> {
         this.data = data;
         this.error = error;
     }
-
 }

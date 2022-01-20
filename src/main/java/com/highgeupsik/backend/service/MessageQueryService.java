@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.service;
 
-
 import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateDESC;
 
 import com.highgeupsik.backend.dto.MessageResDTO;
@@ -8,13 +7,14 @@ import com.highgeupsik.backend.entity.Message;
 import com.highgeupsik.backend.repository.MessageRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.transaction.TransactionScoped;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Service
 public class MessageQueryService {
 
     private final MessageRepository messageRepository;
@@ -30,5 +30,4 @@ public class MessageQueryService {
             .getContent();
         return messages.stream().map((message) -> new MessageResDTO(message)).collect(Collectors.toList());
     }
-
 }

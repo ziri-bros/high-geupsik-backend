@@ -24,8 +24,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Getter
+@Entity
 public class Comment extends TimeEntity {
 
     @Id

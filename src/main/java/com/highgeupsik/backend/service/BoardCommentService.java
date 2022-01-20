@@ -16,25 +16,25 @@ import com.highgeupsik.backend.repository.LikeRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
 @Transactional
+@Service
 public class BoardCommentService {
 
-	private final CommentRepository commentRepository;
-	private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
-	@Transactional(readOnly = true)
-	public Page<CommentResDTO> findCommentsBy(Long userId, Long boardId, Pageable pageable) {
-		Page<Comment> comments = commentRepository.findCommentsBy(boardId, pageable);
-		Set<Long> likes = getUserLikeSet(userId, comments);
-		return comments.map(comment -> new CommentResDTO(comment, likes.contains(comment.getId())));
-	}
+    @Transactional(readOnly = true)
+    public Page<CommentResDTO> findCommentsBy(Long userId, Long boardId, Pageable pageable) {
+        Page<Comment> comments = commentRepository.findCommentsBy(boardId, pageable);
+        Set<Long> likes = getUserLikeSet(userId, comments);
+        return comments.map(comment -> new CommentResDTO(comment, likes.contains(comment.getId())));
+    }
 
-	private Set<Long> getUserLikeSet(Long userId, Page<Comment> comments) {
-		return likeRepository.findAllByUserIdAndCommentIn(userId, comments.getContent())
-			.stream()
-			.map(like -> like.getComment().getId())
-			.collect(toSet());
-	}
+    private Set<Long> getUserLikeSet(Long userId, Page<Comment> comments) {
+        return likeRepository.findAllByUserIdAndCommentIn(userId, comments.getContent())
+            .stream()
+            .map(like -> like.getComment().getId())
+            .collect(toSet());
+    }
 }

@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.service;
 
-
 import static com.highgeupsik.backend.utils.ErrorMessage.SCHOOL_NOT_FOUND;
 import static com.highgeupsik.backend.utils.ErrorMessage.TOKEN_EXPIRED;
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
@@ -21,10 +20,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
@@ -65,5 +63,4 @@ public class UserService {
         user.updateToken(jwtTokenProvider.createNewToken(userId, role, "refresh"));
         return newTokenDTO;
     }
-
 }

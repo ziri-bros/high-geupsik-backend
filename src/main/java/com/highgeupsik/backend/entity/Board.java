@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,7 +24,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "BOARD")
 @Entity
 public class Board extends TimeEntity {
 
@@ -135,5 +133,4 @@ public class Board extends TimeEntity {
         this.thumbnail = null;
         this.uploadFileList.clear();
     }
-
 }

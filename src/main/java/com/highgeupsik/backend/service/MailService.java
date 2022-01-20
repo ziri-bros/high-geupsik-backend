@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.service;
 
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +7,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class MailService {
 
     private final JavaMailSender javaMailSender;
@@ -32,6 +31,4 @@ public class MailService {
         javaMailSender.send(message);
 
     }
-
-
 }

@@ -1,16 +1,14 @@
 package com.highgeupsik.backend.dto;
 
-
 import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Setter
-@Getter
 @NoArgsConstructor
+@Getter
+@Setter
 public class BoardSearchCondition {
 
     private Region region;
@@ -21,5 +19,4 @@ public class BoardSearchCondition {
     public void setRegion(Region region) {
         this.region = region;
     }
-
 }
