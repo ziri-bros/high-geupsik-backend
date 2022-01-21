@@ -52,9 +52,7 @@ public class UserService {
     public TokenDTO updateToken(TokenDTO tokenDTO) {
         String refreshToken = tokenDTO.getRefreshToken();
         String accessToken = tokenDTO.getAccessToken();
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            throw new TokenExpiredException(TOKEN_EXPIRED);
-        }
+        jwtTokenProvider.validateToken(refreshToken);
         Long userId = jwtTokenProvider.getUserPK(accessToken);
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         String role = user.getRole().toString();

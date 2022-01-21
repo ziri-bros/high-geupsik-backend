@@ -32,8 +32,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
         try {
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                log.info("dofilter");
+            if (token != null) {
+                jwtTokenProvider.validateToken(token);
+                log.info("doFilter");
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -42,8 +43,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(
                 this.objectMapper.writeValueAsString(error(new ApiError(TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED))));
-        } catch (MalformedJwtException e) {
-
         }
     }
 }
