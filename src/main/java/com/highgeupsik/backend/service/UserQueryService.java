@@ -15,17 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class UserQueryService implements UserDetailsService {
+public class UserQueryService {
 
     private final UserRepository userRepository;
 
     public UserResDTO findById(Long userId) {
         return new UserResDTO(userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND)));
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
     }
 }
