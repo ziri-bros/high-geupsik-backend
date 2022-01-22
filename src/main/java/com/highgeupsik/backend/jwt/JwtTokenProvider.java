@@ -1,6 +1,9 @@
 package com.highgeupsik.backend.jwt;
 
 
+import static com.highgeupsik.backend.utils.ErrorMessage.TOKEN_EXPIRED;
+
+import com.highgeupsik.backend.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,7 +32,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     private static final String AUTHORITIES_KEY = "auth";
-    private static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L; //30분
+    private static final long ACCESS_TOKEN_TIME = 30 * 30 * 60 * 1000L; //30분
     private static final long REFRESH_TOKEN_TIME = 24 * 7 * 30 * 60 * 1000L;
 
     @PostConstruct
@@ -87,9 +90,10 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String jwtToken) {
-        Claims claims = parseClaims(jwtToken);
-        return !claims.getExpiration().before(new Date());
+    public void validateToken(String token) {
+        if(parseClaims(token).getExpiration().before(new Date())){
+            throw new TokenExpiredException(TOKEN_EXPIRED);
+        }
     }
 
     public Claims parseClaims(String token) {
