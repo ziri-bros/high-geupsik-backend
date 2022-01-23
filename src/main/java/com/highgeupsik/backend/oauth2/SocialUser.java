@@ -1,72 +1,70 @@
 package com.highgeupsik.backend.oauth2;
 
 import com.highgeupsik.backend.entity.User;
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.util.Assert;
 
-public class SocialUser implements OAuth2User, Serializable {
+public class SocialUser implements OAuth2User, UserDetails {
 
     private User user;
 
-    private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-
-    private final Set<GrantedAuthority> authorities;
-
-    private final Map<String, Object> attributes;
-
-    private final String nameAttributeKey;
-
-    public SocialUser(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes,
-        String nameAttributeKey, User user) {
-        Assert.notEmpty(attributes, "attributes cannot be empty");
-        Assert.hasText(nameAttributeKey, "nameAttributeKey cannot be empty");
-        if (!attributes.containsKey(nameAttributeKey)) {
-            throw new IllegalArgumentException("Missing attribute '" + nameAttributeKey + "' in attributes");
-        }
-        this.authorities = (authorities != null)
-            ? Collections.unmodifiableSet(new LinkedHashSet<>(this.sortAuthorities(authorities)))
-            : Collections.unmodifiableSet(new LinkedHashSet<>(AuthorityUtils.NO_AUTHORITIES));
-        this.attributes = Collections.unmodifiableMap(new LinkedHashMap<>(attributes));
-        this.nameAttributeKey = nameAttributeKey;
-        this.user = user;
+    @Override
+    public String getPassword() {
+        return null;
     }
 
-    private Set<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(
-            Comparator.comparing(GrantedAuthority::getAuthority));
-        sortedAuthorities.addAll(authorities);
-        return sortedAuthorities;
+    @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return this.attributes;
+        return null;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return null;
     }
 
     @Override
     public String getName() {
-        return this.getAttribute(this.nameAttributeKey).toString();
+        return null;
     }
 
     public User getUser() {
-        return this.user;
+        return user;
+    }
+
+    private SocialUser(User user) {
+        this.user = user;
+    }
+
+    public static SocialUser of(User user) {
+        return new SocialUser(user);
     }
 }
