@@ -2,9 +2,7 @@ package com.highgeupsik.backend.oauth2;
 
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.repository.UserRepository;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -32,10 +30,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName,
             oAuth2User.getAttributes());
         User user = saveOrUpdate(attributes);
-        String role = user.getRole().toString();
-        System.out.println("ROLE = " + role);
-        return new SocialUser(Collections.singleton(new SimpleGrantedAuthority(role))
-            , attributes.getAttributes(), attributes.getNameAttributeKey(), user);
+        return SocialUser.of(user);
 //        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(role))
 //                , attributes.getAttributes(), attributes.getNameAttributeKey());
     }
