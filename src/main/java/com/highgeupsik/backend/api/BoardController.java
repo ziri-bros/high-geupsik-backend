@@ -43,8 +43,8 @@ public class BoardController {
     @ApiOperation(value = "게시글 목록 조회")
     @GetMapping("/boards")
     public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-        @LoginUser Long userId, BoardSearchCondition condition) {
-        return ApiUtils.success(boardQueryService.findAll(userId, pageNum, condition));
+        BoardSearchCondition condition) {
+        return ApiUtils.success(boardQueryService.findAll(pageNum, condition));
     }
 
     @ApiOperation(value = "게시글 작성")
