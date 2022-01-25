@@ -13,10 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.dto.BoardSearchCondition;
 import com.highgeupsik.backend.entity.Board;
-import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,13 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class BoardQueryService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
 
     private static final int POST_COUNT = 20;
 
-    public BoardResDTO findOneById(Long postId) {
+    public BoardResDTO findOneById(Long boardId) {
         return new BoardResDTO(
-            boardRepository.findById(postId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)));
+            boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)));
     }
 
     public List<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
@@ -41,10 +38,7 @@ public class BoardQueryService {
         return boards.stream().map(BoardResDTO::new).collect(Collectors.toList());
     }
 
-    public Page<BoardResDTO> findAll(Long userId, Integer pageNum, BoardSearchCondition condition) {
-        Region region = userRepository.findById(userId).orElseThrow(
-            () -> new NotFoundException(USER_NOT_FOUND)).getSchool().getRegion();
-        condition.setRegion(region);
+    public Page<BoardResDTO> findAll(Integer pageNum, BoardSearchCondition condition) {
         return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
     }
 }
