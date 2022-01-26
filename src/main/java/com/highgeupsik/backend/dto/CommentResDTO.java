@@ -13,6 +13,7 @@ public class CommentResDTO {
 
     private Long id;
     private Long writerId;
+    private Long boardId;
     private String content;
     private int anonymousId;
     private int likeCount;
@@ -25,10 +26,24 @@ public class CommentResDTO {
     public CommentResDTO(Comment comment, boolean isUserLike) {
         this.id = comment.getId();
         this.writerId = comment.getUser().getId();
+        this.boardId = comment.getBoard().getId();
         this.content = comment.getContent();
         this.anonymousId = comment.getAnonymousId();
         this.likeCount = comment.getLikeCount();
         this.isUserLike = isUserLike;
+        this.isParent = comment.isParent();
+        this.isDeleted = comment.isDeleteFlag();
+        this.replyCount = comment.getReplyCount();
+        this.createdDate = comment.getCreatedDate();
+    }
+
+    public CommentResDTO(Comment comment) {
+        this.id = comment.getId();
+        this.writerId = comment.getUser().getId();
+        this.boardId = comment.getBoard().getId();
+        this.content = comment.getContent();
+        this.anonymousId = comment.getAnonymousId();
+        this.likeCount = comment.getLikeCount();
         this.isParent = comment.isParent();
         this.isDeleted = comment.isDeleteFlag();
         this.replyCount = comment.getReplyCount();
