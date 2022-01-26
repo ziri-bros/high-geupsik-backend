@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
@@ -18,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@RequestMapping("/schedules")
 @RestController
 public class ScheduleController {
 
@@ -25,20 +27,20 @@ public class ScheduleController {
     private final SubjectScheduleQueryService subjectScheduleQueryService;
 
     @ApiOperation(value = "시간표 조회")
-    @GetMapping("/users/schedule")
+    @GetMapping()
     public ApiResult<SubjectScheduleDTO> schedule(@LoginUser Long userId) {
         return success(subjectScheduleQueryService.findSubjectSchedule(userId));
     }
 
     @ApiOperation(value = "시간표 제출")
-    @PostMapping("/users/schedule")
+    @PostMapping()
     public ApiResult makeSchedule(@LoginUser Long userId,
         @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
         return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
     }
 
     @ApiOperation(value = "시간표 삭제")
-    @DeleteMapping("/users/schedule")
+    @DeleteMapping()
     public ApiResult deleteSchedule(@LoginUser Long userId) {
         subjectScheduleService.deleteSchedule(userId);
         return success(null);
