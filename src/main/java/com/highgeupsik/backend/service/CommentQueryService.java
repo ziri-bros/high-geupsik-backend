@@ -18,7 +18,7 @@ public class CommentQueryService {
     private final static int COMMENT_COUNT = 20;
 
     public Page<CommentResDTO> findByMyId(Long userId, Integer pageNum) {
-        return commentRepository.findByUserId(userId, PagingUtils.orderByCreatedDateASC(pageNum, COMMENT_COUNT))
+        return commentRepository.findByUserId(userId, PagingUtils.orderByCreatedDateDESC(pageNum, COMMENT_COUNT))
             .map((CommentResDTO::new));
     }
 }
