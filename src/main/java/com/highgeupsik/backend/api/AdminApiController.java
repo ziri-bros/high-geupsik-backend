@@ -23,8 +23,8 @@ import com.highgeupsik.backend.utils.ApiResult;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/admin")
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 @RestController
 public class AdminApiController {
 
