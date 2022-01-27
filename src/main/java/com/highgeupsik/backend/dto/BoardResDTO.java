@@ -22,6 +22,7 @@ public class BoardResDTO {
     private Category category;
     private int likeCount;
     private int commentCount;
+    private boolean isUserLike;
     private LocalDateTime createdDate;
     private List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
 
@@ -39,17 +40,32 @@ public class BoardResDTO {
         this.createdDate = createdDate;
     }
 
-    public BoardResDTO(Board board) {
-        id = board.getId();
-        writerId = board.getUser().getId();
-        title = board.getTitle();
-        content = board.getContent();
-        category = board.getCategory();
-        likeCount = board.getLikeCount();
-        commentCount = board.getCommentCount();
-        thumbnail = board.getThumbnail();
-        uploadFileDTOList = board.getUploadFileList().stream().map((uploadFile -> new UploadFileDTO(uploadFile)))
+    public BoardResDTO(Board board, boolean isUserLike) {
+        this.id = board.getId();
+        this.writerId = board.getUser().getId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.category = board.getCategory();
+        this.likeCount = board.getLikeCount();
+        this.commentCount = board.getCommentCount();
+        this.isUserLike = isUserLike;
+        this.thumbnail = board.getThumbnail();
+        this.uploadFileDTOList = board.getUploadFileList().stream().map((UploadFileDTO::new))
             .collect(Collectors.toList());
-        createdDate = board.getCreatedDate();
+        this.createdDate = board.getCreatedDate();
+    }
+
+    public BoardResDTO(Board board) {
+        this.id = board.getId();
+        this.writerId = board.getUser().getId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.category = board.getCategory();
+        this.likeCount = board.getLikeCount();
+        this.commentCount = board.getCommentCount();
+        this.thumbnail = board.getThumbnail();
+        this.uploadFileDTOList = board.getUploadFileList().stream().map((UploadFileDTO::new))
+            .collect(Collectors.toList());
+        this.createdDate = board.getCreatedDate();
     }
 }
