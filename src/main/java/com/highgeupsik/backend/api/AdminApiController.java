@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static org.springframework.http.HttpStatus.*;
 
 import javax.mail.MessagingException;
 
@@ -10,13 +11,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.highgeupsik.backend.dto.UserConfirmDTO;
-import com.highgeupsik.backend.dto.UserResDTO;
-import com.highgeupsik.backend.service.MailService;
 import com.highgeupsik.backend.service.UserConfirmService;
-import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
 
@@ -29,9 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminApiController {
 
     private final UserService userService;
-    private final UserQueryService userQueryService;
     private final UserConfirmService userConfirmService;
-    private final MailService mailService;
 
     @ApiOperation(value = "학생증 검수를 위한 유저 조회", notes = "관리자가 유저를 조회합니다")
     @GetMapping("/users")
@@ -41,21 +38,16 @@ public class AdminApiController {
     }
 
     @ApiOperation(value = "학생증 허가")
+    @ResponseStatus(OK)
     @PatchMapping("/users/{userId}/authorize") //수락
-    public ApiResult acceptCard(@PathVariable("userId") Long userId) throws MessagingException {
-        UserResDTO userResDTO = userQueryService.findById(userId);
-        userService.updateRoleUser(userId);
-        userConfirmService.deleteUserConfirmByUserId(userId);
-        mailService.sendEmail(userResDTO.getUsername(), userResDTO.getEmail(), true);
-        return success(null);
+    public void acceptStudentCard(@PathVariable("userId") Long userId) throws MessagingException {
+        userService.acceptUser(userId);
     }
 
     @ApiOperation(value = "학생증 거부")
+    @ResponseStatus(OK)
     @PatchMapping("/users/{userId}") //거부
-    public ApiResult denyCard(@PathVariable("userId") Long userId) throws MessagingException {
-        UserResDTO user = userQueryService.findById(userId);
-        userConfirmService.deleteUserConfirmByUserId(userId);
-        mailService.sendEmail(user.getUsername(), user.getEmail(), false);
-        return success(null);
+    public void rejectStudentCard(@PathVariable("userId") Long userId) throws MessagingException {
+        userService.rejectUser(userId);
     }
 }
