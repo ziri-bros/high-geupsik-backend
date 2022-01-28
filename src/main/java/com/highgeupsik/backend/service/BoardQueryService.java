@@ -30,7 +30,7 @@ public class BoardQueryService {
 
     public BoardResDTO findOneById(Long userId, Long boardId) {
         return new BoardResDTO(boardRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)), getUserLike(userId, boardId));
+            .orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)), isUserLike(userId, boardId));
     }
 
     public Page<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
@@ -42,7 +42,7 @@ public class BoardQueryService {
         return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
     }
 
-    public boolean getUserLike(Long userId, Long boardId) {
+    public boolean isUserLike(Long userId, Long boardId) {
         Optional<Like> like = likeRepository.findByUserIdAndBoardId(userId, boardId);
         if (like.isEmpty()) {
             return false;
