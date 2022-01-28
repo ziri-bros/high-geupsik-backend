@@ -1,5 +1,6 @@
 package com.highgeupsik.backend.api;
 
+import static com.highgeupsik.backend.utils.ApiUtils.*;
 import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.data.domain.Page;
@@ -21,7 +22,6 @@ import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.BoardQueryService;
 import com.highgeupsik.backend.service.BoardService;
 import com.highgeupsik.backend.utils.ApiResult;
-import com.highgeupsik.backend.utils.ApiUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -36,28 +36,28 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 단일 조회")
     @GetMapping("/{boardId}")
-    public ApiResult<BoardResDTO> board(@PathVariable("boardId") Long boardId) {
-        return ApiUtils.success(boardQueryService.findOneById(boardId));
+    public ApiResult<BoardResDTO> board(@LoginUser Long userId, @PathVariable("boardId") Long boardId) {
+        return success(boardQueryService.findOneById(userId, boardId));
     }
 
     @ApiOperation(value = "게시글 목록 조회")
     @GetMapping()
     public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
         BoardSearchCondition condition) {
-        return ApiUtils.success(boardQueryService.findAll(pageNum, condition));
+        return success(boardQueryService.findAll(pageNum, condition));
     }
 
     @ApiOperation(value = "게시글 작성")
     @PostMapping()
     public ApiResult writeBoard(@LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
-        return ApiUtils.success(boardService.makeBoard(userId, boardReqDTO));
+        return success(boardService.makeBoard(userId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 편집")
     @PutMapping("/{boardId}") //게시글 편집
-    public ApiResult editBoard(@PathVariable("boardId") Long boardId, @LoginUser Long userId,
+    public ApiResult editBoard(@LoginUser Long userId, @PathVariable("boardId") Long boardId,
         @RequestBody BoardReqDTO boardReqDTO) {
-        return ApiUtils.success(boardService.updateBoard(userId, boardId, boardReqDTO));
+        return success(boardService.updateBoard(userId, boardId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 삭제")

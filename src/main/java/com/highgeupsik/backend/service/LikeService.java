@@ -52,9 +52,4 @@ public class LikeService {
         likeRepository.save(like);
         return like.getFlag();
     }
-
-    public LikeDTO findBoardLikeDTO(Long userId, Long boardId) {
-        return new LikeDTO(likeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
-            () -> new NotFoundException(LIKE_NOT_FOUND)));
-    }
 }
