@@ -1,8 +1,6 @@
 package com.highgeupsik.backend.service;
 
 import com.highgeupsik.backend.dto.UserConfirmDTO;
-import com.highgeupsik.backend.entity.User;
-import com.highgeupsik.backend.entity.UserConfirm;
 import com.highgeupsik.backend.repository.UserConfirmRepository;
 import com.highgeupsik.backend.utils.PagingUtils;
 import lombok.RequiredArgsConstructor;
