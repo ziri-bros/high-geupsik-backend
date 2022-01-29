@@ -60,7 +60,7 @@ public class CommentService {
         comment.toReply(parent);
     }
 
-    public Long updateComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
+    public Long modifyComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new NotFoundException(COMMENT_NOT_FOUND));
         comment.checkWriter(userId);
@@ -68,7 +68,7 @@ public class CommentService {
         return commentId;
     }
 
-    public void deleteComment(Long userId, Long commentId) {
+    public void removeComment(Long userId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new NotFoundException(COMMENT_NOT_FOUND));
         Comment parent = comment.getParent();

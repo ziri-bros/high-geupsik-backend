@@ -21,7 +21,7 @@ public class CommentLikeController {
 
     @ApiOperation(value = "댓글 좋아요")
     @PostMapping("/comments/{commentId}/likes")
-    public ApiResult pressCommentLike(@LoginUser Long userId, @PathVariable Long commentId) {
-        return success(likeService.saveOrUpdateCommentLike(userId, commentId));
+    public ApiResult commentLikeSave(@LoginUser Long userId, @PathVariable Long commentId) {
+        return success(likeService.saveOrModifyCommentLike(userId, commentId));
     }
 }

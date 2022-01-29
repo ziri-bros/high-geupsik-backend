@@ -28,21 +28,21 @@ public class ScheduleController {
 
     @ApiOperation(value = "시간표 조회")
     @GetMapping()
-    public ApiResult<SubjectScheduleDTO> schedule(@LoginUser Long userId) {
+    public ApiResult<SubjectScheduleDTO> scheduleDetails(@LoginUser Long userId) {
         return success(subjectScheduleQueryService.findSubjectSchedule(userId));
     }
 
-    @ApiOperation(value = "시간표 제출")
+    @ApiOperation(value = "시간표 저장")
     @PostMapping()
-    public ApiResult makeSchedule(@LoginUser Long userId,
+    public ApiResult scheduleSave(@LoginUser Long userId,
         @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
         return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
     }
 
     @ApiOperation(value = "시간표 삭제")
     @DeleteMapping()
-    public ApiResult deleteSchedule(@LoginUser Long userId) {
-        subjectScheduleService.deleteSchedule(userId);
+    public ApiResult scheduleRemove(@LoginUser Long userId) {
+        subjectScheduleService.removeSubjectSchedule(userId);
         return success(null);
     }
 }

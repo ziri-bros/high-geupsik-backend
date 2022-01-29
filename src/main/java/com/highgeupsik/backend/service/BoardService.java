@@ -45,7 +45,7 @@ public class BoardService {
         return board.getId();
     }
 
-    public Long updateBoard(Long userId, Long boardId, BoardReqDTO boardReqDTO) {
+    public Long modifyBoard(Long userId, Long boardId, BoardReqDTO boardReqDTO) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
         board.checkWriter(userId);
         board.deleteFiles();
@@ -56,7 +56,7 @@ public class BoardService {
         return board.getId();
     }
 
-    public void deleteBoard(Long userId, Long boardId) {
+    public void removeBoard(Long userId, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
             () -> new NotFoundException(BOARD_NOT_FOUND));
         board.checkWriter(userId);

@@ -34,14 +34,14 @@ public class SubjectScheduleService {
         return subjectSchedule.getId();
     }
 
-    public void changeSubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
+    public void modifySubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
         SubjectSchedule subjectSchedule = subjectScheduleRepository.findOneByUserId(userId).orElseThrow(()
             -> new NotFoundException("시간표가 없습니다"));
         subjectRepository.deleteBySubjectScheduleId(subjectSchedule.getId());
         subjectSchedule.changeSubjects(subjectScheduleDTO);
     }
 
-    public void deleteSchedule(Long userId) {
+    public void removeSubjectSchedule(Long userId) {
         SubjectSchedule subjectSchedule = subjectScheduleRepository.findOneByUserId(userId).get();
         subjectScheduleRepository.delete(subjectSchedule);
     }
@@ -49,7 +49,7 @@ public class SubjectScheduleService {
     public Long makeSubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
         Optional<SubjectSchedule> subject = subjectScheduleRepository.findOneByUserId(userId);
         if (subject.isPresent()) {
-            changeSubjectSchedule(subjectScheduleDTO, userId);
+            modifySubjectSchedule(subjectScheduleDTO, userId);
             return subject.get().getId();
         }
         return saveSubjectSchedule(subjectScheduleDTO, userId);

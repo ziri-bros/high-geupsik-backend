@@ -20,7 +20,7 @@ public class ImageApiController {
 
     @ApiOperation(value = "이미지 업로드")
     @PostMapping("/images")
-    public ApiResult<List<UploadFileDTO>> images(List<MultipartFile> imageList) throws IOException {
+    public ApiResult<List<UploadFileDTO>> imageSave(List<MultipartFile> imageList) throws IOException {
         return ApiUtils.success(s3Service.uploadFiles(imageList));
     }
 }
