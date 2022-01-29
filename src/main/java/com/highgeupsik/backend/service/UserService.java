@@ -1,7 +1,6 @@
 package com.highgeupsik.backend.service;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.SCHOOL_NOT_FOUND;
-import static com.highgeupsik.backend.utils.ErrorMessage.TOKEN_EXPIRED;
 import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 
 import com.highgeupsik.backend.dto.SchoolDTO;
@@ -10,12 +9,14 @@ import com.highgeupsik.backend.dto.TokenDTO;
 import com.highgeupsik.backend.entity.GRADE;
 import com.highgeupsik.backend.entity.StudentCard;
 import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.entity.UserConfirm;
 import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.exception.TokenExpiredException;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
 import com.highgeupsik.backend.repository.SchoolRepository;
 import com.highgeupsik.backend.repository.StudentCardRepository;
+import com.highgeupsik.backend.repository.UserConfirmRepository;
 import com.highgeupsik.backend.repository.UserRepository;
+import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserConfirmRepository userConfirmRepository;
     private final SchoolRepository schoolRepository;
     private final StudentCardRepository studentCardRepository;
-    private final UserConfirmService userConfirmService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MailService mailService;
 
     public void updateUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
@@ -40,13 +42,14 @@ public class UserService {
         user.setStudentCard(studentCardRepository.save(new StudentCard(
             GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(),
             studentCardDTO.getStudentCardImage())));
-        userConfirmService.saveUserConfirm(user);
+        saveUserConfirm(user);
     }
 
-    public void updateRoleUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() ->
-            new NotFoundException(USER_NOT_FOUND));
-        user.updateRoleUser();
+    public Long saveUserConfirm(User user) {
+        return userConfirmRepository.save(UserConfirm.builder()
+            .user(user)
+            .studentCard(user.getStudentCard())
+            .build()).getId();
     }
 
     public TokenDTO updateToken(TokenDTO tokenDTO) {
@@ -60,5 +63,18 @@ public class UserService {
             jwtTokenProvider.createRefreshToken());
         user.updateToken(jwtTokenProvider.createNewToken(userId, role, "refresh"));
         return newTokenDTO;
+    }
+
+    public void acceptUser(Long userId) throws MessagingException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        user.updateRoleUser();
+        userConfirmRepository.deleteByUserId(userId);
+        mailService.sendEmail(user.getUsername(), user.getEmail(), true);
+    }
+
+    public void rejectUser(Long userId) throws MessagingException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        userConfirmRepository.deleteByUserId(userId);
+        mailService.sendEmail(user.getUsername(), user.getEmail(), false);
     }
 }
