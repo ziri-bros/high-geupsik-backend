@@ -32,7 +32,7 @@ public class AdminApiController {
 
     @ApiOperation(value = "학생증 검수를 위한 유저 조회", notes = "관리자가 유저를 조회합니다")
     @GetMapping("/users")
-    public ApiResult<Page<UserConfirmDTO>> userCards(
+    public ApiResult<Page<UserConfirmDTO>> userConfirms(
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(userConfirmService.findAll(pageNum));
     }
@@ -40,14 +40,14 @@ public class AdminApiController {
     @ApiOperation(value = "학생증 허가")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}/authorize") //수락
-    public void acceptStudentCard(@PathVariable("userId") Long userId) throws MessagingException {
+    public void userAccept(@PathVariable("userId") Long userId) throws MessagingException {
         userService.acceptUser(userId);
     }
 
     @ApiOperation(value = "학생증 거부")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}") //거부
-    public void rejectStudentCard(@PathVariable("userId") Long userId) throws MessagingException {
+    public void userReject(@PathVariable("userId") Long userId) throws MessagingException {
         userService.rejectUser(userId);
     }
 }

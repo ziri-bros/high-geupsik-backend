@@ -33,7 +33,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MailService mailService;
 
-    public void updateUserInfo(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
+    public void modifyUser(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
         user.updateRoleGuest();

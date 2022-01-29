@@ -25,7 +25,7 @@ public class BoardCommentController {
 
     @ApiOperation(value = "게시글의 댓글 목록 조회")
     @GetMapping("/boards/{boardId}/comments")
-    public ApiResult<Page<CommentResDTO>> findBoardComments(
+    public ApiResult<Page<CommentResDTO>> boardComments(
         @LoginUser Long userId,
         @PathVariable("boardId") Long boardId,
         @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
