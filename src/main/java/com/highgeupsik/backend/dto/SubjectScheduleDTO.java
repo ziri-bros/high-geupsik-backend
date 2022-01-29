@@ -16,7 +16,7 @@ public class SubjectScheduleDTO {
     private List<SubjectDTO> subjectDTOList = new ArrayList<>();
 
     public SubjectScheduleDTO(SubjectSchedule subjectSchedule) {
-        subjectDTOList = subjectSchedule.getSubjectList().stream().map((subject) -> new SubjectDTO(subject))
+        subjectDTOList = subjectSchedule.getSubjectList().stream().map(SubjectDTO::new)
             .collect(Collectors.toList());
     }
 }

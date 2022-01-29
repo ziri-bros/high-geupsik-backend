@@ -1,13 +1,13 @@
 package com.highgeupsik.backend.service;
 
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
+
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.entity.Subject;
 import com.highgeupsik.backend.entity.SubjectSchedule;
 import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.repository.SubjectRepository;
 import com.highgeupsik.backend.repository.SubjectScheduleRepository;
 import com.highgeupsik.backend.repository.UserRepository;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class SubjectScheduleService {
 
     private final SubjectScheduleRepository subjectScheduleRepository;
-    private final SubjectRepository subjectRepository;
     private final UserRepository userRepository;
 
-    public Long saveSubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
+    public void saveSubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
         SubjectSchedule subjectSchedule = subjectScheduleRepository.save(SubjectSchedule.builder()
             .subjectList(subjectScheduleDTO.getSubjectDTOList()
                 .stream().map((subjectDTO -> new Subject(subjectDTO.getSubjectTime(),
@@ -30,28 +29,7 @@ public class SubjectScheduleService {
                 .collect(Collectors.toList()))
             .build());
         subjectSchedule.getSubjectList().forEach((subject -> subject.setSubjectSchedule(subjectSchedule)));
-        userRepository.findById(userId).get().setSubjectSchedule(subjectSchedule);
-        return subjectSchedule.getId();
-    }
-
-    public void modifySubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
-        SubjectSchedule subjectSchedule = subjectScheduleRepository.findOneByUserId(userId).orElseThrow(()
-            -> new NotFoundException("시간표가 없습니다"));
-        subjectRepository.deleteBySubjectScheduleId(subjectSchedule.getId());
-        subjectSchedule.changeSubjects(subjectScheduleDTO);
-    }
-
-    public void removeSubjectSchedule(Long userId) {
-        SubjectSchedule subjectSchedule = subjectScheduleRepository.findOneByUserId(userId).get();
-        subjectScheduleRepository.delete(subjectSchedule);
-    }
-
-    public Long makeSubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
-        Optional<SubjectSchedule> subject = subjectScheduleRepository.findOneByUserId(userId);
-        if (subject.isPresent()) {
-            modifySubjectSchedule(subjectScheduleDTO, userId);
-            return subject.get().getId();
-        }
-        return saveSubjectSchedule(subjectScheduleDTO, userId);
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND))
+            .setSubjectSchedule(subjectSchedule);
     }
 }

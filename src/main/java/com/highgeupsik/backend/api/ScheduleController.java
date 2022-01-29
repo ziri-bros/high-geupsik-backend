@@ -1,12 +1,13 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static org.springframework.http.HttpStatus.OK;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
@@ -33,16 +34,10 @@ public class ScheduleController {
     }
 
     @ApiOperation(value = "시간표 저장")
+    @ResponseStatus(OK)
     @PostMapping()
-    public ApiResult scheduleSave(@LoginUser Long userId,
+    public void scheduleSave(@LoginUser Long userId,
         @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
-        return success(subjectScheduleService.makeSubjectSchedule(subjectScheduleDTO, userId));
-    }
-
-    @ApiOperation(value = "시간표 삭제")
-    @DeleteMapping()
-    public ApiResult scheduleRemove(@LoginUser Long userId) {
-        subjectScheduleService.removeSubjectSchedule(userId);
-        return success(null);
+        subjectScheduleService.saveSubjectSchedule(subjectScheduleDTO, userId);
     }
 }
