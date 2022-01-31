@@ -26,7 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final ObjectMapper objectMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -75,8 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticated()
 
             .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
-                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
             .oauth2Login()
             .authorizationEndpoint()
             .baseUri("/oauth2/authorize")
