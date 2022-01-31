@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.oauth2;
 
 import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.jwt.JwtTokenProvider;
 import com.highgeupsik.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -39,6 +41,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         User user = userRepository.findByEmailAndProvider(attributes.getEmail(), attributes.getProvider())
             .map(entity -> entity.updateName(attributes.getName()))
             .orElse(attributes.toEntity());
+        user.updateRefreshToken(jwtTokenProvider.createRefreshToken());
         return userRepository.save(user);
     }
 }
