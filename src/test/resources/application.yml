@@ -6,5 +6,5 @@ spring:
       - mail
       - test-db
 jwt:
-  secret: ${JWT_SECRET}
+  secret: testJwtSecretWhichIsVeryLongAndMeaninglessAndOnlyForTestshouldBeLongerThan240Bytes
 

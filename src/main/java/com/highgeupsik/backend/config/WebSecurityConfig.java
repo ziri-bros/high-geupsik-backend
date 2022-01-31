@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highgeupsik.backend.handler.JwtAccessDeniedHandler;
 import com.highgeupsik.backend.handler.JwtAuthenticationEntryPoint;
 import com.highgeupsik.backend.handler.OAuth2AuthenticationSuccessHandler;
@@ -26,7 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final ObjectMapper objectMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -75,8 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticated()
 
             .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
-                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
             .oauth2Login()
             .authorizationEndpoint()
             .baseUri("/oauth2/authorize")

@@ -35,19 +35,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = "http://localhost:3000/oauth2/redirect?";
         SocialUser socialUser = (SocialUser) authentication.getPrincipal();
         User user = socialUser.getUser();
-        String accessToken = jwtTokenProvider.createNewToken(user.getId(), user.getRole().toString(), "access");
-        String refreshToken = jwtTokenProvider.createRefreshToken();
-        boolean isSubmittedCard = checkUserConfirm(user.getId());
+        Long userId = user.getId();
         return UriComponentsBuilder.fromUriString(targetUrl)
             .queryParam("role", user.getRole())
-            .queryParam("isSubmittedCard", isSubmittedCard)
-            .queryParam("accessToken", accessToken)
-            .queryParam("refreshToken", refreshToken)
+            .queryParam("isSubmittedCard", isSubmittedUserConfirm(userId))
+            .queryParam("accessToken", jwtTokenProvider.createAccessToken(userId, user.getRole().toString()))
+            .queryParam("refreshToken", user.getRefreshToken())
             .build()
             .toUriString();
     }
 
-    public boolean checkUserConfirm(Long userId) {
+    public boolean isSubmittedUserConfirm(Long userId) {
         return userConfirmRepository.findByUserId(userId).isPresent();
     }
 }
