@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highgeupsik.backend.handler.JwtAccessDeniedHandler;
 import com.highgeupsik.backend.handler.JwtAuthenticationEntryPoint;
 import com.highgeupsik.backend.handler.OAuth2AuthenticationSuccessHandler;
