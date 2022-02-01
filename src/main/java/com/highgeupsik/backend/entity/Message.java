@@ -36,23 +36,11 @@ public class Message extends TimeEntity {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    private boolean fromDeleteFlag = false;
-
-    private boolean toDeleteFlag = false;
-
     @Builder
     public Message(String content, User fromUser, User toUser, Room room) {
         this.content = content;
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.room = room;
-    }
-
-    public void deleteFromUser() {
-        fromDeleteFlag = true;
-    }
-
-    public void deleteToUser() {
-        toDeleteFlag = true;
     }
 }
