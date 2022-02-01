@@ -22,8 +22,6 @@ public class Room extends TimeEntity {
     @GeneratedValue
     private Long id;
 
-    private String firstMessage;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
     private User fromUser;
@@ -36,9 +34,5 @@ public class Room extends TimeEntity {
     public Room(User fromUser, User toUser) {
         this.fromUser = fromUser;
         this.toUser = toUser;
-    }
-
-    public void updateMessage(String firstMessage) {
-        this.firstMessage = firstMessage;
     }
 }
