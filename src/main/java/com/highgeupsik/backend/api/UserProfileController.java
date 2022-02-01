@@ -33,9 +33,9 @@ public class UserProfileController {
     }
 
     @ApiOperation(value = "내정보 수정")
+    @ResponseStatus(OK)
     @PatchMapping("/users")
-    public ApiResult userModify(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
+    public void userModify(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
         userService.modifyUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
-        return success(null);
     }
 }
