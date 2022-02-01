@@ -9,7 +9,6 @@ import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.exception.NotMatchException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import java.util.List;
