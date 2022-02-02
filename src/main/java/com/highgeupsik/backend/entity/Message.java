@@ -43,4 +43,17 @@ public class Message extends TimeEntity {
         this.toUser = toUser;
         this.room = room;
     }
+
+    public static Message of(User fromUser, User toUser, Room room, String content) {
+        return Message.builder()
+            .fromUser(fromUser)
+            .toUser(toUser)
+            .room(room)
+            .content(content)
+            .build();
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
 }
