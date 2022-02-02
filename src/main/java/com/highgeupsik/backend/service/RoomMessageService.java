@@ -37,8 +37,8 @@ public class RoomMessageService {
         myRoom.addMessage(myMessage);
         otherRoom.addMessage(otherMessage);
 
-        myRoom.setFirstMessage(content);
-        otherRoom.setFirstMessage(content);
+        myRoom.setLatestMessage(content);
+        otherRoom.setLatestMessage(content);
 
         roomRepository.save(myRoom);
         roomRepository.save(otherRoom);

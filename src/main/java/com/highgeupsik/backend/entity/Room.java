@@ -57,7 +57,7 @@ public class Room extends TimeEntity {
         message.setRoom(this);
     }
 
-    public void setFirstMessage(String latestMessage) {
+    public void setLatestMessage(String latestMessage) {
         this.latestMessage = latestMessage;
     }
 }
