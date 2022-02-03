@@ -31,8 +31,8 @@ public class RoomMessageService {
         Room otherRoom = roomRepository.findByFromUserAndToUser(toUser, fromUser)
             .orElse(Room.of(toUser, fromUser));
 
-        Message myMessage = Message.of(fromUser, toUser, myRoom, content);
-        Message otherMessage = Message.of(fromUser, toUser, otherRoom, content);
+        Message myMessage = Message.of(fromUser, toUser, content);
+        Message otherMessage = Message.of(fromUser, toUser, content);
 
         myRoom.addMessage(myMessage);
         otherRoom.addMessage(otherMessage);
