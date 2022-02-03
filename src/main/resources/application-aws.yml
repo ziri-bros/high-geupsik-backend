@@ -1,8 +1,8 @@
 cloud:
   aws:
     credentials:
-      accessKey: ${AWS_ACCESSKEY}
-      secretKey: ${AWS_SECRETKEY}
+      access-key: ${AWS_ACCESSKEY}
+      secret-key: ${AWS_SECRETKEY}
     s3:
       bucket: ${AWS_S3BUCKET}
     region:
