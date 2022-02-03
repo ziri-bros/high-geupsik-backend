@@ -25,48 +25,48 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class S3Service {
 
-	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
-	private final AmazonS3 s3Client;
+    private final AmazonS3 s3Client;
 
-	public List<UploadFileDTO> uploadFiles(List<MultipartFile> images) {
-		return images.stream()
-			.map(file -> {
-				String fileKey = generateRandomFileKey(file);
-				String fileUrl = uploadToS3(fileKey, file);
-				return new UploadFileDTO(file.getOriginalFilename(), fileUrl);
-			}).collect(toList());
-	}
+    public List<UploadFileDTO> uploadFiles(List<MultipartFile> images) {
+        return images.stream()
+            .map(file -> {
+                String fileKey = generateRandomFileKey(file);
+                String fileUrl = uploadToS3(fileKey, file);
+                return new UploadFileDTO(file.getOriginalFilename(), fileUrl);
+            }).collect(toList());
+    }
 
-	private String generateRandomFileKey(MultipartFile file) {
-		return UUID.randomUUID() + file.getOriginalFilename();
-	}
+    private String generateRandomFileKey(MultipartFile file) {
+        return UUID.randomUUID() + file.getOriginalFilename();
+    }
 
-	private String uploadToS3(String fileKey, MultipartFile file) {
-		s3Client.putObject(
-			new PutObjectRequest(
-				bucket,
-				fileKey,
-				getBytesInputStream(file),
-				getMetadata(file)
-			).withCannedAcl(CannedAccessControlList.PublicRead)
-		);
-		return s3Client.getUrl(bucket, fileKey).toString();
-	}
+    private String uploadToS3(String fileKey, MultipartFile file) {
+        s3Client.putObject(
+            new PutObjectRequest(
+                bucket,
+                fileKey,
+                getBytesInputStream(file),
+                getMetadata(file)
+            ).withCannedAcl(CannedAccessControlList.PublicRead)
+        );
+        return s3Client.getUrl(bucket, fileKey).toString();
+    }
 
-	private InputStream getBytesInputStream(MultipartFile file) {
-		try {
-			return new ByteArrayInputStream(file.getBytes());
-		} catch (IOException e) {
-			throw new FileUploadException("파일 업로드에 실패했습니다.");
-		}
-	}
+    private InputStream getBytesInputStream(MultipartFile file) {
+        try {
+            return new ByteArrayInputStream(file.getBytes());
+        } catch (IOException e) {
+            throw new FileUploadException("파일 업로드에 실패했습니다.");
+        }
+    }
 
-	private ObjectMetadata getMetadata(MultipartFile file) {
-		ObjectMetadata metadata = new ObjectMetadata();
-		metadata.setContentLength(file.getSize());
-		metadata.setContentType(file.getContentType());
-		return metadata;
-	}
+    private ObjectMetadata getMetadata(MultipartFile file) {
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        return metadata;
+    }
 }

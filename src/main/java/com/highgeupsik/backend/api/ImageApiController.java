@@ -18,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class ImageApiController {
 
-	private final S3Service s3Service;
+    private final S3Service s3Service;
 
-	@ApiOperation(value = "이미지 업로드")
-	@PostMapping("/images")
-	public ApiResult<List<UploadFileDTO>> imageSave(List<MultipartFile> imageList) {
-		return ApiUtils.success(s3Service.uploadFiles(imageList));
-	}
+    @ApiOperation(value = "이미지 업로드")
+    @PostMapping("/images")
+    public ApiResult<List<UploadFileDTO>> imageSave(List<MultipartFile> imageList) {
+        return ApiUtils.success(s3Service.uploadFiles(imageList));
+    }
 }
