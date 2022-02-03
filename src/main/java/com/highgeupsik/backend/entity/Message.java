@@ -37,18 +37,16 @@ public class Message extends TimeEntity {
     private Room room;
 
     @Builder
-    public Message(String content, User fromUser, User toUser, Room room) {
+    public Message(String content, User fromUser, User toUser) {
         this.content = content;
         this.fromUser = fromUser;
         this.toUser = toUser;
-        this.room = room;
     }
 
-    public static Message of(User fromUser, User toUser, Room room, String content) {
+    public static Message of(User fromUser, User toUser, String content) {
         return Message.builder()
             .fromUser(fromUser)
             .toUser(toUser)
-            .room(room)
             .content(content)
             .build();
     }
