@@ -1,5 +1,6 @@
 package com.highgeupsik.backend.dto;
 
+import com.highgeupsik.backend.entity.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,8 +8,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserReqDTO {
+public class SchoolReqDTO {
 
-    private StudentCardDTO studentCardDTO;
-    private SchoolReqDTO schoolReqDTO;
+    Region region;
+    String schoolName;
 }
