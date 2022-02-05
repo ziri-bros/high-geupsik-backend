@@ -1,9 +1,8 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.ErrorMessage.SCHOOL_NOT_FOUND;
-import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
-import com.highgeupsik.backend.dto.SchoolDTO;
+import com.highgeupsik.backend.dto.SchoolReqDTO;
 import com.highgeupsik.backend.dto.StudentCardDTO;
 import com.highgeupsik.backend.entity.GRADE;
 import com.highgeupsik.backend.entity.StudentCard;
@@ -30,12 +29,12 @@ public class UserService {
     private final StudentCardRepository studentCardRepository;
     private final MailService mailService;
 
-    public void modifyUser(Long userId, StudentCardDTO studentCardDTO, SchoolDTO schoolDTO) {
+    public void modifyUser(Long userId, StudentCardDTO studentCardDTO, SchoolReqDTO schoolReqDTO) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND));
         user.updateRoleGuest();
-        user.setSchool(schoolRepository.findByName(schoolDTO.getName()).orElseThrow(
-            () -> new NotFoundException(SCHOOL_NOT_FOUND)));
+        user.setSchool(schoolRepository.findByRegionAndName(schoolReqDTO.getRegion(), schoolReqDTO.getSchoolName())
+            .orElseThrow(() -> new NotFoundException(SCHOOL_NOT_FOUND)));
         user.setStudentCard(studentCardRepository.save(new StudentCard(
             GRADE.from(studentCardDTO.getGrade()), studentCardDTO.getClassNum(),
             studentCardDTO.getStudentCardImage())));

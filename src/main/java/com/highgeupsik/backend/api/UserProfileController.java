@@ -36,6 +36,6 @@ public class UserProfileController {
     @ResponseStatus(OK)
     @PatchMapping("/users")
     public void userModify(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-        userService.modifyUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolDTO());
+        userService.modifyUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolReqDTO());
     }
 }

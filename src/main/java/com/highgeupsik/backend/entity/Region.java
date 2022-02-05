@@ -2,20 +2,22 @@ package com.highgeupsik.backend.entity;
 
 public enum Region {
 
-    SEOUL,
-    BUSAN,
-    ULSAN,
-    DAEJEON,
-    DAEGU,
-    INCHEON,
-    GWANGJU,
-    GYEONGGI,
-    GANGWON,
-    CHUNGBUK,
-    CHUNGNAM,
-    JEONNAM,
-    JEONBUK,
-    GYEONGNAM,
-    GYEONGBUK,
-    JEJU
+    서울특별시교육청,
+    부산광역시교육청,
+    대구광역시교육청,
+    인천광역시교육청,
+    광주광역시교육청,
+    대전광역시교육청,
+    울산광역시교육청,
+    세종특별자치시교육청,
+    경기도교육청,
+    강원도교육청,
+    충청북도교육청,
+    충청남도교육청,
+    전라남도교육청,
+    전라북도교육청,
+    경상남도교육청,
+    경상북도교육청,
+    제주특별자치도교육청,
+    재외한국학교교육청
 }

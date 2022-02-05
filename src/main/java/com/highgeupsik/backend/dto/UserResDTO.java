@@ -15,7 +15,7 @@ public class UserResDTO {
     private int grade;
     private int classNum;
     private String studentCardImage;
-    private SchoolDTO schoolDTO;
+    private SchoolResDTO schoolResDTO;
 
     public UserResDTO(User user) {
         id = user.getId();
@@ -24,6 +24,6 @@ public class UserResDTO {
         grade = user.getStudentCard().getGrade().getGradeNum();
         classNum = user.getStudentCard().getClassNum();
         studentCardImage = user.getStudentCard().getStudentCardImage();
-        schoolDTO = new SchoolDTO(user.getSchool());
+        schoolResDTO = new SchoolResDTO(user.getSchool());
     }
 }

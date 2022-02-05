@@ -8,14 +8,14 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Getter @Setter
-public class SchoolDTO {
+public class SchoolResDTO {
 
     private String name;
     private String code;
     private String regionCode;
     private Region region;
 
-    public SchoolDTO(School school) {
+    public SchoolResDTO(School school) {
         name = school.getName();
         code = school.getCode();
         regionCode = school.getRegionCode();
