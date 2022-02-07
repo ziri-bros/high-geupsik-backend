@@ -3,6 +3,7 @@ package com.highgeupsik.backend.utils;
 import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.entity.School;
 import com.highgeupsik.backend.repository.SchoolRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +30,12 @@ public class InitDB {
         private final SchoolRepository schoolRepository;
 
         public void dbInit() {
+            List<School> schoolList = new ArrayList<>();
             for (Region region : Region.values()) {
                 ClassPathResource resource = new ClassPathResource("/static/schools/" + region.toString() + ".json");
-                List<School> schoolList = ParsingUtils
-                    .getSchoolListFromJsonFile(resource);
-                schoolRepository.saveAll(schoolList);
+                ParsingUtils.addSchoolListFromJsonFile(resource, schoolList);
             }
+            schoolRepository.saveAll(schoolList);
         }
     }
 }

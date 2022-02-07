@@ -17,13 +17,12 @@ import org.springframework.core.io.ClassPathResource;
 @Slf4j
 public class ParsingUtils {
 
-    public static List<School> getSchoolListFromJsonFile(ClassPathResource resource) {
+    public static List<School> addSchoolListFromJsonFile(ClassPathResource resource, List<School> schoolList) {
         String REGION = "LCTN_SC_NM"; //소재지명
         String SCHOOLCODE = "SD_SCHUL_CODE"; //표준학교코드
         String SCHOOLNAME = "SCHUL_NM"; //학교명
         String REGIONCODE = "ATPT_OFCDC_SC_CODE"; //시도교육청코드
         String SCHOOLTYPE = "SCHUL_KND_SC_NM"; //학교종류
-        List<School> schoolList = new ArrayList<>();
         try {
             JSONParser parser = new JSONParser();
             InputStreamReader streamReader = new InputStreamReader(resource.getInputStream());
