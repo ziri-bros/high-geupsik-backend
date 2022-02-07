@@ -1,10 +1,12 @@
 package com.highgeupsik.backend.utils;
 
+import com.highgeupsik.backend.entity.Region;
 import com.highgeupsik.backend.entity.School;
 import com.highgeupsik.backend.repository.SchoolRepository;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +29,12 @@ public class InitDB {
         private final SchoolRepository schoolRepository;
 
         public void dbInit() {
-            String fileLocation = "";
-            List<School> schoolList = ParsingUtils
-                .getSchoolListFromJsonFile(fileLocation);
-            schoolRepository.saveAll(schoolList);
+            for (Region region : Region.values()) {
+                ClassPathResource resource = new ClassPathResource("/static/schools/" + region.toString() + ".json");
+                List<School> schoolList = ParsingUtils
+                    .getSchoolListFromJsonFile(resource);
+                schoolRepository.saveAll(schoolList);
+            }
         }
     }
 }
