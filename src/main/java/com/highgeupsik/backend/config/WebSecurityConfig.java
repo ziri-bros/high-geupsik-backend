@@ -1,9 +1,11 @@
 package com.highgeupsik.backend.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highgeupsik.backend.handler.JwtAccessDeniedHandler;
 import com.highgeupsik.backend.handler.JwtAuthenticationEntryPoint;
 import com.highgeupsik.backend.handler.OAuth2AuthenticationSuccessHandler;
 import com.highgeupsik.backend.jwt.JwtAuthenticationFilter;
+import com.highgeupsik.backend.jwt.JwtExceptionFilter;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
 import com.highgeupsik.backend.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -55,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .exceptionHandling()
-            // .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .accessDeniedHandler(jwtAccessDeniedHandler)
 
             .and()
@@ -74,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtAuthenticationFilter.class)
             .oauth2Login()
             .authorizationEndpoint()
             .baseUri("/oauth2/authorize")
