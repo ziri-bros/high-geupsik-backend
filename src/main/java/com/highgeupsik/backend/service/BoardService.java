@@ -45,7 +45,7 @@ public class BoardService {
     }
 
     public Long modifyBoard(Long userId, Long boardId, BoardReqDTO boardReqDTO) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND));
         board.checkWriter(userId);
         board.deleteFiles();
         if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {

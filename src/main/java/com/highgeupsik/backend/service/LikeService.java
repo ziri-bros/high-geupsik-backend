@@ -32,7 +32,7 @@ public class LikeService {
 
     public boolean saveOrModifyBoardLike(Long userId, Long boardId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND));
         Like like = likeRepository.findByUserIdAndBoardId(userId, boardId)
             .map(Like::update).orElse(Like.of(user));
         like.setBoard(board);

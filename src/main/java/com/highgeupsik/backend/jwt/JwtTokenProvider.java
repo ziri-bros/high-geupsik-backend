@@ -2,8 +2,7 @@ package com.highgeupsik.backend.jwt;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
-import com.highgeupsik.backend.exception.TokenExpiredException;
-import com.highgeupsik.backend.utils.ErrorMessage;
+import com.highgeupsik.backend.exception.TokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -90,13 +89,13 @@ public class JwtTokenProvider {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            throw new TokenException(UNABLE_JWT_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException(TOKEN_EXPIRED);
+            throw new TokenException(TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            throw new TokenException(UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
+            throw new TokenException(WRONG_JWT_TOKEN);
         }
     }
 }

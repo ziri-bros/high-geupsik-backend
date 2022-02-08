@@ -6,7 +6,7 @@ import static org.springframework.http.HttpStatus.*;
 import com.highgeupsik.backend.exception.DuplicateException;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.exception.NotMatchException;
-import com.highgeupsik.backend.exception.TokenExpiredException;
+import com.highgeupsik.backend.exception.TokenException;
 import com.highgeupsik.backend.utils.ApiError;
 import com.highgeupsik.backend.utils.ApiResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,8 +30,8 @@ public class ErrorApiController {
         return error(new ApiError(e.getMessage(), INTERNAL_SERVER_ERROR));
     }
 
-    @ExceptionHandler(TokenExpiredException.class)
-    public ApiResult tokenExpiredException(TokenExpiredException e) {
+    @ExceptionHandler(TokenException.class)
+    public ApiResult tokenExpiredException(TokenException e) {
         return error(new ApiError(e.getMessage(), FORBIDDEN));
     }
 }
