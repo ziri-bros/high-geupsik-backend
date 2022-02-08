@@ -40,9 +40,9 @@ public class ParsingUtils {
                     Region.valueOf((String) jsonObject.get(REGION))));
             }
         } catch (IOException e) {
-            log.info("파일에러입니다");
+            log.error("파일에러입니다");
         } catch (ParseException e) {
-            log.info("파싱에러입니다");
+            log.error("파싱에러입니다");
         }
         return schoolList;
     }
