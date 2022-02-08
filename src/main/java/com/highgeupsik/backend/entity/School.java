@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.TableGenerator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@TableGenerator(
+    name = "SCHOOL_SEQ_GENERATOR",
+    table = "MY_SEQUENCES",
+    pkColumnValue = "SCHOOL_SEQ", allocationSize = 500
+)
 public class School {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "SCHOOL_SEQ_GENERATOR")
     @Column(name = "school_id", updatable = false)
     private Long id;
 
