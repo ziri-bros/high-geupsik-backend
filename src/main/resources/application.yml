@@ -16,4 +16,5 @@ spring:
       - db
       - mail
       - aws
+      - log
 
