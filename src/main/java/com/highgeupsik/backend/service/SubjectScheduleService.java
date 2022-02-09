@@ -8,6 +8,7 @@ import com.highgeupsik.backend.entity.SubjectSchedule;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.repository.SubjectScheduleRepository;
 import com.highgeupsik.backend.repository.UserRepository;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,18 @@ public class SubjectScheduleService {
     private final UserRepository userRepository;
 
     public void saveSubjectSchedule(SubjectScheduleDTO subjectScheduleDTO, Long userId) {
-        SubjectSchedule subjectSchedule = subjectScheduleRepository.save(SubjectSchedule.builder()
-            .subjectList(subjectScheduleDTO.getSubjectDTOList()
-                .stream().map((subjectDTO -> new Subject(subjectDTO.getSubjectTime(),
-                    subjectDTO.getWeekDay(), subjectDTO.getSubjectName())))
-                .collect(Collectors.toList()))
-            .build());
-        subjectSchedule.getSubjectList().forEach((subject -> subject.setSubjectSchedule(subjectSchedule)));
+
+        SubjectSchedule subjectSchedule = subjectScheduleRepository.findOneByUserId(userId)
+            .orElse(SubjectSchedule.of());
+        subjectSchedule.removeSubjects();
+
+        List<Subject> subjectList = subjectScheduleDTO.getSubjectDTOList()
+            .stream().map((Subject::of)).collect(Collectors.toList());
+
+        subjectSchedule.setSubjects(subjectList);
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND))
             .setSubjectSchedule(subjectSchedule);
+
+        subjectScheduleRepository.save(subjectSchedule);
     }
 }
