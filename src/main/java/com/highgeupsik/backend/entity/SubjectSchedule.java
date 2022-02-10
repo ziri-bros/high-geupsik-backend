@@ -1,9 +1,7 @@
 package com.highgeupsik.backend.entity;
 
-import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +28,7 @@ public class SubjectSchedule {
     @OneToOne(mappedBy = "subjectSchedule", fetch = FetchType.EAGER)
     private User user;
 
-    @OneToMany(mappedBy = "subjectSchedule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subjectSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjectList = new ArrayList<>();
 
     @Builder
@@ -38,15 +36,21 @@ public class SubjectSchedule {
         this.subjectList = subjectList;
     }
 
-    public void changeSubjects(SubjectScheduleDTO subjectScheduleDTO) {
-        subjectList = subjectScheduleDTO.getSubjectDTOList()
-            .stream().map((subjectDTO -> new Subject(
-                subjectDTO.getSubjectTime(), subjectDTO.getWeekDay(), subjectDTO.getSubjectName()
-            ))).collect(Collectors.toList());
-        subjectList.forEach((subject -> subject.setSubjectSchedule(this)));
-    }
-
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void removeSubjects() {
+        this.getSubjectList().clear();
+    }
+
+    public void setSubjects(List<Subject> subjectList) {
+        this.subjectList = subjectList;
+        subjectList.forEach((subject) -> subject.setSubjectSchedule(this));
+    }
+
+    public static SubjectSchedule of() {
+        return SubjectSchedule.builder()
+            .build();
     }
 }
