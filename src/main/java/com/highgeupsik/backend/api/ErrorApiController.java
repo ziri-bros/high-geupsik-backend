@@ -4,6 +4,7 @@ import static com.highgeupsik.backend.utils.ApiUtils.error;
 import static org.springframework.http.HttpStatus.*;
 
 import com.highgeupsik.backend.exception.DuplicateException;
+import com.highgeupsik.backend.exception.MailException;
 import com.highgeupsik.backend.exception.NotFoundException;
 import com.highgeupsik.backend.exception.NotMatchException;
 import com.highgeupsik.backend.exception.TokenException;
@@ -33,5 +34,10 @@ public class ErrorApiController {
     @ExceptionHandler(TokenException.class)
     public ApiResult tokenExpiredException(TokenException e) {
         return error(new ApiError(e.getMessage(), FORBIDDEN));
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ApiResult mailException(MailException e) {
+        return error(new ApiError(e.getMessage(), INTERNAL_SERVER_ERROR));
     }
 }

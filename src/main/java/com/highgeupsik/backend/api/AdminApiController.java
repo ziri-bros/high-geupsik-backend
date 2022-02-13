@@ -3,8 +3,6 @@ package com.highgeupsik.backend.api;
 import static com.highgeupsik.backend.utils.ApiUtils.*;
 import static org.springframework.http.HttpStatus.*;
 
-import javax.mail.MessagingException;
-
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,14 +38,14 @@ public class AdminApiController {
     @ApiOperation(value = "학생증 허가")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}/authorize") //수락
-    public void userAccept(@PathVariable("userId") Long userId) throws MessagingException {
+    public void userAccept(@PathVariable("userId") Long userId) {
         userService.acceptUser(userId);
     }
 
     @ApiOperation(value = "학생증 거부")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}") //거부
-    public void userReject(@PathVariable("userId") Long userId) throws MessagingException {
+    public void userReject(@PathVariable("userId") Long userId) {
         userService.rejectUser(userId);
     }
 }
