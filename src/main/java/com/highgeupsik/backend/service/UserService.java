@@ -13,7 +13,6 @@ import com.highgeupsik.backend.repository.SchoolRepository;
 import com.highgeupsik.backend.repository.StudentCardRepository;
 import com.highgeupsik.backend.repository.UserConfirmRepository;
 import com.highgeupsik.backend.repository.UserRepository;
-import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,14 +47,14 @@ public class UserService {
             .build());
     }
 
-    public void acceptUser(Long userId) throws MessagingException {
+    public void acceptUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.updateRoleUser();
         userConfirmRepository.deleteByUserId(userId);
         mailService.sendEmail(user.getUsername(), user.getEmail(), true);
     }
 
-    public void rejectUser(Long userId) throws MessagingException {
+    public void rejectUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         userConfirmRepository.deleteByUserId(userId);
         mailService.sendEmail(user.getUsername(), user.getEmail(), false);
