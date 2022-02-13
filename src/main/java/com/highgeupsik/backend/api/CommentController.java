@@ -28,25 +28,22 @@ public class CommentController {
 
     @ApiOperation(value = "댓글 작성")
     @PostMapping("/boards/{boardId}/comments")
-    public ApiResult<CommentResDTO> commentSave(
-        @LoginUser Long userId,
-        @PathVariable("boardId") Long boardId,
-        @RequestBody CommentReqDTO dto
-    ) {
+    public ApiResult<CommentResDTO> commentSave(@LoginUser Long userId, @PathVariable Long boardId,
+        @RequestBody CommentReqDTO dto) {
         return success(commentService.saveComment(userId, boardId, dto));
     }
 
     @ApiOperation(value = "댓글 편집")
     @PutMapping("/comments/{commentId}")
-    public ApiResult commentModify(@PathVariable("commentId") Long commentId, @RequestBody CommentReqDTO commentReqDTO,
-        @LoginUser Long userId) {
+    public ApiResult commentModify(@LoginUser Long userId, @PathVariable Long commentId,
+        @RequestBody CommentReqDTO commentReqDTO) {
         return success(commentService.modifyComment(userId, commentId, commentReqDTO));
     }
 
     @ApiOperation(value = "댓글 삭제")
     @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/comments/{commentId}")
-    public void commentRemove(@PathVariable("commentId") Long commentId, @LoginUser Long userId) {
+    public void commentRemove(@LoginUser Long userId, @PathVariable Long commentId) {
         commentService.removeComment(userId, commentId);
     }
 }

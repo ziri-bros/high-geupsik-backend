@@ -28,14 +28,14 @@ public class ScheduleController {
     private final SubjectScheduleQueryService subjectScheduleQueryService;
 
     @ApiOperation(value = "시간표 조회")
-    @GetMapping()
+    @GetMapping
     public ApiResult<SubjectScheduleDTO> scheduleDetails(@LoginUser Long userId) {
         return success(subjectScheduleQueryService.findSubjectSchedule(userId));
     }
 
     @ApiOperation(value = "시간표 저장")
     @ResponseStatus(OK)
-    @PostMapping()
+    @PostMapping
     public void scheduleSave(@LoginUser Long userId,
         @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
         subjectScheduleService.saveSubjectSchedule(subjectScheduleDTO, userId);

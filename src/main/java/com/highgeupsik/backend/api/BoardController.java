@@ -36,34 +36,34 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 단일 조회")
     @GetMapping("/{boardId}")
-    public ApiResult<BoardResDTO> boardDetails(@LoginUser Long userId, @PathVariable("boardId") Long boardId) {
+    public ApiResult<BoardResDTO> boardDetails(@LoginUser Long userId, @PathVariable Long boardId) {
         return success(boardQueryService.findOneById(userId, boardId));
     }
 
     @ApiOperation(value = "게시글 목록 조회")
-    @GetMapping()
+    @GetMapping
     public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
         BoardSearchCondition condition) {
         return success(boardQueryService.findAll(pageNum, condition));
     }
 
     @ApiOperation(value = "게시글 작성")
-    @PostMapping()
+    @PostMapping
     public ApiResult boardSave(@LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
         return success(boardService.makeBoard(userId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 편집")
-    @PutMapping("/{boardId}") //게시글 편집
-    public ApiResult boardModify(@LoginUser Long userId, @PathVariable("boardId") Long boardId,
+    @PutMapping("/{boardId}")
+    public ApiResult boardModify(@LoginUser Long userId, @PathVariable Long boardId,
         @RequestBody BoardReqDTO boardReqDTO) {
         return success(boardService.modifyBoard(userId, boardId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 삭제")
     @ResponseStatus(NO_CONTENT)
-    @DeleteMapping("/{boardId}") //게시글 삭제
-    public void boardRemove(@PathVariable("boardId") Long boardId, @LoginUser Long userId) {
+    @DeleteMapping("/{boardId}")
+    public void boardRemove(@LoginUser Long userId, @PathVariable Long boardId) {
         boardService.removeBoard(userId, boardId);
     }
 }

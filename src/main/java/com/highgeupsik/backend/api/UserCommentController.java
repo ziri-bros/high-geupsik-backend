@@ -21,8 +21,8 @@ public class UserCommentController {
 
     @ApiOperation(value = "내가 작성한 댓글 목록 조회")
     @GetMapping("/comments/my")
-    public ApiResult<Page<CommentResDTO>> myComments(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-        @LoginUser Long userId) {
+    public ApiResult<Page<CommentResDTO>> myComments(@LoginUser Long userId,
+        @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(commentQueryService.findByMyId(userId, pageNum));
     }
 }
