@@ -27,7 +27,7 @@ public class BoardCommentController {
     @GetMapping("/boards/{boardId}/comments")
     public ApiResult<Page<CommentResDTO>> boardComments(
         @LoginUser Long userId,
-        @PathVariable("boardId") Long boardId,
+        @PathVariable Long boardId,
         @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
     ) {

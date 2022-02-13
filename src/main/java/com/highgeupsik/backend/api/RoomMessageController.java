@@ -34,7 +34,7 @@ public class RoomMessageController {
     private final MessageQueryService messageQueryService;
 
     @ApiOperation(value = "메세지룸 목록 조회")
-    @GetMapping()
+    @GetMapping
     public ApiResult<Page<RoomDTO>> rooms(@LoginUser Long userId,
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(roomQueryService.findAll(userId, pageNum));
