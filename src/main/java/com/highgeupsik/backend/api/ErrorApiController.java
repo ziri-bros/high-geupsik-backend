@@ -37,7 +37,7 @@ public class ErrorApiController {
     }
 
     @ExceptionHandler(MailException.class)
-    public ApiResult messagingException(MailException e) {
+    public ApiResult mailException(MailException e) {
         return error(new ApiError(e.getMessage(), INTERNAL_SERVER_ERROR));
     }
 }
