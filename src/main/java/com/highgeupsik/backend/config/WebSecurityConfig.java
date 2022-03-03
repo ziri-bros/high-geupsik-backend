@@ -41,11 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/favicon.ico",
+        web.ignoring().mvcMatchers("/favicon.ico",
             "/v2/**",
             "/webjars/**",
             "/swagger**",
-            "/swagger-resources/**");
+            "/swagger-resources/**",
+            "/admin/**",
+            "/css/**");
     }
 
     @Override
@@ -67,11 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .authorizeRequests()
-            .antMatchers("/login").permitAll()
-            .antMatchers("/login/**").permitAll()
             .antMatchers("/images").permitAll()
-            .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+            .antMatchers("/**").hasRole("USER")
             .anyRequest()
             .authenticated()
 
