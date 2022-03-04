@@ -45,9 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v2/**",
             "/webjars/**",
             "/swagger**",
-            "/swagger-resources/**",
-            "/admin/**",
-            "/css/**");
+            "/swagger-resources/**");
     }
 
     @Override
@@ -69,8 +67,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .authorizeRequests()
+            .antMatchers("/login").permitAll()
+            .antMatchers("/login/**").permitAll()
             .antMatchers("/images").permitAll()
-            .antMatchers("/**").hasRole("USER")
+            .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
             .anyRequest()
             .authenticated()
 
