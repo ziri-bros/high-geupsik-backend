@@ -9,7 +9,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -23,10 +22,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
         AccessDeniedException accessDeniedException) throws IOException {
-        System.out.println("JwtAccessDeniedHandler");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(this.objectMapper
-            .writeValueAsString((error(new ApiError(NOT_ROLE_USER, HttpStatus.FORBIDDEN)))));
+            .writeValueAsString((error(new ApiError("FORBIDDEN", NOT_ROLE_USER)))));
     }
 }

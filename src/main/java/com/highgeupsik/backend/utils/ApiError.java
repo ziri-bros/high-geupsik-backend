@@ -2,18 +2,16 @@ package com.highgeupsik.backend.utils;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @Slf4j
 public class ApiError {
 
+    String code;
     String message;
-    HttpStatus httpStatus;
 
-    public ApiError(String message, HttpStatus httpStatus) {
-        log.error(message);
+    public ApiError(String code, String message) {
+        this.code = code;
         this.message = message;
-        this.httpStatus = httpStatus;
     }
 }
