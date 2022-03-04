@@ -4,7 +4,7 @@ import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
 import static com.highgeupsik.backend.utils.PagingUtils.*;
 
 import com.highgeupsik.backend.dto.RoomDTO;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.RoomRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +23,9 @@ public class RoomQueryService {
 
     public Page<RoomDTO> findAll(Long userId, Integer pageNum) {
         return roomRepository.findAllByFromUser(
-                userRepository.findById(userId)
-                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND)),
-                orderByModifiedDate(pageNum, ROOM_COUNT))
+            userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND)),
+            orderByModifiedDate(pageNum, ROOM_COUNT))
             .map(RoomDTO::new);
     }
 }

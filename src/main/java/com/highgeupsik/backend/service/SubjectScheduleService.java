@@ -5,7 +5,7 @@ import static com.highgeupsik.backend.utils.ErrorMessage.*;
 import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.entity.Subject;
 import com.highgeupsik.backend.entity.SubjectSchedule;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.SubjectScheduleRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import java.util.List;
@@ -32,7 +32,7 @@ public class SubjectScheduleService {
             .stream().map((Subject::of)).collect(Collectors.toList());
 
         subjectSchedule.setSubjects(subjectList);
-        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND))
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND))
             .setSubjectSchedule(subjectSchedule);
 
         subjectScheduleRepository.save(subjectSchedule);

@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.entity;
 
-import com.highgeupsik.backend.exception.NotMatchException;
+import com.highgeupsik.backend.exception.NotWriterException;
 import com.highgeupsik.backend.utils.ErrorMessage;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class Board extends TimeEntity {
 
     public void checkWriter(Long userId) {
         if (!isWriter(userId)) {
-            throw new NotMatchException(ErrorMessage.WRITER_NOT_MATCH);
+            throw new NotWriterException(ErrorMessage.WRITER_NOT_MATCH);
         }
     }
 

@@ -5,7 +5,7 @@ import static com.highgeupsik.backend.utils.ErrorMessage.*;
 import com.highgeupsik.backend.entity.Message;
 import com.highgeupsik.backend.entity.Room;
 import com.highgeupsik.backend.entity.User;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.RoomRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,9 @@ public class RoomMessageService {
 
     public void sendMessage(Long fromUserId, Long toUserId, String content) {
         User fromUser = userRepository.findById(fromUserId)
-            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         User toUser = userRepository.findById(toUserId)
-            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         Room myRoom = roomRepository.findByFromUserAndToUser(fromUser, toUser)
             .orElse(Room.of(fromUser, toUser));

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.dto.BoardSearchCondition;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class BoardQueryService {
 
     public BoardResDTO findOneById(Long userId, Long boardId) {
         return new BoardResDTO(boardRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND)), isUserLike(userId, boardId));
+            .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND)), isUserLike(userId, boardId));
     }
 
     public Page<BoardResDTO> findByMyId(Long userId, Integer pageNum) {

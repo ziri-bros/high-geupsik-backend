@@ -4,7 +4,7 @@ import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
 import com.highgeupsik.backend.dto.SchoolResDTO;
 import com.highgeupsik.backend.entity.Region;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,6 @@ public class SchoolService {
 
     public SchoolResDTO findByRegionAndName(Region region, String schoolName) {
         return new SchoolResDTO(schoolRepository.findByRegionAndName(region, schoolName)
-            .orElseThrow(() -> new NotFoundException(SCHOOL_NOT_FOUND)));
+            .orElseThrow(() -> new ResourceNotFoundException(SCHOOL_NOT_FOUND)));
     }
 }

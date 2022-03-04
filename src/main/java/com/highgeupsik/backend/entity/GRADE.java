@@ -2,8 +2,7 @@ package com.highgeupsik.backend.entity;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.GRADE_NOT_FOUND;
 
-import com.highgeupsik.backend.exception.NotFoundException;
-import com.highgeupsik.backend.utils.ErrorMessage;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import java.util.Arrays;
 
 public enum GRADE {
@@ -21,7 +20,7 @@ public enum GRADE {
         return Arrays.stream(values())
             .filter(grade -> grade.gradeNum == gradeNum)
             .findAny()
-            .orElseThrow(() -> new NotFoundException(GRADE_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(GRADE_NOT_FOUND));
     }
 
     public int getGradeNum() {
