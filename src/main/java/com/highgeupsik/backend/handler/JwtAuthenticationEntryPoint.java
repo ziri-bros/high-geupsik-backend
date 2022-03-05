@@ -26,7 +26,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint { /
         AuthenticationException authException) throws IOException {
         response.setStatus(SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(this.objectMapper.writeValueAsString(
-            (error(new ApiError(NOT_USER, UNAUTHORIZED)))));
+        response.getWriter().write(this.objectMapper
+            .writeValueAsString(error(new ApiError("UNAUTHORIZED", NOT_USER))));
     }
 }

@@ -10,7 +10,7 @@ import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.User;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.CommentRepository;
 import com.highgeupsik.backend.repository.UserRepository;
@@ -28,9 +28,9 @@ public class CommentService {
 
     public CommentResDTO saveComment(Long userId, Long boardId, CommentReqDTO dto) {
         User writer = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
 
         int anonymousNumber = getAnonymousNumberFrom(board, writer);
 
@@ -56,13 +56,13 @@ public class CommentService {
 
     private void transformToReply(Comment comment, Long parentId) {
         Comment parent = commentRepository.findById(parentId)
-            .orElseThrow(() -> new NotFoundException(COMMENT_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
         comment.toReply(parent);
     }
 
     public Long modifyComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
         Comment comment = commentRepository.findById(commentId)
-            .orElseThrow(() -> new NotFoundException(COMMENT_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
         comment.checkWriter(userId);
         comment.updateContent(commentReqDTO);
         return commentId;
@@ -70,7 +70,7 @@ public class CommentService {
 
     public void removeComment(Long userId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-            .orElseThrow(() -> new NotFoundException(COMMENT_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
         Comment parent = comment.getParent();
 
         comment.checkWriter(userId);

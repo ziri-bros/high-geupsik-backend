@@ -31,11 +31,10 @@ public class JwtExceptionFilter extends GenericFilterBean {
         }
     }
 
-    private void sendErrorMessage(HttpServletResponse response, String message)
-        throws IOException {
+    private void sendErrorMessage(HttpServletResponse response, String message) throws IOException {
         response.setStatus(SC_BAD_REQUEST);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(this.objectMapper.writeValueAsString(
-            (error(new ApiError(message, BAD_REQUEST)))));
+        response.getWriter().write(this.objectMapper
+            .writeValueAsString(error(new ApiError("BAD", message))));
     }
 }

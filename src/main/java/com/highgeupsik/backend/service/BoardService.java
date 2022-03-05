@@ -8,7 +8,7 @@ import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.UploadFile;
 import com.highgeupsik.backend.entity.User;
-import com.highgeupsik.backend.exception.NotFoundException;
+import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import java.util.List;
@@ -26,7 +26,7 @@ public class BoardService {
 
     public Board saveBoard(Long userId, String title, String content, Category category) {
         User user = userRepository.findById(userId).orElseThrow(
-            () -> new NotFoundException(USER_NOT_FOUND));
+            () -> new ResourceNotFoundException(USER_NOT_FOUND));
         return boardRepository.save(Board.builder()
             .user(user)
             .content(content)
@@ -45,7 +45,8 @@ public class BoardService {
     }
 
     public Long modifyBoard(Long userId, Long boardId, BoardReqDTO boardReqDTO) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(BOARD_NOT_FOUND));
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
         board.checkWriter(userId);
         board.deleteFiles();
         if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
@@ -56,8 +57,8 @@ public class BoardService {
     }
 
     public void removeBoard(Long userId, Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
-            () -> new NotFoundException(BOARD_NOT_FOUND));
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
         board.checkWriter(userId);
         boardRepository.delete(board);
     }
