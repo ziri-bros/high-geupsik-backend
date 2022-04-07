@@ -13,8 +13,8 @@ public class PagingUtils {
         return PageRequest.of(pageNum - 1, count, Sort.by(Sort.Direction.ASC, "createdDate"));
     }
 
-    public static PageRequest orderByUserName(Integer pageNum, int count) {
-        return PageRequest.of(pageNum - 1, count, Sort.by(Sort.Direction.ASC, "username"));
+    public static PageRequest orderBySchoolNameAsc(Integer pageNum, int count) {
+        return PageRequest.of(pageNum - 1, count, Sort.by(Sort.Direction.ASC, "name"));
     }
 
     public static PageRequest orderByModifiedDate(Integer pageNum, int count) {
