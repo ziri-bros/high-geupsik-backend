@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +24,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -74,7 +72,6 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        log.info(header);
         if (StringUtils.hasText(header) && header.startsWith("Bearer")) {
             return header.substring(7);
         }
