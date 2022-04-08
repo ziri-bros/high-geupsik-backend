@@ -3,6 +3,7 @@ package com.highgeupsik.backend.repository;
 import static com.highgeupsik.backend.entity.QBoard.*;
 import static org.springframework.util.StringUtils.*;
 
+import com.querydsl.core.BooleanBuilder;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,9 +15,6 @@ import org.springframework.data.domain.Pageable;
 import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.dto.BoardSearchCondition;
 import com.highgeupsik.backend.dto.QBoardResDTO;
-import com.highgeupsik.backend.entity.Category;
-import com.highgeupsik.backend.entity.Region;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
@@ -30,17 +28,13 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     @Override
     public Page<BoardResDTO> findAll(BoardSearchCondition condition, Pageable pageable) {
 
+        BooleanBuilder builder = getBuilder(condition);
+
         List<BoardResDTO> content = queryFactory
             .select(new QBoardResDTO(board.id, board.user.id, board.title, board.content,
                 board.thumbnail, board.category, board.likeCount, board.commentCount, board.createdDate))
             .from(board)
-            .where(
-                regionEq(condition.getRegion()),
-                categoryEq(condition.getCategory()),
-                titleLike(condition.getKeyword()),
-                contentLike(condition.getKeyword()),
-                likeCountGoe(condition.getLikeCount())
-            )
+            .where(builder)
             .orderBy(board.createdDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -48,34 +42,27 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
         long total = queryFactory
             .selectFrom(board)
-            .where(
-                regionEq(condition.getRegion()),
-                categoryEq(condition.getCategory()),
-                titleLike(condition.getKeyword()),
-                contentLike(condition.getKeyword()),
-                likeCountGoe(condition.getLikeCount()))
+            .where(builder)
             .fetchCount();
 
         return new PageImpl<>(content, pageable, total);
     }
 
-    private BooleanExpression regionEq(Region region) {
-        return isEmpty(region) ? null : board.region.eq(region);
-    }
-
-    private BooleanExpression likeCountGoe(Integer likeCount) {
-        return likeCount == null ? null : board.likeCount.goe(likeCount);
-    }
-
-    private BooleanExpression categoryEq(Category category) {
-        return isEmpty(category) ? null : board.category.eq(category);
-    }
-
-    private BooleanExpression titleLike(String keyword) {
-        return isEmpty(keyword) ? null : board.title.like(keyword);
-    }
-
-    private BooleanExpression contentLike(String keyword) {
-        return isEmpty(keyword) ? null : board.content.like(keyword);
+    private BooleanBuilder getBuilder(BoardSearchCondition condition) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (hasText(condition.getKeyword())) {
+            builder.and(board.title.contains(condition.getKeyword())
+                .or(board.content.contains(condition.getKeyword())));
+        }
+        if (hasText(condition.getRegion().toString())) {
+            builder.and(board.region.eq(condition.getRegion()));
+        }
+        if (hasText(condition.getCategory().toString())) {
+            builder.and(board.category.eq(condition.getCategory()));
+        }
+        if (condition.getLikeCount() != null) {
+            builder.and(board.likeCount.goe(condition.getLikeCount()));
+        }
+        return builder;
     }
 }
