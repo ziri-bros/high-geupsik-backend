@@ -1,7 +1,10 @@
 package com.highgeupsik.backend.dto;
 
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
+
 import com.highgeupsik.backend.entity.Category;
 import com.highgeupsik.backend.entity.Region;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,12 +14,12 @@ import lombok.Setter;
 @Setter
 public class BoardSearchCondition {
 
+    @NotNull(message = REGION_NOT_NULL)
     private Region region;
-    private String keyword;
+    @NotNull(message = CATEGORY_NOT_NULL)
     private Category category;
-    private Integer likeCount;
 
-    public void setRegion(Region region) {
-        this.region = region;
-    }
+    private String keyword;
+
+    private Integer likeCount;
 }
