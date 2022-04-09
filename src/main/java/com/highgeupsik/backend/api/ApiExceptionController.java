@@ -9,7 +9,11 @@ import com.highgeupsik.backend.exception.NotWriterException;
 import com.highgeupsik.backend.exception.TokenException;
 import com.highgeupsik.backend.utils.ApiError;
 import com.highgeupsik.backend.utils.ApiResult;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,8 +42,13 @@ public class ApiExceptionController {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler
-    public ApiResult illegalArgumentException(IllegalArgumentException e) {
-        return error(new ApiError("BAD", e.getMessage()));
+    public ApiResult beanValidException(BindException e) {
+        List<String> messages = e.getBindingResult()
+            .getAllErrors()
+            .stream()
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .collect(Collectors.toList());
+        return error(new ApiError("BAD", messages.toString()));
     }
 
     @ResponseStatus(INTERNAL_SERVER_ERROR)
