@@ -6,6 +6,7 @@ import com.highgeupsik.backend.dto.SchoolResDTO;
 import com.highgeupsik.backend.dto.SchoolSearchCondition;
 import com.highgeupsik.backend.service.SchoolQueryService;
 import com.highgeupsik.backend.utils.ApiResult;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ public class SchoolController {
 
     @GetMapping("/schools")
     public ApiResult<Page<SchoolResDTO>> schools(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-        SchoolSearchCondition condition) {
+        @Valid SchoolSearchCondition condition) {
         return success(schoolQueryService.findAllByRegionAndName(pageNum, condition));
     }
 }
