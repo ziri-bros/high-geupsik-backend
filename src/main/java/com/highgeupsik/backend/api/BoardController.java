@@ -3,6 +3,7 @@ package com.highgeupsik.backend.api;
 import static com.highgeupsik.backend.utils.ApiUtils.*;
 import static org.springframework.http.HttpStatus.*;
 
+import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class BoardController {
     @ApiOperation(value = "게시글 목록 조회")
     @GetMapping
     public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-        BoardSearchCondition condition) {
+        @Valid BoardSearchCondition condition) {
         return success(boardQueryService.findAll(pageNum, condition));
     }
 
