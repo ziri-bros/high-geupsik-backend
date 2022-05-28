@@ -50,6 +50,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     private BooleanBuilder getBuilder(BoardSearchCondition condition) {
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(board.deleteFlag.eq(false));
         if (hasText(condition.getKeyword())) {
             builder.and(board.title.contains(condition.getKeyword())
                 .or(board.content.contains(condition.getKeyword())));

@@ -60,7 +60,7 @@ public class BoardService {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
         board.checkWriter(userId);
-        boardRepository.delete(board);
+        board.delete();
     }
 
     public void addUploadFiles(Board board, List<UploadFileDTO> uploadFileDTOList) {

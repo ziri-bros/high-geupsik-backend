@@ -54,6 +54,8 @@ public class Board extends TimeEntity {
 
     private String thumbnail;
 
+    private boolean deleteFlag = false;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UploadFile> uploadFileList = new ArrayList<>();
 
@@ -132,5 +134,9 @@ public class Board extends TimeEntity {
     public void deleteFiles() {
         this.thumbnail = null;
         this.uploadFileList.clear();
+    }
+
+    public void delete() {
+        deleteFlag = true;
     }
 }
