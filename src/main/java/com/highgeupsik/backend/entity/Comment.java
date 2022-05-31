@@ -1,5 +1,7 @@
 package com.highgeupsik.backend.entity;
 
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.highgeupsik.backend.dto.CommentReqDTO;
-import com.highgeupsik.backend.exception.NotWriterException;
+import com.highgeupsik.backend.exception.UserException;
 import com.highgeupsik.backend.utils.ErrorMessage;
 
 import lombok.AccessLevel;
@@ -99,7 +101,7 @@ public class Comment extends TimeEntity {
 
     public void checkWriter(Long userId) {
         if (!isWriter(userId)) {
-            throw new NotWriterException(ErrorMessage.WRITER_NOT_MATCH);
+            throw new UserException(WRITER_NOT_MATCH);
         }
     }
 
