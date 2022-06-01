@@ -11,4 +11,5 @@ public class MessageReqDTO {
 
     private String content;
     private Long toUserId;
+    private Long boardId;
 }
