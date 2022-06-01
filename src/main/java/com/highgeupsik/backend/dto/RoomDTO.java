@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RoomDTO {
 
-    private Long id;
-    private Long fromUserId;
+    private Long roomId;
+    private Long boardId;
     private Long toUserId;
     private String latestMessage;
 
     public RoomDTO(Room room) {
-        id = room.getId();
-        fromUserId = room.getFromUser().getId();
+        roomId = room.getId();
+        boardId = room.getBoard().getId();
         toUserId = room.getToUser().getId();
         latestMessage = room.getLatestMessage();
     }

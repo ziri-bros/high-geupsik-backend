@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import com.highgeupsik.backend.exception.MailException;
 import com.highgeupsik.backend.exception.ResourceNotFoundException;
-import com.highgeupsik.backend.exception.NotWriterException;
+import com.highgeupsik.backend.exception.UserException;
 import com.highgeupsik.backend.exception.TokenException;
 import com.highgeupsik.backend.utils.ApiError;
 import com.highgeupsik.backend.utils.ApiResult;
@@ -30,7 +30,7 @@ public class ApiExceptionController {
 
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler
-    public ApiResult notWriterException(NotWriterException e) {
+    public ApiResult userException(UserException e) {
         return error(new ApiError("FORBIDDEN", e.getMessage()));
     }
 

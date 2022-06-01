@@ -16,8 +16,8 @@ public class MessageQueryService {
     private final MessageRepository messageRepository;
     private final static int MESSAGE_COUNT = 10;
 
-    public Page<MessageResDTO> findAll(Long roomId, Integer pageNum) {
-        return messageRepository.findAllByRoomId(roomId, PagingUtils.orderByCreatedDateDESC(
+    public Page<MessageResDTO> findAllByRoomIdAndOwnerId(Long roomId, Long userId, Integer pageNum) {
+        return messageRepository.findAllByRoomIdAndOwnerId(roomId, userId, PagingUtils.orderByCreatedDateDESC(
             pageNum, MESSAGE_COUNT)).map(MessageResDTO::new);
     }
 }

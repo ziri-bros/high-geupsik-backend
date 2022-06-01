@@ -1,5 +1,8 @@
 package com.highgeupsik.backend.entity;
 
+import static com.highgeupsik.backend.utils.ErrorMessage.*;
+
+import com.highgeupsik.backend.exception.UserException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -36,28 +39,48 @@ public class Room extends TimeEntity {
     @JoinColumn(name = "to_user_id")
     private User toUser;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Message> messageList = new ArrayList<>();
 
     @Builder
-    public Room(User fromUser, User toUser) {
+    public Room(User fromUser, User toUser, Board board) {
         this.fromUser = fromUser;
         this.toUser = toUser;
+        this.board = board;
     }
 
-    public static Room of(User fromUser, User toUser) {
+    public static Room of(User fromUser, User toUser, Board board) {
         return Room.builder()
             .fromUser(fromUser)
             .toUser(toUser)
+            .board(board)
             .build();
     }
 
     public void addMessage(Message message) {
         messageList.add(message);
         message.setRoom(this);
+        setLatestMessage(message.getContent());
     }
 
     public void setLatestMessage(String latestMessage) {
         this.latestMessage = latestMessage;
+    }
+
+    public void checkUser(Long userId){
+        if(!isRoomUser(userId)){
+            throw new UserException(NOT_ROOM_USER);
+        }
+    }
+
+    public boolean isRoomUser(Long userId) {
+        if(fromUser.getId().equals(userId)){
+            return true;
+        }
+        return false;
     }
 }
