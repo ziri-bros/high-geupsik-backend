@@ -37,26 +37,27 @@ public class RoomMessageController {
     @GetMapping
     public ApiResult<Page<RoomDTO>> rooms(@LoginUser Long userId,
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
-        return success(roomQueryService.findAll(userId, pageNum));
+        return success(roomQueryService.findAllByFromUserId(userId, pageNum));
     }
 
     @ApiOperation(value = "메세지 목록 조회")
     @GetMapping("/{roomId}")
-    public ApiResult<Page<MessageResDTO>> messages(@PathVariable Long roomId
+    public ApiResult<Page<MessageResDTO>> messages(@LoginUser Long userId, @PathVariable Long roomId
         , @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
-        return success(messageQueryService.findAll(roomId, pageNum));
+        return success(messageQueryService.findAllByRoomIdAndOwnerId(roomId, userId, pageNum));
     }
 
     @ApiOperation(value = "메세지룸 삭제")
     @DeleteMapping("/{roomId}")
-    public void roomRemove(@PathVariable Long roomId) {
-        roomMessageService.removeRoom(roomId);
+    public void deleteRoom(@LoginUser Long userId, @PathVariable Long roomId) {
+        roomMessageService.removeRoom(userId, roomId);
     }
 
     @ApiOperation(value = "메세지 전송")
     @ResponseStatus(CREATED)
     @PostMapping("/messages")
-    public void messageSave(@LoginUser Long userId, @RequestBody MessageReqDTO messageReqDTO) {
-        roomMessageService.sendMessage(userId, messageReqDTO.getToUserId(), messageReqDTO.getContent());
+    public ApiResult<Long> sendMessage(@LoginUser Long userId, @RequestBody MessageReqDTO messageReqDTO) {
+        return success(roomMessageService.sendMessage(userId, messageReqDTO.getToUserId(), messageReqDTO.getBoardId(),
+            messageReqDTO.getContent()));
     }
 }
