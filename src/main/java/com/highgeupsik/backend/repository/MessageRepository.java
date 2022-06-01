@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    Page<Message> findAllByRoomId(Long roomId, Pageable pageable);
+    Page<Message> findAllByRoomIdAndOwnerId(Long roomId, Long ownerId, Pageable pageable);
 }
