@@ -28,7 +28,7 @@ public class UserService {
     private final StudentCardRepository studentCardRepository;
     private final MailService mailService;
 
-    public void modifyUser(Long userId, StudentCardDTO studentCardDTO, SchoolReqDTO schoolReqDTO) {
+    public void updateUser(Long userId, StudentCardDTO studentCardDTO, SchoolReqDTO schoolReqDTO) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         user.updateRoleGuest();
