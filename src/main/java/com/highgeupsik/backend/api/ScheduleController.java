@@ -36,7 +36,7 @@ public class ScheduleController {
     @ApiOperation(value = "시간표 저장")
     @ResponseStatus(OK)
     @PostMapping
-    public void scheduleSave(@LoginUser Long userId,
+    public void saveSchedule(@LoginUser Long userId,
         @RequestBody SubjectScheduleDTO subjectScheduleDTO) {
         subjectScheduleService.saveSubjectSchedule(subjectScheduleDTO, userId);
     }

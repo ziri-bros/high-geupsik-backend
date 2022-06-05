@@ -46,7 +46,7 @@ public class RoomMessageService {
         return roomId;
     }
 
-    public void removeRoom(Long userId, Long roomId) {
+    public void deleteRoom(Long userId, Long roomId) {
         Room room = roomRepository.findById(roomId)
             .orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
         room.checkUser(userId);

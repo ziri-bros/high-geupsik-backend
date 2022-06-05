@@ -38,14 +38,14 @@ public class AdminApiController {
     @ApiOperation(value = "학생증 허가")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}/authorize") //수락
-    public void userAccept(@PathVariable Long userId) {
+    public void acceptUser(@PathVariable Long userId) {
         userService.acceptUser(userId);
     }
 
     @ApiOperation(value = "학생증 거부")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}") //거부
-    public void userReject(@PathVariable Long userId) {
+    public void rejectUser(@PathVariable Long userId) {
         userService.rejectUser(userId);
     }
 }

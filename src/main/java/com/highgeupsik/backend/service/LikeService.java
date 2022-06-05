@@ -27,7 +27,7 @@ public class LikeService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
-    public boolean saveOrModifyBoardLike(Long userId, Long boardId) {
+    public boolean saveOrUpdateBoardLike(Long userId, Long boardId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
@@ -39,7 +39,7 @@ public class LikeService {
         return like.getFlag();
     }
 
-    public boolean saveOrModifyCommentLike(Long userId, Long commentId) {
+    public boolean saveOrUpdateCommentLike(Long userId, Long commentId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
