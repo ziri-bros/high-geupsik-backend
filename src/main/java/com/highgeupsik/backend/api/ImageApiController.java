@@ -22,7 +22,7 @@ public class ImageApiController {
 
     @ApiOperation(value = "이미지 업로드")
     @PostMapping("/images")
-    public ApiResult<List<UploadFileDTO>> imageSave(List<MultipartFile> imageList) {
+    public ApiResult<List<UploadFileDTO>> uploadImage(List<MultipartFile> imageList) {
         return ApiUtils.success(s3Service.uploadFiles(imageList));
     }
 }

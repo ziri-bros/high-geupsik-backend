@@ -50,21 +50,21 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 작성")
     @PostMapping
-    public ApiResult boardSave(@LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
+    public ApiResult saveBoard(@LoginUser Long userId, @RequestBody BoardReqDTO boardReqDTO) {
         return success(boardService.makeBoard(userId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 편집")
     @PutMapping("/{boardId}")
-    public ApiResult boardModify(@LoginUser Long userId, @PathVariable Long boardId,
+    public ApiResult updateBoard(@LoginUser Long userId, @PathVariable Long boardId,
         @RequestBody BoardReqDTO boardReqDTO) {
-        return success(boardService.modifyBoard(userId, boardId, boardReqDTO));
+        return success(boardService.updateBoard(userId, boardId, boardReqDTO));
     }
 
     @ApiOperation(value = "게시글 삭제")
     @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/{boardId}")
-    public void boardRemove(@LoginUser Long userId, @PathVariable Long boardId) {
-        boardService.removeBoard(userId, boardId);
+    public void deleteBoard(@LoginUser Long userId, @PathVariable Long boardId) {
+        boardService.deleteBoard(userId, boardId);
     }
 }

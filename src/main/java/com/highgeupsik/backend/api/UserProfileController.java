@@ -37,7 +37,7 @@ public class UserProfileController {
     @ApiOperation(value = "내정보 수정")
     @ResponseStatus(OK)
     @PatchMapping
-    public void userModify(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-        userService.modifyUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolReqDTO());
+    public void updateUser(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
+        userService.updateUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolReqDTO());
     }
 }

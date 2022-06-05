@@ -50,7 +50,7 @@ public class RoomMessageController {
     @ApiOperation(value = "메세지룸 삭제")
     @DeleteMapping("/{roomId}")
     public void deleteRoom(@LoginUser Long userId, @PathVariable Long roomId) {
-        roomMessageService.removeRoom(userId, roomId);
+        roomMessageService.deleteRoom(userId, roomId);
     }
 
     @ApiOperation(value = "메세지 전송")
