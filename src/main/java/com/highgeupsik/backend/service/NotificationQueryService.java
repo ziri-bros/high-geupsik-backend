@@ -3,7 +3,7 @@ package com.highgeupsik.backend.service;
 import static com.highgeupsik.backend.utils.NotificationMessage.*;
 import static com.highgeupsik.backend.utils.PagingUtils.*;
 
-import com.highgeupsik.backend.dto.NotificationResDTO;
+import com.highgeupsik.backend.dto.NotificationDTO;
 import com.highgeupsik.backend.entity.Notification;
 import com.highgeupsik.backend.entity.NotificationType;
 import com.highgeupsik.backend.repository.NotificationRepository;
@@ -20,9 +20,9 @@ public class NotificationQueryService {
     private final NotificationRepository notificationRepository;
     private static final int NOTIFICATION_COUNT = 10;
 
-    public Page<NotificationResDTO> findAllByUserId(Long userId, Integer pageNum) {
+    public Page<NotificationDTO> findAllByUserId(Long userId, Integer pageNum) {
         return notificationRepository.findAllByReceiverId(userId, orderByCreatedDateDESC(pageNum, NOTIFICATION_COUNT))
-            .map((notification) -> new NotificationResDTO(
+            .map((notification) -> new NotificationDTO(
                 notification.getId(),
                 getTargetId(notification),
                 notification.isReadFlag(),
