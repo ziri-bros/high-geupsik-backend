@@ -5,7 +5,7 @@ import com.highgeupsik.backend.aop.aspect.TraceAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class AopConfig {
 
     @Bean
