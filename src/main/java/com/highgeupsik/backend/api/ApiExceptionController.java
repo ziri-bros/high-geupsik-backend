@@ -25,25 +25,25 @@ public class ApiExceptionController {
 
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler
-    public ApiResult resourceNotFoundException(ResourceNotFoundException e) {
+    public ApiResult<ApiError> resourceNotFoundException(ResourceNotFoundException e) {
         return error(new ApiError("NOT FOUND", e.getMessage()));
     }
 
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler
-    public ApiResult userException(UserException e) {
+    public ApiResult<ApiError> userException(UserException e) {
         return error(new ApiError("FORBIDDEN", e.getMessage()));
     }
 
     @ResponseStatus(UNAUTHORIZED)
     @ExceptionHandler
-    public ApiResult tokenExpiredException(TokenException e) {
+    public ApiResult<ApiError> tokenExpiredException(TokenException e) {
         return error(new ApiError("UNAUTHORIZED", e.getMessage()));
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler
-    public ApiResult beanValidException(BindException e) {
+    public ApiResult<ApiError> beanValidException(BindException e) {
         List<String> messages = e.getBindingResult()
             .getAllErrors()
             .stream()
@@ -54,13 +54,13 @@ public class ApiExceptionController {
 
     @ResponseStatus(SERVICE_UNAVAILABLE)
     @ExceptionHandler
-    public ApiResult sseConnectException(SseException e) {
+    public ApiResult<ApiError> sseConnectException(SseException e) {
         return error(new ApiError("SERVICE UNAVAILABLE", e.getMessage()));
     }
 
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    public ApiResult mailException(MailException e) {
+    public ApiResult<ApiError> mailException(MailException e) {
         log.error("mailException = {}", e);
         return error(new ApiError("SERVER ERROR", e.getMessage()));
     }

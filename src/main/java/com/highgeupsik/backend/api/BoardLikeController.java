@@ -23,7 +23,7 @@ public class BoardLikeController {
 
     @ApiOperation(value = "게시글 좋아요")
     @PostMapping("/{boardId}/likes")
-    public ApiResult saveBoardLike(@LoginUser Long userId, @PathVariable Long boardId) {
+    public ApiResult<Boolean> saveBoardLike(@LoginUser Long userId, @PathVariable Long boardId) {
         return success(likeService.saveOrUpdateBoardLike(userId, boardId));
     }
 }

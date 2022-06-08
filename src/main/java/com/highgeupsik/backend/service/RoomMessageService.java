@@ -22,6 +22,7 @@ public class RoomMessageService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
+    private final NotificationService notificationService;
 
     public Long sendMessage(Long fromUserId, Long toUserId, Long boardId, String content) {
         User fromUser = userRepository.findById(fromUserId)
@@ -41,9 +42,12 @@ public class RoomMessageService {
         fromUserRoom.addMessage(fromMessage);
         toUserRoom.addMessage(toMessage);
 
-        Long roomId = roomRepository.save(fromUserRoom).getId();
-        roomRepository.save(toUserRoom);
-        return roomId;
+        Room savedFromRoom = roomRepository.save(fromUserRoom);
+        Room savedToRoom = roomRepository.save(toUserRoom);
+
+        notificationService.saveRoomNotification(fromUser, savedFromRoom);
+        notificationService.saveRoomNotification(toUser, savedToRoom);
+        return savedFromRoom.getId();
     }
 
     public void deleteRoom(Long userId, Long roomId) {
