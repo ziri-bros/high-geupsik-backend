@@ -35,7 +35,7 @@ public class CommentController {
 
     @ApiOperation(value = "댓글 편집")
     @PutMapping("/comments/{commentId}")
-    public ApiResult updateBoard(@LoginUser Long userId, @PathVariable Long commentId,
+    public ApiResult<Long> updateBoard(@LoginUser Long userId, @PathVariable Long commentId,
         @RequestBody CommentReqDTO commentReqDTO) {
         return success(commentService.updateComment(userId, commentId, commentReqDTO));
     }

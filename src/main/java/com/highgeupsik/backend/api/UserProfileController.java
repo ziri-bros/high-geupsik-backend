@@ -3,6 +3,7 @@ package com.highgeupsik.backend.api;
 import static com.highgeupsik.backend.utils.ApiUtils.*;
 import static org.springframework.http.HttpStatus.*;
 
+import com.highgeupsik.backend.dto.UserResDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class UserProfileController {
     @ApiOperation(value = "내정보 조회")
     @ResponseStatus(OK)
     @GetMapping
-    public ApiResult userDetails(@LoginUser Long userId) {
+    public ApiResult<UserResDTO> userDetails(@LoginUser Long userId) {
         return success(userQueryService.findById(userId));
     }
 
