@@ -2,6 +2,7 @@ package com.highgeupsik.backend.service;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.SSE_CONNECT_ERROR;
 
+import com.highgeupsik.backend.exception.SseException;
 import com.highgeupsik.backend.repository.EmitterRepository;
 import java.io.IOException;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class AlarmServiceImpl implements AlarmService {
                 .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(id);
-            throw new RuntimeException(SSE_CONNECT_ERROR);
+            throw new SseException(SSE_CONNECT_ERROR);
         }
     }
 
