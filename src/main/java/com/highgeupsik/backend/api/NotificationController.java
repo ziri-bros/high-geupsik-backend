@@ -2,7 +2,7 @@ package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 
-import com.highgeupsik.backend.dto.NotificationResDTO;
+import com.highgeupsik.backend.dto.NotificationDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.NotificationQueryService;
 import com.highgeupsik.backend.service.NotificationService;
@@ -23,7 +23,7 @@ public class NotificationController {
     private final NotificationQueryService notificationQueryService;
 
     @GetMapping("/notifications")
-    public ApiResult<Page<NotificationResDTO>> notifications(@LoginUser Long userId,
+    public ApiResult<Page<NotificationDTO>> notifications(@LoginUser Long userId,
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(notificationQueryService.findAllByUserId(userId, pageNum));
     }
