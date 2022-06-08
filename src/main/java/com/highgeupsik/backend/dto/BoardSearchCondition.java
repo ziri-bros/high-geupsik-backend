@@ -16,7 +16,7 @@ public class BoardSearchCondition {
 
     @NotNull(message = REGION_NOT_NULL)
     private Region region;
-    @NotNull(message = CATEGORY_NOT_NULL)
+//    @NotNull(message = CATEGORY_NOT_NULL)
     private Category category;
 
     private String keyword;
