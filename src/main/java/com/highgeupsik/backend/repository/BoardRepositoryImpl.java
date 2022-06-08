@@ -58,7 +58,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         if (hasText(condition.getRegion().toString())) {
             builder.and(board.region.eq(condition.getRegion()));
         }
-        if (hasText(condition.getCategory().toString())) {
+        if (condition.getCategory() != null && hasText(condition.getCategory().toString())) {
             builder.and(board.category.eq(condition.getCategory()));
         }
         if (condition.getLikeCount() != null) {
