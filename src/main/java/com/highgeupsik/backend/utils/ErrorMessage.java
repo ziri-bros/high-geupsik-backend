@@ -8,6 +8,7 @@ public class ErrorMessage {
     public static final String SCHOOL_NOT_FOUND = "없는 학교입니다.";
     public static final String GRADE_NOT_FOUND = "잘못된 학년 입니다.";
     public static final String ROOM_NOT_FOUND = "없는 대화방 입니다.";
+    public static final String NOTIFICATION_NOT_FOUND = "없는 알림 입니다.";
     public static final String WRITER_NOT_MATCH = "작성자가 아닙니다.";
     public static final String NOT_USER = "사용자가 아닙니다.";
     public static final String NOT_ROLE_USER = "권한이 없는 사용자 입니다.";
@@ -18,4 +19,5 @@ public class ErrorMessage {
     public static final String WRONG_JWT_TOKEN = "잘못된 JWT 토큰입니다.";
     public static final String REGION_NOT_NULL = "지역 입력은 필수입니다.";
     public static final String CATEGORY_NOT_NULL = "카테고리 입력은 필수입니다.";
+    public static final String SSE_CONNECT_ERROR = "SSE 연결에 실패했습니다.";
 }

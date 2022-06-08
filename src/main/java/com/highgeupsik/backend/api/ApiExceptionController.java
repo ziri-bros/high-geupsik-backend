@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import com.highgeupsik.backend.exception.MailException;
 import com.highgeupsik.backend.exception.ResourceNotFoundException;
+import com.highgeupsik.backend.exception.SseException;
 import com.highgeupsik.backend.exception.UserException;
 import com.highgeupsik.backend.exception.TokenException;
 import com.highgeupsik.backend.utils.ApiError;
@@ -49,6 +50,12 @@ public class ApiExceptionController {
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .collect(Collectors.toList());
         return error(new ApiError("BAD", messages.toString()));
+    }
+
+    @ResponseStatus(SERVICE_UNAVAILABLE)
+    @ExceptionHandler
+    public ApiResult sseConnectException(SseException e) {
+        return error(new ApiError("SERVICE UNAVAILABLE", e.getMessage()));
     }
 
     @ResponseStatus(INTERNAL_SERVER_ERROR)
