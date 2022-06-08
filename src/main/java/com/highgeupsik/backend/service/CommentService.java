@@ -25,6 +25,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     public CommentResDTO saveComment(Long userId, Long boardId, CommentReqDTO dto) {
         User writer = userRepository.findById(userId)
@@ -41,10 +42,16 @@ public class CommentService {
             comment.setAnonymousId(-1);
         }
 
+        Comment savedComment = commentRepository.save(comment);
+
         if (dto.getParentId() != null) {
-            transformToReply(comment, dto.getParentId());
+            transformToReply(savedComment, dto.getParentId());
+            notificationService.saveReplyNotification(writer, savedComment);
         }
-        commentRepository.save(comment);
+        User boardWriter = userRepository.findById(board.getUser().getId())
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        notificationService.saveCommentNotification(boardWriter, board);
+
         return new CommentResDTO(comment, false);
     }
 

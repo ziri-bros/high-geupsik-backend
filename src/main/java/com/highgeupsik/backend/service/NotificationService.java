@@ -15,6 +15,7 @@ import com.highgeupsik.backend.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -25,18 +26,21 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public void saveCommentNotification(User user, Board board) {
         Notification notification = Notification.ofBoard(user, board, NotificationType.COMMENT);
         notificationRepository.save(notification);
         applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), COMMENT_NOTIFICATION));
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public void saveReplyNotification(User user, Comment comment) {
         Notification notification = Notification.ofComment(user, comment, NotificationType.REPLY);
         notificationRepository.save(notification);
         applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), REPLY_NOTIFICATION));
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public void saveRoomNotification(User user, Room room) {
         Notification notification = Notification.ofRoom(user, room, NotificationType.MESSAGE);
         notificationRepository.save(notification);
