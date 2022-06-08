@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.highgeupsik.backend.dto.UserReqDTO;
+import com.highgeupsik.backend.dto.UserUpdateForm;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
@@ -38,7 +38,8 @@ public class UserProfileController {
     @ApiOperation(value = "내정보 수정")
     @ResponseStatus(OK)
     @PatchMapping
-    public void updateUser(@LoginUser Long userId, @RequestBody UserReqDTO userReqDTO) {
-        userService.updateUser(userId, userReqDTO.getStudentCardDTO(), userReqDTO.getSchoolReqDTO());
+    public void updateUser(@LoginUser Long userId, @RequestBody UserUpdateForm userUpdateForm) {
+        userService.updateUser(userId, userUpdateForm.getGrade(), userUpdateForm.getClassNum(),
+            userUpdateForm.getStudentCardImage(), userUpdateForm.getRegion(), userUpdateForm.getSchoolName());
     }
 }
