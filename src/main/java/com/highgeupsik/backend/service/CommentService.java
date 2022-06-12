@@ -82,10 +82,11 @@ public class CommentService {
 
         comment.checkWriter(userId);
         comment.disable();
-        comment.deleteIfCan();
         if (comment.isReply()) {
             parent.deleteReply(comment);
             parent.deleteIfCan();
+        } else {
+            comment.deleteIfCan();
         }
     }
 }
