@@ -27,4 +27,12 @@ public class UserBoardController {
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(boardQueryService.findByMyId(userId, pageNum));
     }
+
+    @ApiOperation(value = "내가 댓글단 게시글 목로 조회")
+    @GetMapping("boards/my-comments")
+    public ApiResult<Page<BoardResDTO>> boardsByMyComments(@LoginUser Long userId,
+        @RequestParam(value = "age", defaultValue = "1") Integer pageNum) {
+        return success(boardQueryService.findByMyComments(userId, pageNum));
+    }
+
 }

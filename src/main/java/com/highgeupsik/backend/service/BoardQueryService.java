@@ -38,6 +38,11 @@ public class BoardQueryService {
             .map(BoardResDTO::new);
     }
 
+    public Page<BoardResDTO> findByMyComments(Long userId, Integer pageNum) {
+        return boardRepository.findAllByUserComment(userId, orderByCreatedDateDESC(pageNum, POST_COUNT))
+            .map(BoardResDTO::new);
+    }
+
     public Page<BoardResDTO> findAll(Integer pageNum, BoardSearchCondition condition) {
         return boardRepository.findAll(condition, orderByCreatedDateDESC(pageNum, POST_COUNT));
     }
