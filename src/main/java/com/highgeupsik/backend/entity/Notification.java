@@ -8,7 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,56 +26,55 @@ public class Notification {
 
     private boolean readFlag = false;
 
+    private String content;
+
     @Enumerated(EnumType.STRING)
     private NotificationType notificationKind;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User receiver;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
 
     @Builder
-    public Notification(User receiver, Board board, Comment comment, Room room, NotificationType notificationKind) {
+    public Notification(User receiver, String content, NotificationType notificationKind) {
         this.receiver = receiver;
-        this.board = board;
-        this.comment = comment;
-        this.room = room;
         this.notificationKind = notificationKind;
+        this.content = content;
     }
 
-    public static Notification ofBoard(User receiver, Board board, NotificationType notificationKind) {
+    public static Notification of(User receiver, String content, NotificationType notificationKind) {
         return Notification.builder()
             .receiver(receiver)
-            .board(board)
+            .content(content)
             .notificationKind(notificationKind)
             .build();
     }
 
-    public static Notification ofComment(User receiver, Comment comment, NotificationType notificationKind) {
-        return Notification.builder()
-            .receiver(receiver)
-            .comment(comment)
-            .notificationKind(notificationKind)
-            .build();
+    public void setComment(Comment comment) {
+        this.comment = comment;
+        comment.setNotification(this);
     }
 
-    public static Notification ofRoom(User receiver, Room room, NotificationType notificationKind) {
-        return Notification.builder()
-            .receiver(receiver)
-            .room(room)
-            .notificationKind(notificationKind)
-            .build();
+    public void setRoom(Room room) {
+        this.room = room;
+        room.setNotification(this);
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+        board.setNotification(this);
     }
 
     public void readNotification() {

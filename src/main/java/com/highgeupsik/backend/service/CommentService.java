@@ -46,7 +46,7 @@ public class CommentService {
 
         if (dto.getParentId() != null) {
             transformToReply(savedComment, dto.getParentId());
-            notificationService.saveReplyNotification(writer, savedComment);
+            notificationService.saveReplyNotification(writer, board, savedComment);
         }
         User boardWriter = userRepository.findById(board.getUser().getId())
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
@@ -83,10 +83,12 @@ public class CommentService {
         comment.checkWriter(userId);
         comment.disable();
         if (comment.isReply()) {
-            parent.deleteReply(comment);
+            parent.deleteReply();
             parent.deleteIfCan();
         } else {
             comment.deleteIfCan();
         }
+        Board board = comment.getBoard();
+        board.deleteCommentCount();
     }
 }

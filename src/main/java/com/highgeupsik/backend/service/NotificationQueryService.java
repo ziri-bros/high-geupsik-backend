@@ -1,11 +1,8 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.NotificationMessage.*;
 import static com.highgeupsik.backend.utils.PagingUtils.*;
 
 import com.highgeupsik.backend.dto.NotificationDTO;
-import com.highgeupsik.backend.entity.Notification;
-import com.highgeupsik.backend.entity.NotificationType;
 import com.highgeupsik.backend.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,33 +19,6 @@ public class NotificationQueryService {
 
     public Page<NotificationDTO> findAllByUserId(Long userId, Integer pageNum) {
         return notificationRepository.findAllByReceiverId(userId, orderByCreatedDateDESC(pageNum, NOTIFICATION_COUNT))
-            .map((notification) -> new NotificationDTO(
-                notification.getId(),
-                getTargetId(notification),
-                notification.isReadFlag(),
-                getContent(notification),
-                notification.getNotificationKind()));
-    }
-
-    private String getContent(Notification notification) {
-        NotificationType notificationKind = notification.getNotificationKind();
-        if (notificationKind.equals(NotificationType.COMMENT)) {
-            return COMMENT_NOTIFICATION;
-        }
-        if (notificationKind.equals(NotificationType.REPLY)) {
-            return REPLY_NOTIFICATION;
-        }
-        return MESSAGE_NOTIFICATION;
-    }
-
-    public Long getTargetId(Notification notification) {
-        NotificationType notificationKind = notification.getNotificationKind();
-        if (notificationKind.equals(NotificationType.COMMENT)) {
-            return notification.getBoard().getId();
-        }
-        if (notificationKind.equals(NotificationType.REPLY)) {
-            return notification.getComment().getId();
-        }
-        return notification.getRoom().getId();
+            .map(NotificationDTO::new);
     }
 }
