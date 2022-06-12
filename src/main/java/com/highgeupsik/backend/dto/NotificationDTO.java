@@ -1,5 +1,7 @@
 package com.highgeupsik.backend.dto;
 
+import static com.highgeupsik.backend.entity.NotificationType.*;
+
 import com.highgeupsik.backend.entity.Notification;
 import com.highgeupsik.backend.entity.NotificationType;
 import lombok.AllArgsConstructor;
@@ -21,12 +23,11 @@ public class NotificationDTO {
 
     public NotificationDTO(Notification notification) {
         notificationId = notification.getId();
-        boardId = notification.getBoard().getId();
-        commentId = notification.getComment().getId();
-        roomId = notification.getRoom().getId();
+        boardId = notification.getNotificationKind() == MESSAGE ? null : notification.getBoard().getId();
+        commentId = notification.getNotificationKind() == REPLY ? notification.getComment().getId() : null;
+        roomId = notification.getNotificationKind() == MESSAGE ? notification.getRoom().getId() : null;
         readFLag = notification.isReadFlag();
         content = notification.getContent();
         notificationKind = notification.getNotificationKind();
-
     }
 }
