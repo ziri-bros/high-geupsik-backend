@@ -2,13 +2,12 @@ package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 
-import com.highgeupsik.backend.dto.NotificationDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.NotificationQueryService;
+import com.highgeupsik.backend.service.NotificationQueryService.NotificationResult;
 import com.highgeupsik.backend.service.NotificationService;
 import com.highgeupsik.backend.utils.ApiResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,7 +22,7 @@ public class NotificationController {
     private final NotificationQueryService notificationQueryService;
 
     @GetMapping("/notifications")
-    public ApiResult<Page<NotificationDTO>> notifications(@LoginUser Long userId,
+    public ApiResult<NotificationResult> notifications(@LoginUser Long userId,
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         return success(notificationQueryService.findAllByUserId(userId, pageNum));
     }
