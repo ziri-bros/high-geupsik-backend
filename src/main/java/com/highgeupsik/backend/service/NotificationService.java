@@ -28,21 +28,25 @@ public class NotificationService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void saveCommentNotification(User user, Board board) {
-        Notification notification = Notification.ofBoard(user, board, NotificationType.COMMENT);
+        Notification notification = Notification.of(user, board.getTitle(), NotificationType.COMMENT);
+        notification.setBoard(board);
         notificationRepository.save(notification);
         applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), COMMENT_NOTIFICATION));
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void saveReplyNotification(User user, Comment comment) {
-        Notification notification = Notification.ofComment(user, comment, NotificationType.REPLY);
+    public void saveReplyNotification(User user, Board board, Comment comment) {
+        Notification notification = Notification.of(user, comment.getContent(), NotificationType.REPLY);
+        notification.setComment(comment);
+        notification.setBoard(board);
         notificationRepository.save(notification);
         applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), REPLY_NOTIFICATION));
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void saveRoomNotification(User user, Room room) {
-        Notification notification = Notification.ofRoom(user, room, NotificationType.MESSAGE);
+        Notification notification = Notification.of(user, room.getLatestMessage(), NotificationType.MESSAGE);
+        notification.setRoom(room);
         notificationRepository.save(notification);
         applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), MESSAGE_NOTIFICATION));
     }
