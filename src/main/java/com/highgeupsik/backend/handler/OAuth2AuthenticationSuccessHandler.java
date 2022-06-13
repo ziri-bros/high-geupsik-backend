@@ -29,7 +29,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) {
-        String targetUrl = "http://localhost:3000/oauth2/redirect?";
+        String targetUrl = "https://higk.o-r.kr/oauth2/redirect?";
         SocialUser socialUser = (SocialUser) authentication.getPrincipal();
         User user = socialUser.getUser();
         Long userId = user.getId();
