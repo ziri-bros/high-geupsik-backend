@@ -55,13 +55,12 @@ public class CommentService {
             transformToReply(savedComment, parent);
         }
 
-        if (!isBoardWriter(comment) && !sendList.contains(boardWriter.getId())) {
+        if (!board.isWriter(userId) && !sendList.contains(boardWriter.getId())) {
             notificationService.saveCommentNotification(boardWriter, board, savedComment.getContent());
         }
 
         return new CommentResDTO(comment, false);
     }
-
 
     private int getAnonymousNumberFrom(Board board, User writer) {
         return commentRepository.findFirstByBoardAndUser(board, writer)
@@ -120,9 +119,5 @@ public class CommentService {
         User user = userRepository.findById(comment.getUser().getId())
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         notificationService.saveReplyNotification(user, board, comment, content);
-    }
-
-    public boolean isBoardWriter(Comment comment) {
-        return comment.getAnonymousId() == -1;
     }
 }
