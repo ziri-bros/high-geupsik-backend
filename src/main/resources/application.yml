@@ -9,6 +9,8 @@ server:
 jwt:
   secret: ${JWT_SECRET}
 
+redirect_url: ${REDIRECT_URL}
+
 spring:
   profiles:
     include:
