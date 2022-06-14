@@ -100,12 +100,12 @@ public class CommentService {
     public void saveReplyNotification(List<Long> sendList, Long writerId, String content, Board board, Comment parent) {
         if (!isCommentWriter(writerId, parent)) {
             saveNotification(board, parent, content);
-            sendList.add(parent.getId());
+            sendList.add(parent.getUser().getId());
         }
         List<Comment> children = parent.getChildren();
         for (Comment comment : children) {
             if (!isCommentWriter(writerId, comment) && !sendList.contains(comment.getId())) {
-                sendList.add(comment.getId());
+                sendList.add(comment.getUser().getId());
                 saveNotification(board, comment, content);
             }
         }
