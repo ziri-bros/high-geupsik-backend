@@ -35,8 +35,8 @@ public class NotificationService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void saveReplyNotification(User user, Board board, Comment comment, String content) {
-        Notification notification = Notification.of(user, content, NotificationType.REPLY);
+    public void saveReplyNotification(User user, Board board, Comment comment) {
+        Notification notification = Notification.of(user, comment.getContent(), NotificationType.REPLY);
         notification.setComment(comment);
         notification.setBoard(board);
         notificationRepository.save(notification);

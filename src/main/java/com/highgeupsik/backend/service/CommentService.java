@@ -51,7 +51,7 @@ public class CommentService {
         if (dto.getParentId() != null) {
             Comment parent = commentRepository.findById(dto.getParentId())
                 .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
-            saveReplyNotification(sendList, userId, savedComment.getContent(), board, parent);
+            saveReplyNotification(sendList, userId, savedComment, board, parent);
             transformToReply(savedComment, parent);
         }
 
@@ -97,9 +97,10 @@ public class CommentService {
         board.deleteCommentCount();
     }
 
-    public void saveReplyNotification(List<Long> sendList, Long writerId, String content, Board board, Comment parent) {
+    public void saveReplyNotification(List<Long> sendList, Long writerId, Comment savedComment, Board board,
+        Comment parent) {
         if (!isCommentWriter(writerId, parent.getUser().getId())) {
-            saveNotification(board, parent, content);
+            saveNotification(board, savedComment);
             sendList.add(parent.getUser().getId());
         }
         List<Comment> children = parent.getChildren();
@@ -107,7 +108,7 @@ public class CommentService {
             Long commentWriterId = comment.getUser().getId();
             if (!isCommentWriter(writerId, commentWriterId) && !sendList.contains(commentWriterId)) {
                 sendList.add(commentWriterId);
-                saveNotification(board, comment, content);
+                saveNotification(board, savedComment);
             }
         }
     }
@@ -116,9 +117,9 @@ public class CommentService {
         return writerId.equals(commentWriterId);
     }
 
-    public void saveNotification(Board board, Comment comment, String content) {
+    public void saveNotification(Board board, Comment comment) {
         User user = userRepository.findById(comment.getUser().getId())
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-        notificationService.saveReplyNotification(user, board, comment, content);
+        notificationService.saveReplyNotification(user, board, comment);
     }
 }
