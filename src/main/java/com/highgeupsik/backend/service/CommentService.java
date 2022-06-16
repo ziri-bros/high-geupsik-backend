@@ -46,17 +46,17 @@ public class CommentService {
         User boardWriter = userRepository.findById(board.getUser().getId())
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
-        Comment savedComment = commentRepository.save(comment);
+        Comment newComment = commentRepository.save(comment);
         List<Long> sendList = new ArrayList<>();
         if (dto.getParentId() != null) {
             Comment parent = commentRepository.findById(dto.getParentId())
                 .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
-            saveReplyNotification(sendList, userId, savedComment, board, parent);
-            transformToReply(savedComment, parent);
+            saveReplyNotification(sendList, newComment, board, parent);
+            transformToReply(newComment, parent);
         }
 
         if (!board.isWriter(userId) && !sendList.contains(boardWriter.getId())) {
-            notificationService.saveCommentNotification(boardWriter, board, savedComment.getContent());
+            notificationService.saveCommentNotification(boardWriter, board, newComment.getContent());
         }
 
         return new CommentResDTO(comment, false);
@@ -97,29 +97,32 @@ public class CommentService {
         board.deleteCommentCount();
     }
 
-    public void saveReplyNotification(List<Long> sendList, Long writerId, Comment savedComment, Board board,
+    public void saveReplyNotification(List<Long> sendList, Comment newComment, Board board,
         Comment parent) {
-        if (!isCommentWriter(writerId, parent.getUser().getId())) {
-            saveNotification(board, savedComment);
-            sendList.add(parent.getUser().getId());
+        Long newCommentWriterId = newComment.getUser().getId();
+        Long parentCommentWriterId = parent.getUser().getId();
+        if (isNewCommentWriterNotEqualsCommentWriter(newCommentWriterId, parentCommentWriterId)) {
+            saveNotification(parentCommentWriterId, board, newComment);
+            sendList.add(parentCommentWriterId);
         }
         List<Comment> children = parent.getChildren();
         for (Comment comment : children) {
             Long commentWriterId = comment.getUser().getId();
-            if (!isCommentWriter(writerId, commentWriterId) && !sendList.contains(commentWriterId)) {
+            if (isNewCommentWriterNotEqualsCommentWriter(newCommentWriterId, commentWriterId) &&
+                !sendList.contains(commentWriterId)) {
                 sendList.add(commentWriterId);
-                saveNotification(board, savedComment);
+                saveNotification(commentWriterId, board, newComment);
             }
         }
     }
 
-    public boolean isCommentWriter(Long writerId, Long commentWriterId) {
-        return writerId.equals(commentWriterId);
-    }
-
-    public void saveNotification(Board board, Comment comment) {
-        User user = userRepository.findById(comment.getUser().getId())
+    public void saveNotification(Long notificationReceiverUserId, Board board, Comment comment) {
+        User user = userRepository.findById(notificationReceiverUserId)
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         notificationService.saveReplyNotification(user, board, comment);
+    }
+
+    public boolean isNewCommentWriterNotEqualsCommentWriter(Long writerId, Long commentWriterId) {
+        return !writerId.equals(commentWriterId);
     }
 }
