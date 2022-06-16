@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/.DS_Store
+src/main/java/.DS_Store
+src/main/java/com/.DS_Store
+src/main/java/com/highgeupsik/.DS_Store
