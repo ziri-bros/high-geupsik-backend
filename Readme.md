@@ -26,8 +26,7 @@
 ### Architecture
 
 ---
-![하이급식서버아키텍쳐](https://user-images.githubusercontent.com/19234114/175030853-d39e3280-9931-4c36-9d93-7e5afd4fb9b5.png)
-
+![하이급식서버아키텍쳐](https://user-images.githubusercontent.com/19234114/175031353-59052058-cff3-4e13-bea4-8a6137e96a9c.png)
 
 
 
