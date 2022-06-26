@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,9 +42,6 @@ public class Room extends TimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
-
-    @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Notification notification;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Message> messageList = new ArrayList<>();
@@ -86,9 +82,5 @@ public class Room extends TimeEntity {
             return true;
         }
         return false;
-    }
-
-    public void setNotification(Notification notification){
-        this.notification = notification;
     }
 }

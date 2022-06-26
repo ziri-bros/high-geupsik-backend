@@ -19,7 +19,6 @@ import javax.persistence.OneToMany;
 import com.highgeupsik.backend.dto.CommentReqDTO;
 import com.highgeupsik.backend.exception.UserException;
 
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,9 +51,6 @@ public class Comment extends TimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
-
-    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Notification notification;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likeList = new ArrayList<>();
@@ -164,10 +160,6 @@ public class Comment extends TimeEntity {
         } else if (!flag && likeCount > 0) {
             this.likeCount--;
         }
-    }
-
-    public void setNotification(Notification notification) {
-        this.notification = notification;
     }
 
     @Override

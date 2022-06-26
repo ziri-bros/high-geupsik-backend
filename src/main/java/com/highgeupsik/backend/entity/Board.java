@@ -3,7 +3,6 @@ package com.highgeupsik.backend.entity;
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
 import com.highgeupsik.backend.exception.UserException;
-import com.highgeupsik.backend.utils.ErrorMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,9 +52,6 @@ public class Board extends TimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Notification notification;
 
     private String thumbnail;
 
@@ -147,9 +142,5 @@ public class Board extends TimeEntity {
 
     public void delete() {
         deleteFlag = true;
-    }
-
-    public void setNotification(Notification notification) {
-        this.notification = notification;
     }
 }
