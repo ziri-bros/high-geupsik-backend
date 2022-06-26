@@ -2,11 +2,12 @@ package com.highgeupsik.backend.service;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.highgeupsik.backend.entity.NotificationType;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.highgeupsik.backend.dto.CommentReqDTO;
 import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.entity.Board;
@@ -42,33 +43,44 @@ public class CommentService {
         if (board.isWriter(commentWriter.getId())) {
             comment.setAnonymousId(-1);
         }
+        commentRepository.save(comment);
 
-        User boardWriter = userRepository.findById(board.getUser().getId())
-            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-
-        Comment newComment = commentRepository.save(comment);
-        List<Long> sendList = new ArrayList<>();
+        Set<Long> sendUserIdList = new HashSet<>();
         if (dto.getParentId() != null) {
             Comment parent = commentRepository.findById(dto.getParentId())
                 .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
-            saveReplyNotification(sendList, newComment, board, parent);
-            transformToReply(newComment, parent);
+            setSendIdList(sendUserIdList, comment, parent);
+            saveReplyNotification(sendUserIdList, board, comment);
+            transformToReply(comment, parent);
         }
-
-        if (!board.isWriter(userId) && !sendList.contains(boardWriter.getId())) {
-            notificationService.saveCommentNotification(boardWriter, board, newComment.getContent());
-        }
+        saveCommentNotification(board, comment, sendUserIdList);
 
         return new CommentResDTO(comment, false);
     }
 
-    private int getAnonymousNumberFrom(Board board, User writer) {
+    public void saveReplyNotification(Set<Long> sendUserIdList, Board board, Comment comment) {
+        for (Long userId : sendUserIdList) {
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+            notificationService.saveCommentNotification(user, board, comment, NotificationType.REPLY);
+        }
+    }
+
+    public void saveCommentNotification(Board board, Comment comment, Set<Long> sendUserIdList) {
+        if (!board.isWriter(comment.getUser().getId()) && !sendUserIdList.contains(board.getUser().getId())) {
+            User boardWriter = userRepository.findById(board.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+            notificationService.saveCommentNotification(boardWriter, board, comment, NotificationType.COMMENT);
+        }
+    }
+
+    public int getAnonymousNumberFrom(Board board, User writer) {
         return commentRepository.findFirstByBoardAndUser(board, writer)
             .map(Comment::getAnonymousId)
             .orElseGet(board::getNextAnonymousNumber);
     }
 
-    private void transformToReply(Comment comment, Comment parent) {
+    public void transformToReply(Comment comment, Comment parent) {
         comment.toReply(parent);
     }
 
@@ -97,32 +109,27 @@ public class CommentService {
         board.deleteCommentCount();
     }
 
-    public void saveReplyNotification(List<Long> sendList, Comment newComment, Board board,
-        Comment parent) {
+    public void setSendIdList(Set<Long> sendUserIdList, Comment newComment, Comment parent) {
         Long newCommentWriterId = newComment.getUser().getId();
         Long parentCommentWriterId = parent.getUser().getId();
-        if (isNewCommentWriterNotEqualsCommentWriter(newCommentWriterId, parentCommentWriterId)) {
-            saveNotification(parentCommentWriterId, board, newComment);
-            sendList.add(parentCommentWriterId);
-        }
-        List<Comment> children = parent.getChildren();
-        for (Comment comment : children) {
-            Long commentWriterId = comment.getUser().getId();
-            if (isNewCommentWriterNotEqualsCommentWriter(newCommentWriterId, commentWriterId) &&
-                !sendList.contains(commentWriterId)) {
-                sendList.add(commentWriterId);
-                saveNotification(commentWriterId, board, newComment);
-            }
+        sendForParent(newCommentWriterId, parentCommentWriterId, sendUserIdList);
+        sendForChildren(parent, newCommentWriterId, sendUserIdList);
+    }
+
+    public void sendForParent(Long newCommentWriterId, Long parentCommentWriterId, Set<Long> sendUserIdList) {
+        if (isNewCommentWriterNotEqualsPresentCommentWriter(newCommentWriterId, parentCommentWriterId)) {
+            sendUserIdList.add(parentCommentWriterId);
         }
     }
 
-    public void saveNotification(Long notificationReceiverUserId, Board board, Comment comment) {
-        User user = userRepository.findById(notificationReceiverUserId)
-            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-        notificationService.saveReplyNotification(user, board, comment);
+    public void sendForChildren(Comment parent, Long newCommentWriterId, Set<Long> sendUserIdList) {
+        sendUserIdList.addAll(parent.getChildren().stream()
+            .filter(c -> isNewCommentWriterNotEqualsPresentCommentWriter(c.getUser().getId(), newCommentWriterId))
+            .map(comment -> comment.getUser().getId())
+            .collect(Collectors.toList()));
     }
 
-    public boolean isNewCommentWriterNotEqualsCommentWriter(Long writerId, Long commentWriterId) {
+    public boolean isNewCommentWriterNotEqualsPresentCommentWriter(Long writerId, Long commentWriterId) {
         return !writerId.equals(commentWriterId);
     }
 }
