@@ -29,7 +29,7 @@ public class Notification extends TimeEntity {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private NotificationType notificationKind;
+    private NotificationType notificationType;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -48,33 +48,33 @@ public class Notification extends TimeEntity {
     private Room room;
 
     @Builder
-    public Notification(User receiver, String content, NotificationType notificationKind) {
-        this.receiver = receiver;
-        this.notificationKind = notificationKind;
+    public Notification(User receiver, String content, NotificationType notificationType, Board board,
+        Comment comment, Room room) {
         this.content = content;
+        this.notificationType = notificationType;
+        this.receiver = receiver;
+        this.board = board;
+        this.comment = comment;
+        this.room = room;
     }
 
-    public static Notification of(User receiver, String content, NotificationType notificationKind) {
+    public static Notification of(User receiver, String content, NotificationType kind, Board board, Comment comment) {
         return Notification.builder()
-            .receiver(receiver)
             .content(content)
-            .notificationKind(notificationKind)
+            .notificationType(kind)
+            .receiver(receiver)
+            .board(board)
+            .comment(comment)
             .build();
     }
 
-    public void setComment(Comment comment) {
-        this.comment = comment;
-        comment.setNotification(this);
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-        room.setNotification(this);
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-        board.setNotification(this);
+    public static Notification ofRoom(User receiver, String content, NotificationType kind, Room room) {
+        return Notification.builder()
+            .content(content)
+            .notificationType(kind)
+            .receiver(receiver)
+            .room(room)
+            .build();
     }
 
     public void readNotification() {
