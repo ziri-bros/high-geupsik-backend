@@ -10,6 +10,6 @@ import lombok.Setter;
 public class MessageReqDTO {
 
     private String content;
-    private Long toUserId;
+    private Long receiverId;
     private Long boardId;
 }

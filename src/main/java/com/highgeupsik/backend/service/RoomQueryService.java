@@ -17,8 +17,8 @@ public class RoomQueryService {
     private final RoomRepository roomRepository;
     private static final int ROOM_COUNT = 10;
 
-    public Page<RoomDTO> findAllByFromUserId(Long fromUserId, Integer pageNum) {
-        return roomRepository.findByFromUserId(fromUserId, orderByModifiedDate(pageNum, ROOM_COUNT))
+    public Page<RoomDTO> findAllByMyId(Long userId, Integer pageNum) {
+        return roomRepository.findBySenderId(userId, orderByModifiedDate(pageNum, ROOM_COUNT))
             .map(RoomDTO::new);
     }
 }
