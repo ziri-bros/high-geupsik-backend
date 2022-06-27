@@ -11,12 +11,12 @@ public class MessageResDTO {
     private Long id;
     private String content;
     private Long senderId;
-    private Long ownerId;
+    private Long receiverId;
 
     public MessageResDTO(Message message) {
         id = message.getId();
         content = message.getContent();
         senderId = message.getSender().getId();
-        ownerId = message.getReceiver().getId();
+        receiverId = message.getReceiver().getId();
     }
 }
