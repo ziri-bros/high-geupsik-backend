@@ -23,6 +23,7 @@ public class BoardResDTO {
     private int likeCount;
     private int commentCount;
     private boolean isUserLike;
+    private boolean deleteFlag;
     private LocalDateTime createdDate;
     private List<UploadFileDTO> uploadFileDTOList = new ArrayList<>();
 
@@ -49,6 +50,7 @@ public class BoardResDTO {
         this.likeCount = board.getLikeCount();
         this.commentCount = board.getCommentCount();
         this.isUserLike = isUserLike;
+        this.deleteFlag = board.isDeleteFlag();
         this.thumbnail = board.getThumbnail();
         this.uploadFileDTOList = board.getUploadFileList().stream().map((UploadFileDTO::new))
             .collect(Collectors.toList());
@@ -63,6 +65,7 @@ public class BoardResDTO {
         this.category = board.getCategory();
         this.likeCount = board.getLikeCount();
         this.commentCount = board.getCommentCount();
+        this.deleteFlag = board.isDeleteFlag();
         this.thumbnail = board.getThumbnail();
         this.uploadFileDTOList = board.getUploadFileList().stream().map((UploadFileDTO::new))
             .collect(Collectors.toList());

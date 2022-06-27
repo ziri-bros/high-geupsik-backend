@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomRepository extends JpaRepository<Room, Long>{
+public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    Optional<Room> findByBoardAndFromUser(Board board, User fromUser);
+    Optional<Room> findByBoardAndSender(Board board, User sender);
 
-    Page<Room> findByFromUserId(Long fromUserId, Pageable pageable);
+    Page<Room> findBySenderId(Long senderId, Pageable pageable);
 }

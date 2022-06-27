@@ -37,7 +37,7 @@ public class RoomMessageController {
     @GetMapping
     public ApiResult<Page<RoomDTO>> rooms(@LoginUser Long userId,
         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
-        return success(roomQueryService.findAllByFromUserId(userId, pageNum));
+        return success(roomQueryService.findAllByMyId(userId, pageNum));
     }
 
     @ApiOperation(value = "메세지 목록 조회")
@@ -57,7 +57,7 @@ public class RoomMessageController {
     @ResponseStatus(CREATED)
     @PostMapping("/messages")
     public ApiResult<Long> sendMessage(@LoginUser Long userId, @RequestBody MessageReqDTO messageReqDTO) {
-        return success(roomMessageService.sendMessage(userId, messageReqDTO.getToUserId(), messageReqDTO.getBoardId(),
+        return success(roomMessageService.sendMessage(userId, messageReqDTO.getReceiverId(), messageReqDTO.getBoardId(),
             messageReqDTO.getContent()));
     }
 }

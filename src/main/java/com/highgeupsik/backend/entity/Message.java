@@ -25,12 +25,12 @@ public class Message extends TimeEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+    @JoinColumn(name = "sender_id")
+    private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_user_id")
-    private User toUser;
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
@@ -41,17 +41,17 @@ public class Message extends TimeEntity {
     private Room room;
 
     @Builder
-    public Message(User fromUser, User toUser, User owner, String content) {
+    public Message(User sender, User receiver, User owner, String content) {
         this.content = content;
-        this.fromUser = fromUser;
-        this.toUser = toUser;
+        this.sender = sender;
+        this.receiver = receiver;
         this.owner = owner;
     }
 
-    public static Message of(User fromUser, User toUser, User owner, String content) {
+    public static Message of(User sender, User receiver, User owner, String content) {
         return Message.builder()
-            .fromUser(fromUser)
-            .toUser(toUser)
+            .sender(sender)
+            .receiver(receiver)
             .owner(owner)
             .content(content)
             .build();

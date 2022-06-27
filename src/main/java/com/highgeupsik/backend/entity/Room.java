@@ -29,15 +29,15 @@ public class Room extends TimeEntity {
     @GeneratedValue
     private Long id;
 
-    private String latestMessage;
+    private String recentMessage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+    @JoinColumn(name = "sender_id")
+    private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_user_id")
-    private User toUser;
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -47,16 +47,16 @@ public class Room extends TimeEntity {
     private List<Message> messageList = new ArrayList<>();
 
     @Builder
-    public Room(User fromUser, User toUser, Board board) {
-        this.fromUser = fromUser;
-        this.toUser = toUser;
+    public Room(User sender, User receiver, Board board) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.board = board;
     }
 
-    public static Room of(User fromUser, User toUser, Board board) {
+    public static Room of(User sender, User receiver, Board board) {
         return Room.builder()
-            .fromUser(fromUser)
-            .toUser(toUser)
+            .sender(sender)
+            .receiver(receiver)
             .board(board)
             .build();
     }
@@ -64,11 +64,11 @@ public class Room extends TimeEntity {
     public void addMessage(Message message) {
         messageList.add(message);
         message.setRoom(this);
-        setLatestMessage(message.getContent());
+        setRecentMessage(message.getContent());
     }
 
-    public void setLatestMessage(String latestMessage) {
-        this.latestMessage = latestMessage;
+    public void setRecentMessage(String recentMessage) {
+        this.recentMessage = recentMessage;
     }
 
     public void checkUser(Long userId){
@@ -78,9 +78,6 @@ public class Room extends TimeEntity {
     }
 
     public boolean isRoomUser(Long userId) {
-        if(fromUser.getId().equals(userId)){
-            return true;
-        }
-        return false;
+        return sender.getId().equals(userId);
     }
 }
