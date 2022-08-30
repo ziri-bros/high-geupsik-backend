@@ -32,21 +32,23 @@ public class RoomMessageService {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
 
-        Room senderRoom = roomRepository.findByBoardAndSender(board, sender)
-            .orElse(Room.of(sender, receiver, board));
-        Room receiverRoom = roomRepository.findByBoardAndSender(board, receiver)
-            .orElse(Room.of(receiver, sender, board));
+        Room senderRoom = findOrCreateRoom(board, sender, receiver);
+        Room receiverRoom = findOrCreateRoom(board, receiver, sender);
 
-        Message messageOfSender = Message.of(sender, receiver, sender, content);
-        Message messageOfReceiver = Message.of(sender, receiver, receiver, content);
-        senderRoom.addMessage(messageOfSender);
-        receiverRoom.addMessage(messageOfReceiver);
+        senderRoom.addMessage(Message.ofOwner(sender, receiver, sender, content));
+        receiverRoom.addMessage(Message.ofOwner(sender, receiver, receiver, content));
 
         roomRepository.save(senderRoom);
         roomRepository.save(receiverRoom);
 
         notificationService.saveRoomNotification(receiver, receiverRoom);
+
         return senderRoom.getId();
+    }
+
+    private Room findOrCreateRoom(Board board, User sender, User receiver) {
+        return roomRepository.findByBoardAndSender(board, sender)
+            .orElse(Room.of(sender, receiver, board));
     }
 
     public void deleteRoom(Long userId, Long roomId) {

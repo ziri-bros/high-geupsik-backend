@@ -48,7 +48,7 @@ public class Message extends TimeEntity {
         this.owner = owner;
     }
 
-    public static Message of(User sender, User receiver, User owner, String content) {
+    public static Message ofOwner(User sender, User receiver, User owner, String content) {
         return Message.builder()
             .sender(sender)
             .receiver(receiver)
