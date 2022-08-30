@@ -40,10 +40,14 @@ public class School {
     @Column(name = "region", nullable = false, updatable = false)
     private Region region;
 
-    public School(String name, String code, String regionCode, Region region) {
+    @Column(name = "homepage_url", nullable = false, updatable = false)
+    private String homepageUrl;
+
+    public School(String name, String code, String regionCode, Region region, String homepageUrl) {
         this.name = name;
         this.code = code;
         this.regionCode = regionCode;
         this.region = region;
+        this.homepageUrl = homepageUrl;
     }
 }
