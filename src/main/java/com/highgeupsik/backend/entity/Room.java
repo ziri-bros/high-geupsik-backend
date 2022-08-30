@@ -72,12 +72,12 @@ public class Room extends TimeEntity {
     }
 
     public void checkUser(Long userId){
-        if(!isRoomUser(userId)){
+        if(isNotRoomUser(userId)){
             throw new UserException(NOT_ROOM_USER);
         }
     }
 
-    public boolean isRoomUser(Long userId) {
-        return sender.getId().equals(userId);
+    private boolean isNotRoomUser(Long userId) {
+        return !sender.getId().equals(userId);
     }
 }
