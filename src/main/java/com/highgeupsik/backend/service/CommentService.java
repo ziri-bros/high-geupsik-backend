@@ -29,6 +29,7 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private static final int BOARD_WRITER_ANONYMOUS_NUMBER = -1;
 
     public CommentResDTO saveComment(Long userId, Long boardId, CommentReqDTO dto) {
         User commentWriter = userRepository.findById(userId)
@@ -36,68 +37,76 @@ public class CommentService {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
 
-        int anonymousNumber = getAnonymousNumberFrom(board, commentWriter);
-        Comment comment = Comment.of(dto.getContent(), commentWriter, board);
+        Comment comment = Comment.of(dto.getContent(), commentWriter, board,
+            getAnonymousNumberFrom(board, commentWriter));
         comment.setBoard(board);
-        comment.setAnonymousId(anonymousNumber);
-        if (board.isWriter(commentWriter.getId())) {
-            comment.setAnonymousId(-1);
-        }
         commentRepository.save(comment);
 
         Set<Long> sendUserIdList = new HashSet<>();
-        if (dto.getParentId() != null) {
+        if (isReply(dto)) {
             Comment parent = commentRepository.findById(dto.getParentId())
                 .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
-            setSendIdList(sendUserIdList, comment, parent);
-            saveReplyNotification(sendUserIdList, board, comment);
+            initSendIdList(comment, parent, sendUserIdList);
+            sendReplyNotification(board, comment, sendUserIdList);
             transformToReply(comment, parent);
         }
-        saveCommentNotification(board, comment, sendUserIdList);
+        sendCommentNotification(board, comment, sendUserIdList);
 
         return new CommentResDTO(comment, false);
     }
 
-    public void saveReplyNotification(Set<Long> sendUserIdList, Board board, Comment comment) {
-        for (Long userId : sendUserIdList) {
-            User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-            notificationService.saveCommentNotification(user, board, comment, NotificationType.REPLY);
-        }
+    private boolean isReply(CommentReqDTO dto) {
+        return dto.getParentId() != null;
     }
 
-    public void saveCommentNotification(Board board, Comment comment, Set<Long> sendUserIdList) {
-        if (!board.isWriter(comment.getUser().getId()) && !sendUserIdList.contains(board.getUser().getId())) {
+    private int getAnonymousNumberFrom(Board board, User commentWriter) {
+        if (board.isWriter(commentWriter)) {
+            return BOARD_WRITER_ANONYMOUS_NUMBER;
+        }
+        return commentRepository.findFirstByBoardAndUser(board, commentWriter)
+            .map(Comment::getAnonymousId)
+            .orElseGet(board::getNextAnonymousNumber);
+    }
+
+    private void transformToReply(Comment comment, Comment parent) {
+        comment.toReply(parent);
+    }
+
+    private void sendReplyNotification(Board board, Comment comment, Set<Long> sendUserIdList) {
+        sendUserIdList.stream()
+            .map(id -> userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND)))
+            .forEach((u) -> notificationService.saveCommentNotification(u, board, comment, NotificationType.REPLY));
+    }
+
+    private void sendCommentNotification(Board board, Comment comment, Set<Long> sendUserIdList) {
+        if (isBoardWriterHasNotReceiveNotification(board, comment, sendUserIdList)) {
             User boardWriter = userRepository.findById(board.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
             notificationService.saveCommentNotification(boardWriter, board, comment, NotificationType.COMMENT);
         }
     }
 
-    public int getAnonymousNumberFrom(Board board, User writer) {
-        return commentRepository.findFirstByBoardAndUser(board, writer)
-            .map(Comment::getAnonymousId)
-            .orElseGet(board::getNextAnonymousNumber);
-    }
-
-    public void transformToReply(Comment comment, Comment parent) {
-        comment.toReply(parent);
+    private boolean isBoardWriterHasNotReceiveNotification(Board board, Comment comment, Set<Long> sendUserIdList) {
+        return !board.isWriter(comment.getUser()) && !sendUserIdList.contains(board.getUser().getId());
     }
 
     public Long updateComment(Long userId, Long commentId, CommentReqDTO commentReqDTO) {
+        User writer = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
-        comment.checkWriter(userId);
+        comment.validateWriter(writer);
         comment.updateContent(commentReqDTO);
         return commentId;
     }
 
     public void deleteComment(Long userId, Long commentId) {
+        User writer = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND));
         Comment parent = comment.getParent();
-
-        comment.checkWriter(userId);
+        comment.validateWriter(writer);
         comment.disable();
         if (comment.isReply()) {
             parent.deleteReply();
@@ -109,27 +118,21 @@ public class CommentService {
         board.deleteCommentCount();
     }
 
-    public void setSendIdList(Set<Long> sendUserIdList, Comment newComment, Comment parent) {
-        Long newCommentWriterId = newComment.getUser().getId();
-        Long parentCommentWriterId = parent.getUser().getId();
-        sendForParent(newCommentWriterId, parentCommentWriterId, sendUserIdList);
-        sendForChildren(parent, newCommentWriterId, sendUserIdList);
+    private void initSendIdList(Comment newComment, Comment parent, Set<Long> sendUserIdList) {
+        sendForParent(newComment, parent, sendUserIdList);
+        sendForChildren(newComment, parent, sendUserIdList);
     }
 
-    public void sendForParent(Long newCommentWriterId, Long parentCommentWriterId, Set<Long> sendUserIdList) {
-        if (isNewCommentWriterNotEqualsPresentCommentWriter(newCommentWriterId, parentCommentWriterId)) {
-            sendUserIdList.add(parentCommentWriterId);
+    private void sendForParent(Comment newComment, Comment parentComment, Set<Long> sendUserIdList) {
+        if (!newComment.isNotWriter(parentComment.getUser())) {
+            sendUserIdList.add(parentComment.getUser().getId());
         }
     }
 
-    public void sendForChildren(Comment parent, Long newCommentWriterId, Set<Long> sendUserIdList) {
+    private void sendForChildren(Comment newComment, Comment parent, Set<Long> sendUserIdList) {
         sendUserIdList.addAll(parent.getChildren().stream()
-            .filter(c -> isNewCommentWriterNotEqualsPresentCommentWriter(c.getUser().getId(), newCommentWriterId))
+            .filter(c -> c.isNotWriter(newComment.getUser()))
             .map(comment -> comment.getUser().getId())
             .collect(Collectors.toList()));
-    }
-
-    public boolean isNewCommentWriterNotEqualsPresentCommentWriter(Long writerId, Long commentWriterId) {
-        return !writerId.equals(commentWriterId);
     }
 }
