@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MessageResDTO {
 
-    private Long id;
+    private Long messageId;
     private String content;
     private Long senderId;
     private Long receiverId;
 
     public MessageResDTO(Message message) {
-        id = message.getId();
+        messageId = message.getId();
         content = message.getContent();
         senderId = message.getSender().getId();
         receiverId = message.getReceiver().getId();
