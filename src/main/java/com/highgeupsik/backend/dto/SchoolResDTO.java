@@ -14,11 +14,13 @@ public class SchoolResDTO {
     private String code;
     private String regionCode;
     private Region region;
+    private String homepageUrl;
 
     public SchoolResDTO(School school) {
         name = school.getName();
         code = school.getCode();
         regionCode = school.getRegionCode();
         region = school.getRegion();
+        homepageUrl = school.getHomepageUrl();
     }
 }
