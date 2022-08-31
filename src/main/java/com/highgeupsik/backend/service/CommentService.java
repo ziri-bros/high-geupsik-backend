@@ -124,7 +124,7 @@ public class CommentService {
     }
 
     private void sendForParent(Comment newComment, Comment parentComment, Set<Long> sendUserIdList) {
-        if (!newComment.isNotWriter(parentComment.getUser())) {
+        if (parentComment.isNotWriter(newComment.getUser())) {
             sendUserIdList.add(parentComment.getUser().getId());
         }
     }
