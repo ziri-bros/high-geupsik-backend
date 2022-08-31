@@ -25,8 +25,8 @@ public class BoardService {
     private final UserRepository userRepository;
 
     public Board saveBoard(Long userId, String title, String content, Category category) {
-        User user = userRepository.findById(userId).orElseThrow(
-            () -> new ResourceNotFoundException(USER_NOT_FOUND));
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         return boardRepository.save(Board.builder()
             .user(user)
             .content(content)
@@ -38,18 +38,24 @@ public class BoardService {
 
     public Long makeBoard(Long userId, BoardReqDTO boardReqDTO) {
         Board board = saveBoard(userId, boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
-        if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
+        if (isImageExists(boardReqDTO)) {
             addUploadFiles(board, boardReqDTO.getUploadFileDTOList());
         }
         return board.getId();
     }
 
+    private boolean isImageExists(BoardReqDTO boardReqDTO) {
+        return !boardReqDTO.getUploadFileDTOList().isEmpty();
+    }
+
     public Long updateBoard(Long userId, Long boardId, BoardReqDTO boardReqDTO) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
-        board.checkWriter(userId);
+        board.validateWriter(user);
         board.deleteFiles();
-        if (!boardReqDTO.getUploadFileDTOList().isEmpty()) {
+        if (isImageExists(boardReqDTO)) {
             addUploadFiles(board, boardReqDTO.getUploadFileDTOList());
         }
         board.updateBoard(boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getCategory());
@@ -57,16 +63,16 @@ public class BoardService {
     }
 
     public void deleteBoard(Long userId, Long boardId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
-        board.checkWriter(userId);
+        board.validateWriter(user);
         board.delete();
     }
 
     public void addUploadFiles(Board board, List<UploadFileDTO> uploadFileDTOList) {
         board.setThumbnail(uploadFileDTOList.get(0).getFileDownloadUri());
-        for (UploadFileDTO uploadFileDTO : uploadFileDTOList) {
-            board.setFile(new UploadFile(uploadFileDTO.getFileName(), uploadFileDTO.getFileDownloadUri()));
-        }
+        uploadFileDTOList.forEach(file -> board.setFile(new UploadFile(file.getFileName(), file.getFileDownloadUri())));
     }
 }
