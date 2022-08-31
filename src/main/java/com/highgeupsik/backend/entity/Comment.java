@@ -70,11 +70,12 @@ public class Comment extends TimeEntity {
         this.board = board;
     }
 
-    public static Comment of(String content, User user, Board board) {
+    public static Comment of(String content, User user, Board board, int anonymousId) {
         Comment comment = Comment.builder()
             .content(content)
             .user(user)
             .board(board)
+            .anonymousId(anonymousId)
             .build();
         comment.parent = comment;
         comment.children.add(comment);
@@ -90,22 +91,18 @@ public class Comment extends TimeEntity {
         board.addComment(this);
     }
 
-    public void setAnonymousId(int anonymousNumber) {
-        this.anonymousId = anonymousNumber;
-    }
-
     public int getAnonymousId() {
         return anonymousId;
     }
 
-    public void checkWriter(Long userId) {
-        if (!isWriter(userId)) {
+    public void validateWriter(User user) {
+        if (isNotWriter(user)) {
             throw new UserException(WRITER_NOT_MATCH);
         }
     }
 
-    private boolean isWriter(Long userId) {
-        return user.getId().equals(userId);
+    public boolean isNotWriter(User other) {
+        return !this.user.isSameUser(other);
     }
 
     public boolean isParent() {
@@ -157,7 +154,7 @@ public class Comment extends TimeEntity {
     public void updateCommentLike(Boolean flag) {
         if (flag) {
             this.likeCount++;
-        } else if (!flag && likeCount > 0) {
+        } else if (likeCount > 0) {
             this.likeCount--;
         }
     }

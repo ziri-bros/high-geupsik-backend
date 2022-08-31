@@ -76,14 +76,14 @@ public class Board extends TimeEntity {
         this.thumbnail = thumbnail;
     }
 
-    public void checkWriter(Long userId) {
-        if (!isWriter(userId)) {
+    public void validateWriter(User other) {
+        if (!isWriter(other)) {
             throw new UserException(WRITER_NOT_MATCH);
         }
     }
 
-    public boolean isWriter(Long userId) {
-        return user.getId().equals(userId);
+    public boolean isWriter(User other) {
+        return user.isSameUser(other);
     }
 
     public void updateBoard(String title, String content, Category category) {
@@ -118,7 +118,7 @@ public class Board extends TimeEntity {
         commentList.remove(comment);
     }
 
-    public void deleteCommentCount(){
+    public void deleteCommentCount() {
         if (commentCount > 0) {
             commentCount--;
         }

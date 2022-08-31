@@ -108,4 +108,8 @@ public class User {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+    public boolean isSameUser(User other){
+        return id.equals(other.getId());
+    }
 }
