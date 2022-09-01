@@ -1,6 +1,12 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.ErrorMessage.*;
+import static com.highgeupsik.backend.utils.ErrorMessage.BOARD_NOT_FOUND;
+import static com.highgeupsik.backend.utils.ErrorMessage.USER_NOT_FOUND;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.highgeupsik.backend.dto.BoardReqDTO;
 import com.highgeupsik.backend.dto.UploadFileDTO;
@@ -11,10 +17,8 @@ import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.UserRepository;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
