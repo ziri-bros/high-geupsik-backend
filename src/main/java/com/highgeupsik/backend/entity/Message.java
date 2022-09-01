@@ -22,6 +22,8 @@ public class Message extends TimeEntity {
     @Column(name = "message_id")
     private Long id;
 
+    //TODO: 읽었는지 안읽었는지 FLAG 추가
+
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,6 +50,7 @@ public class Message extends TimeEntity {
         this.owner = owner;
     }
 
+    //TODO: FLAG
     public static Message ofOwner(User sender, User receiver, User owner, String content) {
         return Message.builder()
             .sender(sender)

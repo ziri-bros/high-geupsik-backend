@@ -16,6 +16,7 @@ public class MessageQueryService {
     private final MessageRepository messageRepository;
     private final static int MESSAGE_COUNT = 10;
 
+    //TODO: 읽음처리 BULK UPDATE
     public Page<MessageResDTO> findAllByRoomIdAndOwnerId(Long roomId, Long userId, Integer pageNum) {
         return messageRepository.findAllByRoomIdAndOwnerId(roomId, userId, PagingUtils.orderByCreatedDateDESC(
             pageNum, MESSAGE_COUNT)).map(MessageResDTO::new);

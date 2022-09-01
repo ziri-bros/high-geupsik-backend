@@ -31,6 +31,8 @@ public class Room extends TimeEntity {
 
     private String recentMessage;
 
+    //TODO: 안읽은 메시지 개수 추가
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private User sender;

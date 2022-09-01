@@ -24,6 +24,7 @@ public class RoomMessageService {
     private final BoardRepository boardRepository;
     private final NotificationService notificationService;
 
+    //TODO: receiver room 에만 안읽은 count 증가
     public Long sendMessage(Long senderId, Long receiverId, Long boardId, String content) {
         User sender = userRepository.findById(senderId)
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
@@ -35,6 +36,7 @@ public class RoomMessageService {
         Room senderRoom = findOrCreateRoom(board, sender, receiver);
         Room receiverRoom = findOrCreateRoom(board, receiver, sender);
 
+        //TODO: factory method 분리
         senderRoom.addMessage(Message.ofOwner(sender, receiver, sender, content));
         receiverRoom.addMessage(Message.ofOwner(sender, receiver, receiver, content));
 

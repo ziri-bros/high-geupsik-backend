@@ -12,6 +12,7 @@ public class MessageResDTO {
     private String content;
     private Long senderId;
     private Long receiverId;
+    //TODO: 메시지 보내진 시간 + 내가 보낸 메시지를 상대가 읽었는지
 
     public MessageResDTO(Message message) {
         messageId = message.getId();
