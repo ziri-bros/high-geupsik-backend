@@ -8,6 +8,7 @@ import com.highgeupsik.backend.entity.Room;
 import com.highgeupsik.backend.entity.User;
 import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.repository.BoardRepository;
+import com.highgeupsik.backend.repository.MessageRepository;
 import com.highgeupsik.backend.repository.RoomRepository;
 import com.highgeupsik.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomMessageService {
 
     private final RoomRepository roomRepository;
+    private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final NotificationService notificationService;
@@ -37,9 +39,9 @@ public class RoomMessageService {
         Room receiverRoom = findOrCreateRoom(board, receiver, sender);
 
         //TODO: factory method 분리
-        senderRoom.addMessage(Message.ofOwner(sender, receiver, sender, content));
-        receiverRoom.addMessage(Message.ofOwner(sender, receiver, receiver, content));
-
+        senderRoom.addMessage(Message.ofOwner(sender, receiver, sender, content, false));
+        receiverRoom.addMessage(Message.ofOwner(sender, receiver, receiver, content, true));
+        receiverRoom.addNewMessageCount();
         roomRepository.save(senderRoom);
         roomRepository.save(receiverRoom);
 
@@ -58,5 +60,21 @@ public class RoomMessageService {
             .orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
         room.checkUser(userId);
         roomRepository.delete(room);
+    }
+
+    public void readNewMessagesByRoomId(Long roomId) {
+        Room myRoom = roomRepository.findById(roomId)
+            .orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
+        myRoom.readNewMessages();
+        Room otherRoom = findOtherRoom(myRoom);
+        messageRepository.updateReadFlagByRoom(otherRoom);
+    }
+
+    private Room findOtherRoom(Room room) {
+        return roomRepository.findByBoardAndSender(boardRepository.findById(room.getBoard().getId())
+                .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND)),
+            userRepository.findById(room.getReceiver().getId())
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND)))
+            .orElseThrow(() -> new ResourceNotFoundException("없는 대화방입니다."));
     }
 }
