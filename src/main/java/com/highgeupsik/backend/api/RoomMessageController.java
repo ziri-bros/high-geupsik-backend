@@ -47,6 +47,7 @@ public class RoomMessageController {
 	@GetMapping("/{roomId}")
 	public ApiResult<Page<MessageResDTO>> messages(@LoginUser Long userId, @PathVariable Long roomId,
 		@RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+		roomMessageService.readNewMessagesByRoomId(roomId);
 		return success(messageQueryService.findAllByRoomIdAndOwnerId(roomId, userId, pageNum));
 	}
 
