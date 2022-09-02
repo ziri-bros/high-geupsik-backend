@@ -32,6 +32,7 @@ public class Room extends TimeEntity {
     private String recentMessage;
 
     //TODO: 안읽은 메시지 개수 추가
+    private int newMessageCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
@@ -67,6 +68,14 @@ public class Room extends TimeEntity {
         messageList.add(message);
         message.setRoom(this);
         setRecentMessage(message.getContent());
+    }
+
+    public void addNewMessageCount(){
+        newMessageCount++;
+    }
+
+    public void readNewMessages(){
+        newMessageCount = 0;
     }
 
     public void setRecentMessage(String recentMessage) {
