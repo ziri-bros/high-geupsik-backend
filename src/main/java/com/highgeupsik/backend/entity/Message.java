@@ -23,8 +23,9 @@ public class Message extends TimeEntity {
     private Long id;
 
     //TODO: 읽었는지 안읽었는지 FLAG 추가
-
     private String content;
+
+    private boolean isRead;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
@@ -43,20 +44,22 @@ public class Message extends TimeEntity {
     private Room room;
 
     @Builder
-    public Message(User sender, User receiver, User owner, String content) {
+    public Message(User sender, User receiver, User owner, String content, boolean isRead) {
         this.content = content;
         this.sender = sender;
         this.receiver = receiver;
         this.owner = owner;
+        this.isRead = isRead;
     }
 
     //TODO: FLAG
-    public static Message ofOwner(User sender, User receiver, User owner, String content) {
+    public static Message ofOwner(User sender, User receiver, User owner, String content, boolean isRead) {
         return Message.builder()
             .sender(sender)
             .receiver(receiver)
             .owner(owner)
             .content(content)
+            .isRead(isRead)
             .build();
     }
 

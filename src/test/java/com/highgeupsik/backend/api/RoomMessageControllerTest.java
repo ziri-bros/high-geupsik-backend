@@ -67,7 +67,7 @@ public class RoomMessageControllerTest {
         board = boardRepository.save(Board.builder().build());
         token = "Bearer " + jwtTokenProvider.createAccessToken(sender.getId(), "ROLE_USER");
         room = roomRepository.save(Room.of(sender, receiver, board));
-        message = Message.ofOwner(sender, receiver, sender, "content");
+        message = Message.ofOwner(sender, receiver, sender, "content", false);
         message.setRoom(room);
         message = messageRepository.save(message);
     }

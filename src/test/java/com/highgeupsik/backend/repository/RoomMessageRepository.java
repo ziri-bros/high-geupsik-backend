@@ -41,7 +41,7 @@ public class RoomMessageRepository {
         room = roomRepository.save(Room.builder()
             .sender(sender)
             .board(board).build());
-        Message saveMessage = Message.ofOwner(sender, receiver, sender, "content");
+        Message saveMessage = Message.ofOwner(sender, receiver, sender, "content", false);
         saveMessage.setRoom(room);
         message = messageRepository.save(saveMessage);
     }

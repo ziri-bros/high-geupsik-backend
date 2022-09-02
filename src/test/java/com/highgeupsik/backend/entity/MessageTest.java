@@ -20,8 +20,8 @@ public class MessageTest {
 
     @Test
     void create() {
-        Message message = Message.ofOwner(sender, receiver, sender, content);
-        Message message2 = Message.ofOwner(sender, receiver, receiver, content);
+        Message message = Message.ofOwner(sender, receiver, sender, content, false);
+        Message message2 = Message.ofOwner(sender, receiver, receiver, content, false);
 
         assertThat(message.getContent()).isEqualTo(content);
         assertThat(message.getOwner()).isEqualTo(sender);
@@ -30,7 +30,7 @@ public class MessageTest {
 
     @Test
     void updateRoom() {
-        Message message = Message.ofOwner(sender, receiver, sender, content);
+        Message message = Message.ofOwner(sender, receiver, sender, content, false);
         Room room = new Room();
         message.setRoom(room);
 

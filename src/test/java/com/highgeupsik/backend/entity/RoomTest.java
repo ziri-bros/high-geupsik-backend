@@ -46,7 +46,7 @@ public class RoomTest {
 
         assertThat(room.getMessageList()).isEmpty();
 
-        Message message = new Message(sender, receiver, sender, content);
+        Message message = Message.ofOwner(sender, receiver, sender, content, false);
         room.addMessage(message);
 
         assertThat(room.getMessageList()).containsExactly(message);
