@@ -5,12 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class RoomRepositoryTest extends RoomMessageRepository {
+public class RoomRepositoryTest extends RepositoryTest {
 
     @Test
     void findByBoardAndSender() {
         assertThat(roomRepository.findByBoardAndSender(board, sender)).isPresent();
-        assertThat(roomRepository.findByBoardAndSender(board, receiver)).isEmpty();
+        assertThat(roomRepository.findByBoardAndSender(board, receiver)).isNotEmpty();
     }
 
     @Test
@@ -20,6 +20,6 @@ public class RoomRepositoryTest extends RoomMessageRepository {
             .isNotEmpty();
         assertThat(roomRepository.findAllBySenderId(receiver.getId(), orderByModifiedDate(1, 1))
             .getContent())
-            .isEmpty();
+            .isNotEmpty();
     }
 }

@@ -5,14 +5,18 @@ import com.highgeupsik.backend.entity.Message;
 import com.highgeupsik.backend.entity.Room;
 import com.highgeupsik.backend.entity.User;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @TestInstance(value = Lifecycle.PER_CLASS)
-@DataJpaTest
-public class RoomMessageRepository {
+@Transactional
+@SpringBootTest
+public abstract class RepositoryTest {
 
     @Autowired
     RoomRepository roomRepository;
@@ -27,9 +31,10 @@ public class RoomMessageRepository {
     User receiver;
     Board board;
     Room room;
+    Room room2;
     Message message;
 
-    @BeforeAll
+    @BeforeEach
     void init() {
         board = boardRepository.save(Board.builder().build());
         sender = userRepository.save(User.builder()
@@ -41,7 +46,11 @@ public class RoomMessageRepository {
         room = roomRepository.save(Room.builder()
             .sender(sender)
             .board(board).build());
+        room2 = roomRepository.save(Room.builder()
+            .sender(receiver)
+            .board(board).build());
         Message saveMessage = Message.ofOwner(sender, receiver, sender, "content", false);
+
         saveMessage.setRoom(room);
         message = messageRepository.save(saveMessage);
     }
