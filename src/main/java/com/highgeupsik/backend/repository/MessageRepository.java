@@ -14,6 +14,6 @@ public interface MessageRepository extends JpaRepository<Message, Long>, Message
     Page<Message> findAllByRoomIdAndOwnerId(Long roomId, Long ownerId, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "update Message m set m.isRead = true where m.room = :room")
+    @Query(value = "update Message m set m.isReceiverRead = true where m.room = :room")
     void updateReadFlagByRoom(@Param("room") Room room);
 }

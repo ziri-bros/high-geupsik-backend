@@ -69,9 +69,8 @@ public class RoomMessageController {
 
 	@ApiOperation(value = "메세지 전송")
 	@ResponseStatus(CREATED)
-	@PostMapping("/messages")
-	public ApiResult<Long> sendMessage(@LoginUser Long userId, @RequestBody MessageReqDTO messageReqDTO) {
-		return success(roomMessageService.sendMessage(userId, messageReqDTO.getReceiverId(), messageReqDTO.getBoardId(),
-			messageReqDTO.getContent()));
+	@PostMapping("/{roomId}/messages")
+	public ApiResult<Long> sendMessage(@PathVariable Long roomId, @RequestBody MessageReqDTO messageReqDTO) {
+		return success(roomMessageService.sendMessage(roomId, messageReqDTO.getContent()));
 	}
 }

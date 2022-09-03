@@ -75,7 +75,7 @@ public class RoomMessageControllerTest {
 		token = "Bearer " + jwtTokenProvider.createAccessToken(sender.getId(), "ROLE_USER");
 		room = roomRepository.save(Room.of(sender, receiver, board));
 		room2 = roomRepository.save(Room.of(receiver, sender, board));
-		message = Message.ofOwner(sender, receiver, sender, "content", false);
+		message = Message.send(sender, receiver, "content");
 		message.setRoom(room);
 		message = messageRepository.save(message);
 	}
@@ -84,9 +84,7 @@ public class RoomMessageControllerTest {
 	void sendMessage() throws Exception {
 		MessageReqDTO req = new MessageReqDTO();
 		req.setContent("new");
-		req.setReceiverId(receiver.getId());
-		req.setBoardId(board.getId());
-		mockMvc.perform(post(URI.create("/rooms/messages"))
+		mockMvc.perform(post(URI.create("/rooms/" + room.getId() + "/messages"))
 				.header("Authorization", token)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(req)))

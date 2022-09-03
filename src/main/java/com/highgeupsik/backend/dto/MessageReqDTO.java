@@ -9,7 +9,5 @@ import lombok.Setter;
 @Setter
 public class MessageReqDTO {
 
-    private String content;
-    private Long receiverId;
-    private Long boardId;
+	private String content;
 }

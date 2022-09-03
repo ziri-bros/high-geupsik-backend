@@ -1,0 +1,15 @@
+1662206001562|63|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists board CASCADE |drop table if exists board CASCADE 
+1662206001571|4|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists comment CASCADE |drop table if exists comment CASCADE 
+1662206001574|1|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists likes CASCADE |drop table if exists likes CASCADE 
+1662206001585|10|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists message CASCADE |drop table if exists message CASCADE 
+1662206001587|1|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists my_sequences CASCADE |drop table if exists my_sequences CASCADE 
+1662206001589|2|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists notification CASCADE |drop table if exists notification CASCADE 
+1662206001593|3|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists room CASCADE |drop table if exists room CASCADE 
+1662206001607|14|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists school CASCADE |drop table if exists school CASCADE 
+1662206001608|0|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists student_card CASCADE |drop table if exists student_card CASCADE 
+1662206001608|0|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists subject CASCADE |drop table if exists subject CASCADE 
+1662206001608|0|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists subject_schedule CASCADE |drop table if exists subject_schedule CASCADE 
+1662206001609|0|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists upload_file CASCADE |drop table if exists upload_file CASCADE 
+1662206001616|6|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists user CASCADE |drop table if exists user CASCADE 
+1662206001617|1|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop table if exists user_confirm CASCADE |drop table if exists user_confirm CASCADE 
+1662206001619|1|statement|connection 16|url jdbc:h2:mem:45c4bd27-d8d4-4877-9323-5a8d9642e66b|drop sequence if exists hibernate_sequence|drop sequence if exists hibernate_sequence
