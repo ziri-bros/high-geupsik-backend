@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface MessageRepository extends JpaRepository<Message, Long> {
+public interface MessageRepository extends JpaRepository<Message, Long>, MessageRepositoryCustom {
 
     Page<Message> findAllByRoomIdAndOwnerId(Long roomId, Long ownerId, Pageable pageable);
 

@@ -53,6 +53,7 @@ public class RoomMessageControllerTest {
     User receiver;
     Board board;
     Room room;
+    Room room2;
     Message message;
 
     @BeforeAll
@@ -67,6 +68,7 @@ public class RoomMessageControllerTest {
         board = boardRepository.save(Board.builder().build());
         token = "Bearer " + jwtTokenProvider.createAccessToken(sender.getId(), "ROLE_USER");
         room = roomRepository.save(Room.of(sender, receiver, board));
+        room2 = roomRepository.save(Room.of(receiver,sender,board));
         message = Message.ofOwner(sender, receiver, sender, "content", false);
         message.setRoom(room);
         message = messageRepository.save(message);
@@ -103,10 +105,10 @@ public class RoomMessageControllerTest {
                 .header("Authorization", token))
             .andExpect(status().isOk())
             .andExpect(jsonPath("data").exists())
-            .andExpect(jsonPath("data.content[0].messageId").value(message.getId()))
-            .andExpect(jsonPath("data.content[0].content").value(message.getContent()))
-            .andExpect(jsonPath("data.content[0].senderId").value(message.getSender().getId()))
-            .andExpect(jsonPath("data.content[0].receiverId").value(message.getReceiver().getId()));
+            .andExpect(jsonPath("data[0].messageId").value(message.getId()))
+            .andExpect(jsonPath("data[0].content").value(message.getContent()))
+            .andExpect(jsonPath("data[0].senderId").value(message.getSender().getId()))
+            .andExpect(jsonPath("data[0].receiverId").value(message.getReceiver().getId()));
     }
 
     @Test

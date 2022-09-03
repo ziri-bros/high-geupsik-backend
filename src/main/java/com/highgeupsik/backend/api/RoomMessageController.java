@@ -3,6 +3,7 @@ package com.highgeupsik.backend.api;
 import static com.highgeupsik.backend.utils.ApiUtils.success;
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,10 +46,10 @@ public class RoomMessageController {
     //TODO: 메시지 목록 조회를 하는 방법
 	@ApiOperation(value = "메세지 목록 조회")
 	@GetMapping("/{roomId}")
-	public ApiResult<Page<MessageResDTO>> messages(@LoginUser Long userId, @PathVariable Long roomId,
-		@RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+	public ApiResult<List<MessageResDTO>> messages(@PathVariable Long roomId,
+		@RequestParam(value = "lastMessageId", required = false) Long lastMessageId) {
 		roomMessageService.readNewMessagesByRoomId(roomId);
-		return success(messageQueryService.findAllByRoomIdAndOwnerId(roomId, userId, pageNum));
+		return success(messageQueryService.findAllByRoomIdAndOwnerId(roomId,lastMessageId));
 	}
 
 	@ApiOperation(value = "메세지룸 삭제")
