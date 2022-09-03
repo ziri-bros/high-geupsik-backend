@@ -5,6 +5,8 @@ import org.springframework.data.domain.Sort;
 
 public class PagingUtils {
 
+    public static final int MESSAGE_COUNT = 20;
+
     public static PageRequest orderByCreatedDateDESC(Integer pageNum, int count) {
         return PageRequest.of(pageNum - 1, count, Sort.by(Sort.Direction.DESC, "createdDate"));
     }
