@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.repository;
 
-import static com.highgeupsik.backend.utils.PagingUtils.MESSAGE_COUNT;
 import static com.highgeupsik.backend.utils.PagingUtils.orderByCreatedDateDESC;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,14 +12,16 @@ import com.highgeupsik.backend.entity.Message;
 
 public class MessageRepositoryTest extends RepositoryTest {
 
+	private static final int PAGING_SIZE = 2;
+
 	@Test
 	void findAllByRoomIdAndOwnerId() {
 		assertThat(messageRepository
-			.findAllByRoomIdAndOwnerId(room.getId(), sender.getId(), orderByCreatedDateDESC(1, 10))
+			.findAllByRoomIdAndOwnerId(room.getId(), sender.getId(), orderByCreatedDateDESC(0, 10))
 			.getContent())
 			.isNotEmpty();
 		assertThat(messageRepository
-			.findAllByRoomIdAndOwnerId(room.getId(), receiver.getId(), orderByCreatedDateDESC(1, 10))
+			.findAllByRoomIdAndOwnerId(room.getId(), receiver.getId(), orderByCreatedDateDESC(0, 10))
 			.getContent())
 			.isEmpty();
 	}
@@ -36,7 +37,7 @@ public class MessageRepositoryTest extends RepositoryTest {
 		message2.setRoom(room);
 		message3.setRoom(room);
 
-		List<Message> messages = messageRepository.findAllByRoomIdAndIdLessThan(roomId, messageId, MESSAGE_COUNT);
+		List<Message> messages = messageRepository.findAllByRoomIdAndIdLessThan(roomId, messageId, PAGING_SIZE);
 
 		Assertions.assertThat(messages.size()).isEqualTo(2);
 		Assertions.assertThat(messages.get(0).getId()).isEqualTo(message3.getId());
@@ -54,7 +55,7 @@ public class MessageRepositoryTest extends RepositoryTest {
 		message3.setRoom(room);
 
 		Long messageId = message2.getId();
-		List<Message> messages = messageRepository.findAllByRoomIdAndIdLessThan(roomId, messageId, MESSAGE_COUNT);
+		List<Message> messages = messageRepository.findAllByRoomIdAndIdLessThan(roomId, messageId, PAGING_SIZE);
 
 		Assertions.assertThat(messages.size()).isEqualTo(1);
 		Assertions.assertThat(messages.get(0).getId()).isEqualTo(message.getId());

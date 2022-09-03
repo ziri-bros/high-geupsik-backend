@@ -27,7 +27,7 @@ public class BoardCommentController {
     public ApiResult<Page<CommentResDTO>> boardComments(
         @LoginUser Long userId,
         @PathVariable Long boardId,
-        @RequestParam(value = "page", defaultValue = "1") int pageNum,
+        @RequestParam(value = "page", defaultValue = "0") int pageNum,
         @RequestParam(value = "pageSize", defaultValue = "20") int pageSize
     ) {
         return success(boardCommentService.findCommentsBy(userId, boardId, pageNum, pageSize));

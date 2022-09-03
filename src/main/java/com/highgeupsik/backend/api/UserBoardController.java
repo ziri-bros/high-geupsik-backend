@@ -24,14 +24,14 @@ public class UserBoardController {
     @ApiOperation(value = "내가 작성한 게시글 목록 조회")
     @GetMapping("/boards/my")
     public ApiResult<Page<BoardResDTO>> myBoards(@LoginUser Long userId,
-        @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+        @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
         return success(boardQueryService.findByMyId(userId, pageNum));
     }
 
     @ApiOperation(value = "내가 댓글단 게시글 목로 조회")
     @GetMapping("boards/my-comments")
     public ApiResult<Page<BoardResDTO>> boardsByMyComments(@LoginUser Long userId,
-        @RequestParam(value = "age", defaultValue = "1") Integer pageNum) {
+        @RequestParam(value = "age", defaultValue = "0") Integer pageNum) {
         return success(boardQueryService.findByMyComments(userId, pageNum));
     }
 

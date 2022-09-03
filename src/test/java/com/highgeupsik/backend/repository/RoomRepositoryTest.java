@@ -15,10 +15,10 @@ public class RoomRepositoryTest extends RepositoryTest {
 
     @Test
     void findAllSenderId() {
-        assertThat(roomRepository.findAllBySenderId(sender.getId(), orderByModifiedDate(1, 1))
+        assertThat(roomRepository.findAllBySenderId(sender.getId(), orderByModifiedDate(0, 1))
             .getContent())
             .isNotEmpty();
-        assertThat(roomRepository.findAllBySenderId(receiver.getId(), orderByModifiedDate(1, 1))
+        assertThat(roomRepository.findAllBySenderId(receiver.getId(), orderByModifiedDate(0, 1))
             .getContent())
             .isNotEmpty();
     }

@@ -42,7 +42,7 @@ public class RoomMessageController {
 	@ApiOperation(value = "메세지룸 목록 조회")
 	@GetMapping
 	public ApiResult<Page<RoomDTO>> rooms(@LoginUser Long userId,
-		@RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+		@RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
 		return success(roomQueryService.findAllByMyId(userId, pageNum));
 	}
 

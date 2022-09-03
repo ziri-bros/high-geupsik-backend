@@ -31,7 +31,7 @@ public class AdminApiController {
     @ApiOperation(value = "학생증 검수를 위한 유저 조회", notes = "관리자가 유저를 조회합니다")
     @GetMapping("/users")
     public ApiResult<Page<UserConfirmDTO>> userConfirms(
-        @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+        @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
         return success(userConfirmService.findAll(pageNum));
     }
 

@@ -21,7 +21,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
             .join(message.room, room)
             .where(roomIdEq(roomId), lastMessageIdLt(lastMessageId))
             .orderBy(message.id.desc())
-            .limit(2)
+            .limit(MESSAGE_COUNT)
             .fetch();
     }
 

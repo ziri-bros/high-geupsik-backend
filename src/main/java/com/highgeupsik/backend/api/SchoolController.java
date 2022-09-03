@@ -20,7 +20,7 @@ public class SchoolController {
     private final SchoolQueryService schoolQueryService;
 
     @GetMapping("/schools")
-    public ApiResult<Page<SchoolResDTO>> schools(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+    public ApiResult<Page<SchoolResDTO>> schools(@RequestParam(value = "page", defaultValue = "0") Integer pageNum,
         @Valid SchoolSearchCondition condition) {
         return success(schoolQueryService.findAllByRegionAndName(pageNum, condition));
     }

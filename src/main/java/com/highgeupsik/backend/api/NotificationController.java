@@ -23,7 +23,7 @@ public class NotificationController {
 
     @GetMapping("/notifications")
     public ApiResult<NotificationResult> notifications(@LoginUser Long userId,
-        @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+        @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
         return success(notificationQueryService.findAllByUserId(userId, pageNum));
     }
 
