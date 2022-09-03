@@ -74,13 +74,13 @@ public class Room extends TimeEntity {
 	}
 
 	public void sendMessage(String content) {
-		messageList.add(Message.send(sender, receiver, content));
+		addMessage(Message.send(sender, receiver, content));
 	}
 
-    public void receiveMessage(String content) {
-        messageList.add(Message.receive(receiver, sender, content));
+	public void receiveMessage(String content) {
+		addMessage(Message.receive(receiver, sender, content));
 		addNewMessageCount();
-    }
+	}
 
 	public void addNewMessageCount() {
 		newMessageCount++;
