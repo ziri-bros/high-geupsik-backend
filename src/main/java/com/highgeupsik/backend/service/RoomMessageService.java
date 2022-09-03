@@ -2,6 +2,7 @@ package com.highgeupsik.backend.service;
 
 import static com.highgeupsik.backend.utils.ErrorMessage.*;
 
+import com.highgeupsik.backend.dto.OnlyIdDTO;
 import com.highgeupsik.backend.entity.Board;
 import com.highgeupsik.backend.entity.Message;
 import com.highgeupsik.backend.entity.Room;
@@ -11,6 +12,8 @@ import com.highgeupsik.backend.repository.BoardRepository;
 import com.highgeupsik.backend.repository.MessageRepository;
 import com.highgeupsik.backend.repository.RoomRepository;
 import com.highgeupsik.backend.repository.UserRepository;
+import com.highgeupsik.backend.utils.ApiResult;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,5 +79,22 @@ public class RoomMessageService {
                 userRepository.findById(room.getReceiver().getId())
                     .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND)))
             .orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
+    }
+
+    public OnlyIdDTO createRoom(Long userId, Long receiverId, Long boardId) {
+        User sender = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        User receiver = userRepository.findById(receiverId)
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND));
+
+        Room senderRoom = findOrCreateRoom(board, sender, receiver);
+        Room receiverRoom = findOrCreateRoom(board, receiver, sender);
+
+        roomRepository.save(senderRoom);
+        roomRepository.save(receiverRoom);
+
+        return new OnlyIdDTO(senderRoom.getId());
     }
 }

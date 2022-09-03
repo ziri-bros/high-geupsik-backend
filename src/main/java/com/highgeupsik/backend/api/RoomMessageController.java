@@ -4,6 +4,7 @@ import static com.highgeupsik.backend.utils.ApiUtils.success;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.highgeupsik.backend.dto.MessageReqDTO;
 import com.highgeupsik.backend.dto.MessageResDTO;
+import com.highgeupsik.backend.dto.OnlyIdDTO;
+import com.highgeupsik.backend.dto.RoomCreateDTO;
 import com.highgeupsik.backend.dto.RoomDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.MessageQueryService;
@@ -43,13 +46,19 @@ public class RoomMessageController {
 		return success(roomQueryService.findAllByMyId(userId, pageNum));
 	}
 
-    //TODO: 메시지 목록 조회를 하는 방법
+	//TODO: 메시지 목록 조회를 하는 방법
 	@ApiOperation(value = "메세지 목록 조회")
 	@GetMapping("/{roomId}")
 	public ApiResult<List<MessageResDTO>> messages(@PathVariable Long roomId,
 		@RequestParam(value = "lastMessageId", required = false) Long lastMessageId) {
 		roomMessageService.readNewMessagesByRoomId(roomId);
-		return success(messageQueryService.findAllByRoomIdAndOwnerId(roomId,lastMessageId));
+		return success(messageQueryService.findAllByRoomIdAndOwnerId(roomId, lastMessageId));
+	}
+
+	@ApiOperation(value = "메시지 룸 생성")
+	@PostMapping
+	public ApiResult<OnlyIdDTO> createRoom(@LoginUser Long userId, @RequestBody RoomCreateDTO req) {
+		return success(roomMessageService.createRoom(userId, req.getReceiverId(), req.getBoardId()));
 	}
 
 	@ApiOperation(value = "메세지룸 삭제")
