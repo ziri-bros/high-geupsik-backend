@@ -72,9 +72,9 @@ public class RoomMessageService {
 
     private Room findOtherRoom(Room room) {
         return roomRepository.findByBoardAndSender(boardRepository.findById(room.getBoard().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND)),
-            userRepository.findById(room.getReceiver().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND)))
-            .orElseThrow(() -> new ResourceNotFoundException("없는 대화방입니다."));
+                    .orElseThrow(() -> new ResourceNotFoundException(BOARD_NOT_FOUND)),
+                userRepository.findById(room.getReceiver().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND)))
+            .orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
     }
 }
