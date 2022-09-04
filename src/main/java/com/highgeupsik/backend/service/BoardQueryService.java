@@ -34,7 +34,7 @@ public class BoardQueryService {
     }
 
     public Page<BoardResDTO> findByMyId(Long userId, Integer pageNum) {
-        return boardRepository.findByUserId(userId, orderByCreatedDateDESC(pageNum, POST_COUNT))
+        return boardRepository.findByUserIdAndDeleteFlag(userId, false, orderByCreatedDateDESC(pageNum, POST_COUNT))
             .map(BoardResDTO::new);
     }
 
