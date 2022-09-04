@@ -2,10 +2,9 @@ package com.highgeupsik.backend.repository;
 
 import com.highgeupsik.backend.dto.SchoolSearchCondition;
 import com.highgeupsik.backend.entity.School;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 public interface SchoolRepositoryCustom {
 
-    Page<School> findAllByRegionAndName(SchoolSearchCondition condition, Pageable pageable);
+    List<School> findAllByRegionAndName(SchoolSearchCondition condition);
 }

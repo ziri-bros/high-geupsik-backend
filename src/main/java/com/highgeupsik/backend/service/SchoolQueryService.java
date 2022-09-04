@@ -1,12 +1,11 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.PagingUtils.*;
-
 import com.highgeupsik.backend.dto.SchoolResDTO;
 import com.highgeupsik.backend.dto.SchoolSearchCondition;
 import com.highgeupsik.backend.repository.SchoolRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class SchoolQueryService {
 
     private final SchoolRepository schoolRepository;
-    private static final int SCHOOL_COUNT = 20;
 
-    public Page<SchoolResDTO> findAllByRegionAndName(Integer pageNum, SchoolSearchCondition condition) {
+    public List<SchoolResDTO> findAllByRegionAndName(SchoolSearchCondition condition) {
         return schoolRepository
-            .findAllByRegionAndName(condition, orderBySchoolNameAsc(pageNum, SCHOOL_COUNT))
-            .map(SchoolResDTO::new);
+            .findAllByRegionAndName(condition)
+            .stream()
+            .map(SchoolResDTO::new)
+            .collect(Collectors.toList());
     }
 }

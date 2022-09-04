@@ -10,9 +10,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 public class SchoolRepositoryImpl implements SchoolRepositoryCustom {
 
@@ -23,21 +20,13 @@ public class SchoolRepositoryImpl implements SchoolRepositoryCustom {
     }
 
     @Override
-    public Page<School> findAllByRegionAndName(SchoolSearchCondition condition, Pageable pageable) {
+    public List<School> findAllByRegionAndName(SchoolSearchCondition condition) {
         List<School> schools = queryFactory.selectFrom(school)
             .where(regionEq(condition.getRegion()),
                 nameContains(condition.getKeyword()))
             .orderBy(school.name.asc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
             .fetch();
-
-        long total = queryFactory.selectFrom(school)
-            .where(regionEq(condition.getRegion()),
-                nameContains(condition.getKeyword()))
-            .fetchCount();
-
-        return new PageImpl<>(schools, pageable, total);
+        return schools;
     }
 
     private BooleanExpression regionEq(Region region) {
