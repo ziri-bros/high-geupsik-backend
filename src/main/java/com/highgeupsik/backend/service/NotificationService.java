@@ -38,7 +38,7 @@ public class NotificationService {
 
 	@Transactional(propagation = Propagation.MANDATORY)
 	public void saveRoomNotification(User user, Room room) {
-		Notification notification = Notification.ofRoom(user, room.getRecentMessage(), NotificationType.MESSAGE, room);
+		Notification notification = Notification.ofRoom(user, room.getRecentMessage().getContent(), NotificationType.MESSAGE, room);
 		notificationRepository.save(notification);
 		applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), MESSAGE_NOTIFICATION));
 	}
@@ -52,5 +52,9 @@ public class NotificationService {
 	public void deleteByComment(Comment comment) {
 		notificationRepository.deleteByComment(comment);
 		notificationRepository.deleteAllByCommentIn(comment.getChildren());
+	}
+
+	public void deleteByRoom(Room room) {
+		notificationRepository.deleteAllByRoom(room);
 	}
 }

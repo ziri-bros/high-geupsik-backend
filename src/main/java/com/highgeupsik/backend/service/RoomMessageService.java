@@ -53,6 +53,7 @@ public class RoomMessageService {
         Room room = roomRepository.findById(roomId)
             .orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
         room.checkUser(userId);
+        notificationService.deleteByRoom(room);
         roomRepository.delete(room);
     }
 

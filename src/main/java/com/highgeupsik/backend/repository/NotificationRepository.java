@@ -1,5 +1,6 @@
 package com.highgeupsik.backend.repository;
 
+import com.highgeupsik.backend.entity.Room;
 import java.util.List;
 
 import com.highgeupsik.backend.entity.Comment;
@@ -15,4 +16,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     void deleteByComment(Comment comment);
 
     void deleteAllByCommentIn(List<Comment> comments);
+
+    void deleteAllByRoom(Room room);
 }
