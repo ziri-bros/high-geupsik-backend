@@ -38,7 +38,7 @@ public class NotificationService {
 
 	@Transactional(propagation = Propagation.MANDATORY)
 	public void saveRoomNotification(User user, Room room) {
-		Notification notification = Notification.ofRoom(user, room.getRecentMessage().getContent(), NotificationType.MESSAGE, room);
+		Notification notification = Notification.ofRoom(user, room.getRecentMessage(), NotificationType.MESSAGE, room);
 		notificationRepository.save(notification);
 		applicationEventPublisher.publishEvent(new AlarmEvent(user.getId(), MESSAGE_NOTIFICATION));
 	}
