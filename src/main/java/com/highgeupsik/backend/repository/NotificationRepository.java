@@ -1,5 +1,7 @@
 package com.highgeupsik.backend.repository;
 
+import java.util.List;
+
 import com.highgeupsik.backend.entity.Comment;
 import com.highgeupsik.backend.entity.Notification;
 import org.springframework.data.domain.Page;
@@ -11,4 +13,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Page<Notification> findAllByReceiverId(Long receiverId, Pageable pageable);
 
     void deleteByComment(Comment comment);
+
+    void deleteAllByCommentIn(List<Comment> comments);
 }
