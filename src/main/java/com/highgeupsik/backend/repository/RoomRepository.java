@@ -12,5 +12,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Optional<Room> findByBoardAndSender(Board board, User sender);
 
+    Optional<Room> findByBoardAndSenderAndReceiver(Board board, User sender, User receiver);
+
     Page<Room> findAllBySenderId(Long senderId, Pageable pageable);
 }
