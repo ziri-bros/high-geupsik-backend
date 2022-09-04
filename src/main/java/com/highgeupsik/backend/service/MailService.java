@@ -24,10 +24,14 @@ public class MailService {
             StringBuilder body = new StringBuilder();
             if (accept) {
                 subject = "HighGeupSik 회원가입을 축하드립니다";
-                body.append("<html><p><strong>" + username + "님 HighGeupSik에 오신것을 환영합니다!</strong></p><br/>");
+                body.append("<html><body><p><strong>" + username + "님 HighGeupSik에 오신것을 환영합니다! "
+                        + "하단링크 접속 및 로그아웃 후 다시 로그인해주세요</strong></p><br/>")
+                    .append("<a href = 'https://higk.o-r.kr/'>하이급식 접속하기</a></body></html>");
             } else {
                 subject = "HighGeupSik 회원가입에 실패했습니다";
-                body.append("<html><p><strong>" + username + "님 가입이 거부되었습니다. 학생증을 다시 제출해 주세요</strong></p><br/>");
+                body.append("<html><body><p><strong>" + username + "님 가입이 거부되었습니다.<br/>")
+                    .append( "하단링크 접속 후 학생증을 다시 제출해 주세요</strong></p><br/>")
+                    .append("<<a href = 'https://higk.o-r.kr/'>하이급식 접속하기</a></body></html>");
             }
             messageHelper.setTo(receiverEmail);
             messageHelper.setSubject(subject);
