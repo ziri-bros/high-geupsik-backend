@@ -138,13 +138,17 @@ public class Comment extends TimeEntity {
     }
 
     public boolean canDelete() {
-        return replyCount == 1;
+        return replyCount == 0;
     }
 
     public void deleteIfCan() {
         if (isDisabled() && canDelete()) {
             board.deleteComment(this);
         }
+    }
+
+    public void deleteComment() {
+        board.deleteComment(this);
     }
 
     public void updateContent(CommentReqDTO commentReqDTO) {

@@ -45,4 +45,8 @@ public class NotificationService {
             .orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION_NOT_FOUND));
         notification.readNotification();
     }
+
+    public void deleteByComment(Comment comment) {
+        notificationRepository.deleteByComment(comment);
+    }
 }

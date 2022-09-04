@@ -108,14 +108,20 @@ public class CommentService {
         Comment parent = comment.getParent();
         comment.validateWriter(writer);
         comment.disable();
-        if (comment.isReply()) {
-            parent.deleteReply();
-            parent.deleteIfCan();
-        } else {
-            comment.deleteIfCan();
+
+        parent.deleteReply();
+
+        if(parent.isDisabled() && parent.canDelete()){
+            fullDelete(parent);
+            parent.deleteComment();
         }
+
         Board board = comment.getBoard();
         board.deleteCommentCount();
+    }
+
+    public void fullDelete(Comment comment) {
+        notificationService.deleteByComment(comment);
     }
 
     private void initSendIdList(Comment newComment, Comment parent, Set<Long> sendUserIdList) {
