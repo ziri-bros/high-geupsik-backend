@@ -6,6 +6,7 @@ import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -14,8 +15,8 @@ public class MailService {
 
     private final JavaMailSender javaMailSender;
 
+    @Async
     public void sendEmail(String username, String receiverEmail, boolean accept) {
-
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
@@ -35,6 +36,5 @@ public class MailService {
         } catch (MessagingException e) {
             throw new MailException(e.getMessage());
         }
-
     }
 }
