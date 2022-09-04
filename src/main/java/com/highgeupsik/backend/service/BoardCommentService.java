@@ -26,7 +26,7 @@ public class BoardCommentService {
 
     @Transactional(readOnly = true)
     public Page<CommentResDTO> findCommentsBy(Long userId, Long boardId, Integer pageNum, Integer pageSize) {
-        Page<Comment> comments = commentRepository.findCommentsBy(boardId, PageRequest.of(pageNum - 1, pageSize));
+        Page<Comment> comments = commentRepository.findCommentsBy(boardId, PageRequest.of(pageNum, pageSize));
         Set<Long> likes = getUserLikeSet(userId, comments);
         return comments.map(comment -> new CommentResDTO(comment, likes.contains(comment.getId())));
     }
