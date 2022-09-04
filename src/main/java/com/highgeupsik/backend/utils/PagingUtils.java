@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 
 public class PagingUtils {
 
+    public static final String DEFAULT_PAGE_NUMBER = "0";
     public static final int MESSAGE_COUNT = 20;
 
     public static PageRequest orderByCreatedDateDESC(Integer pageNum, int count) {

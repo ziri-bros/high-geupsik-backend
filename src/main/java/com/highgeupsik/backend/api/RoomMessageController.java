@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.success;
+import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import com.highgeupsik.backend.service.MessageQueryService;
 import com.highgeupsik.backend.service.RoomMessageService;
 import com.highgeupsik.backend.service.RoomQueryService;
 import com.highgeupsik.backend.utils.ApiResult;
+import com.highgeupsik.backend.utils.PagingUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +44,7 @@ public class RoomMessageController {
 	@ApiOperation(value = "메세지룸 목록 조회")
 	@GetMapping
 	public ApiResult<Page<RoomDTO>> rooms(@LoginUser Long userId,
-		@RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
+		@RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNum) {
 		return success(roomQueryService.findAllByMyId(userId, pageNum));
 	}
 

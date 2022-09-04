@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import com.highgeupsik.backend.dto.UserConfirmDTO;
 import com.highgeupsik.backend.service.UserConfirmService;
 import com.highgeupsik.backend.service.UserService;
 import com.highgeupsik.backend.utils.ApiResult;
+import com.highgeupsik.backend.utils.PagingUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class AdminApiController {
     @ApiOperation(value = "학생증 검수를 위한 유저 조회", notes = "관리자가 유저를 조회합니다")
     @GetMapping("/users")
     public ApiResult<Page<UserConfirmDTO>> userConfirms(
-        @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
+        @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNum) {
         return success(userConfirmService.findAll(pageNum));
     }
 

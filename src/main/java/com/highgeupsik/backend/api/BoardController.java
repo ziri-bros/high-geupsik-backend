@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 import static org.springframework.http.HttpStatus.*;
 
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.BoardQueryService;
 import com.highgeupsik.backend.service.BoardService;
 import com.highgeupsik.backend.utils.ApiResult;
+import com.highgeupsik.backend.utils.PagingUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +45,7 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 목록 조회")
     @GetMapping
-    public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+    public ApiResult<Page<BoardResDTO>> boards(@RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNum,
         @Valid BoardSearchCondition condition) {
         return success(boardQueryService.findAll(pageNum, condition));
     }

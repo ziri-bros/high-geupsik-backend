@@ -1,11 +1,14 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 
 import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.CommentQueryService;
 import com.highgeupsik.backend.utils.ApiResult;
+import com.highgeupsik.backend.utils.PagingUtils;
+
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +25,7 @@ public class UserCommentController {
     @ApiOperation(value = "내가 작성한 댓글 목록 조회")
     @GetMapping("/comments/my")
     public ApiResult<Page<CommentResDTO>> myComments(@LoginUser Long userId,
-        @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
+        @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) Integer pageNum) {
         return success(commentQueryService.findByMyId(userId, pageNum));
     }
 }

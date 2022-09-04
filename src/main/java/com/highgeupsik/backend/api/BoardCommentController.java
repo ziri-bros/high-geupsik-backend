@@ -1,6 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import com.highgeupsik.backend.dto.CommentResDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.BoardCommentService;
 import com.highgeupsik.backend.utils.ApiResult;
+import com.highgeupsik.backend.utils.PagingUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,7 @@ public class BoardCommentController {
     public ApiResult<Page<CommentResDTO>> boardComments(
         @LoginUser Long userId,
         @PathVariable Long boardId,
-        @RequestParam(value = "page", defaultValue = "0") int pageNum,
+        @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) int pageNum,
         @RequestParam(value = "pageSize", defaultValue = "20") int pageSize
     ) {
         return success(boardCommentService.findCommentsBy(userId, boardId, pageNum, pageSize));
