@@ -1,8 +1,10 @@
 package com.highgeupsik.backend.service;
 
 import com.highgeupsik.backend.dto.MessageResDTO;
+import com.highgeupsik.backend.entity.Message;
 import com.highgeupsik.backend.repository.MessageRepository;
 import com.highgeupsik.backend.utils.PagingUtils;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ public class MessageQueryService {
     //TODO: 읽음처리 BULK UPDATE
     public List<MessageResDTO> findAllByRoomIdAndOwnerId(Long roomId, Long lastMessageId) {
         return messageRepository.findAllByRoomIdAndIdLessThan(roomId, lastMessageId, PagingUtils.MESSAGE_COUNT)
-            .stream().map((MessageResDTO::new)).collect(Collectors.toList());
+            .stream()
+            .sorted(Comparator.comparing(Message::getId))
+            .map((MessageResDTO::new)).collect(Collectors.toList());
     }
 }
