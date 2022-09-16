@@ -21,7 +21,6 @@
 * Spring Data Jpa
 * Query DSL
 * MYSQL
-* SSE
 
 ### Architecture
 
