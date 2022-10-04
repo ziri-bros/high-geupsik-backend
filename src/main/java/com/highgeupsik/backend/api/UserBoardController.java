@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.api;
 
-import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.api.ApiUtils.*;
 import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 
 import org.springframework.data.domain.Page;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.highgeupsik.backend.dto.BoardResDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.BoardQueryService;
-import com.highgeupsik.backend.utils.ApiResult;
-import com.highgeupsik.backend.utils.PagingUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

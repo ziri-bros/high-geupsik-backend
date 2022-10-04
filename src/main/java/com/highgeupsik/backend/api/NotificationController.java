@@ -1,14 +1,12 @@
 package com.highgeupsik.backend.api;
 
-import static com.highgeupsik.backend.utils.ApiUtils.success;
+import static com.highgeupsik.backend.api.ApiUtils.success;
 import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.NotificationQueryService;
 import com.highgeupsik.backend.service.NotificationQueryService.NotificationResult;
 import com.highgeupsik.backend.service.NotificationService;
-import com.highgeupsik.backend.utils.ApiResult;
-import com.highgeupsik.backend.utils.PagingUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

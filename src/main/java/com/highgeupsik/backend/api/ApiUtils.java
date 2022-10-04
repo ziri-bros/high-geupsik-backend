@@ -1,4 +1,4 @@
-package com.highgeupsik.backend.utils;
+package com.highgeupsik.backend.api;
 
 public class ApiUtils {
 

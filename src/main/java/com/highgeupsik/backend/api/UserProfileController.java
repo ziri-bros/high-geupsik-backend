@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.api;
 
-import static com.highgeupsik.backend.utils.ApiUtils.success;
+import static com.highgeupsik.backend.api.ApiUtils.success;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,6 @@ import com.highgeupsik.backend.dto.UserUpdateForm;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.UserQueryService;
 import com.highgeupsik.backend.service.UserService;
-import com.highgeupsik.backend.utils.ApiResult;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

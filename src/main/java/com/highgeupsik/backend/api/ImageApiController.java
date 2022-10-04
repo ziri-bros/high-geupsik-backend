@@ -8,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.highgeupsik.backend.dto.UploadFileDTO;
 import com.highgeupsik.backend.service.S3Service;
-import com.highgeupsik.backend.utils.ApiResult;
-import com.highgeupsik.backend.utils.ApiUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

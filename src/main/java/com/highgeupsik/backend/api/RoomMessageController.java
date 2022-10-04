@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.api;
 
-import static com.highgeupsik.backend.utils.ApiUtils.success;
+import static com.highgeupsik.backend.api.ApiUtils.success;
 import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -26,8 +26,6 @@ import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.MessageQueryService;
 import com.highgeupsik.backend.service.RoomMessageService;
 import com.highgeupsik.backend.service.RoomQueryService;
-import com.highgeupsik.backend.utils.ApiResult;
-import com.highgeupsik.backend.utils.PagingUtils;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

@@ -1,15 +1,15 @@
-package com.highgeupsik.backend.api;
+package com.highgeupsik.backend.exception;
 
-import static com.highgeupsik.backend.utils.ApiUtils.error;
+import static com.highgeupsik.backend.api.ApiUtils.error;
 import static org.springframework.http.HttpStatus.*;
 
+import com.highgeupsik.backend.api.ApiError;
+import com.highgeupsik.backend.api.ApiResult;
 import com.highgeupsik.backend.exception.MailException;
 import com.highgeupsik.backend.exception.ResourceNotFoundException;
 import com.highgeupsik.backend.exception.SseException;
 import com.highgeupsik.backend.exception.UserException;
 import com.highgeupsik.backend.exception.TokenException;
-import com.highgeupsik.backend.utils.ApiError;
-import com.highgeupsik.backend.utils.ApiResult;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;

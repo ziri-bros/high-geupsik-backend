@@ -1,12 +1,11 @@
 package com.highgeupsik.backend.handler;
 
-import static com.highgeupsik.backend.utils.ApiUtils.error;
+import static com.highgeupsik.backend.api.ApiUtils.error;
 import static com.highgeupsik.backend.utils.ErrorMessage.NOT_USER;
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.springframework.http.HttpStatus.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.highgeupsik.backend.utils.ApiError;
+import com.highgeupsik.backend.api.ApiError;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

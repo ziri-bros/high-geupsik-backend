@@ -1,11 +1,10 @@
 package com.highgeupsik.backend.api;
 
-import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.api.ApiUtils.*;
 
 import com.highgeupsik.backend.dto.SchoolResDTO;
 import com.highgeupsik.backend.dto.SchoolSearchCondition;
 import com.highgeupsik.backend.service.SchoolQueryService;
-import com.highgeupsik.backend.utils.ApiResult;
 
 import java.util.List;
 import javax.validation.Valid;

@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.api;
 
-import static com.highgeupsik.backend.utils.ApiUtils.*;
+import static com.highgeupsik.backend.api.ApiUtils.*;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,6 @@ import com.highgeupsik.backend.dto.SubjectScheduleDTO;
 import com.highgeupsik.backend.resolver.LoginUser;
 import com.highgeupsik.backend.service.SubjectScheduleQueryService;
 import com.highgeupsik.backend.service.SubjectScheduleService;
-import com.highgeupsik.backend.utils.ApiResult;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
