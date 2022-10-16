@@ -2,7 +2,6 @@ package com.highgeupsik.backend.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -53,10 +52,6 @@ public class User {
     @JoinColumn(name = "school_id")
     private School school;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "subject_schedule_id")
-    private SubjectSchedule subjectSchedule;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -98,11 +93,6 @@ public class User {
     public User updateName(String username) {
         this.username = username;
         return this;
-    }
-
-    public void setSubjectSchedule(SubjectSchedule subjectSchedule) {
-        this.subjectSchedule = subjectSchedule;
-        subjectSchedule.setUser(this);
     }
 
     public void updateRefreshToken(String refreshToken) {
