@@ -6,6 +6,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.highgeupsik.backend.service.message.RoomMessageService;
+import com.highgeupsik.backend.service.notification.NotificationService;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -14,16 +16,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.highgeupsik.backend.entity.Room;
-import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.RoomRepository;
-import com.highgeupsik.backend.repository.UserRepository;
+import com.highgeupsik.backend.entity.message.Room;
+import com.highgeupsik.backend.repository.board.BoardRepository;
+import com.highgeupsik.backend.repository.message.RoomRepository;
+import com.highgeupsik.backend.repository.user.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class RoomMessageServiceTest {
 
 	@InjectMocks
-	RoomMessageService roomMessageService;
+    RoomMessageService roomMessageService;
 	@Mock
 	RoomRepository roomRepository;
 	@Mock

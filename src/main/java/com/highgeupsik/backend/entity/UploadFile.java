@@ -1,5 +1,6 @@
 package com.highgeupsik.backend.entity;
 
+import com.highgeupsik.backend.entity.board.Board;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

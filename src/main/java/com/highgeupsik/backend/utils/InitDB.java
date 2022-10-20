@@ -1,8 +1,8 @@
 package com.highgeupsik.backend.utils;
 
-import com.highgeupsik.backend.entity.Region;
-import com.highgeupsik.backend.entity.School;
-import com.highgeupsik.backend.repository.SchoolRepository;
+import com.highgeupsik.backend.entity.school.Region;
+import com.highgeupsik.backend.entity.school.School;
+import com.highgeupsik.backend.repository.school.SchoolRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;

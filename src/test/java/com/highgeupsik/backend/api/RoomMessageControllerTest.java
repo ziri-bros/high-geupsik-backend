@@ -19,19 +19,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.highgeupsik.backend.dto.MessageReqDTO;
-import com.highgeupsik.backend.dto.RoomCreateDTO;
-import com.highgeupsik.backend.entity.Board;
-import com.highgeupsik.backend.entity.Message;
-import com.highgeupsik.backend.entity.Role;
-import com.highgeupsik.backend.entity.Room;
-import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.api.message.MessageReqDTO;
+import com.highgeupsik.backend.api.message.RoomCreateRequest;
+import com.highgeupsik.backend.entity.board.Board;
+import com.highgeupsik.backend.entity.message.Message;
+import com.highgeupsik.backend.entity.user.Role;
+import com.highgeupsik.backend.entity.message.Room;
+import com.highgeupsik.backend.entity.user.User;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
-import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.MessageRepository;
-import com.highgeupsik.backend.repository.RoomRepository;
-import com.highgeupsik.backend.repository.UserRepository;
-import com.highgeupsik.backend.service.RoomMessageService;
+import com.highgeupsik.backend.repository.board.BoardRepository;
+import com.highgeupsik.backend.repository.message.MessageRepository;
+import com.highgeupsik.backend.repository.message.RoomRepository;
+import com.highgeupsik.backend.repository.user.UserRepository;
+import com.highgeupsik.backend.service.message.RoomMessageService;
 
 @TestInstance(value = Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
@@ -73,8 +73,8 @@ public class RoomMessageControllerTest {
 			.username("receiver").build());
 		board = boardRepository.save(Board.builder().build());
 		token = "Bearer " + jwtTokenProvider.createAccessToken(sender.getId(), "ROLE_USER");
-		room = roomRepository.save(Room.of(sender, receiver, board));
-		room2 = roomRepository.save(Room.of(receiver, sender, board));
+		room = roomRepository.save(Room.ofBoard(sender, receiver, board));
+		room2 = roomRepository.save(Room.ofBoard(receiver, sender, board));
 		message = Message.send(sender, receiver, "content");
 		message.setRoom(room);
 		message = messageRepository.save(message);
@@ -118,7 +118,7 @@ public class RoomMessageControllerTest {
 	@Test
 	void createRoom() throws Exception {
 		Board newBoard = boardRepository.save(Board.builder().build());
-		RoomCreateDTO req = new RoomCreateDTO(newBoard.getId(), receiver.getId());
+		RoomCreateRequest req = new RoomCreateRequest(newBoard.getId(), receiver.getId());
 
 		mockMvc.perform(post(URI.create("/rooms"))
 				.header("Authorization", token)
@@ -130,7 +130,7 @@ public class RoomMessageControllerTest {
 
 	@Test
 	void createRoomReturnsSameRoomWhenAlreadyExist() throws Exception {
-		RoomCreateDTO req = new RoomCreateDTO(board.getId(), receiver.getId());
+		RoomCreateRequest req = new RoomCreateRequest(board.getId(), receiver.getId());
 
 		mockMvc.perform(post(URI.create("/rooms"))
 				.header("Authorization", token)
@@ -142,7 +142,7 @@ public class RoomMessageControllerTest {
 
 	@Test
 	void deleteRoom() throws Exception {
-		Room deleteRoom = roomRepository.save(Room.of(sender, receiver, board));
+		Room deleteRoom = roomRepository.save(Room.ofBoard(sender, receiver, board));
 		mockMvc.perform(delete(URI.create("/rooms/" + deleteRoom.getId()))
 				.header("Authorization", token))
 			.andExpect(status().isOk());

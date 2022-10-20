@@ -1,9 +1,9 @@
 package com.highgeupsik.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.highgeupsik.backend.handler.JwtAccessDeniedHandler;
-import com.highgeupsik.backend.handler.JwtAuthenticationEntryPoint;
-import com.highgeupsik.backend.handler.OAuth2AuthenticationSuccessHandler;
+import com.highgeupsik.backend.jwt.JwtAccessDeniedHandler;
+import com.highgeupsik.backend.jwt.JwtAuthenticationEntryPoint;
+import com.highgeupsik.backend.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.highgeupsik.backend.jwt.JwtAuthenticationFilter;
 import com.highgeupsik.backend.jwt.JwtExceptionFilter;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;

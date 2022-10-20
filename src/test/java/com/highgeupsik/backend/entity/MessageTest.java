@@ -2,6 +2,9 @@ package com.highgeupsik.backend.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.highgeupsik.backend.entity.message.Message;
+import com.highgeupsik.backend.entity.message.Room;
+import com.highgeupsik.backend.entity.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +16,8 @@ public class MessageTest {
 
 	@BeforeEach
 	void init() {
-		sender = new User();
-		receiver = new User();
+		sender = User.ofUser();
+		receiver = User.ofUser();
 		content = "content";
 	}
 
@@ -31,7 +34,7 @@ public class MessageTest {
 	@Test
 	void updateRoom() {
 		Message message = Message.send(sender, receiver, content);
-		Room room = new Room();
+		Room room = Room.of();
 		message.setRoom(room);
 
 		assertThat(message.getRoom()).isEqualTo(room);

@@ -1,9 +1,9 @@
 package com.highgeupsik.backend.oauth2;
 
 
-import com.highgeupsik.backend.entity.AuthProvider;
-import com.highgeupsik.backend.entity.Role;
-import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.entity.user.AuthProvider;
+import com.highgeupsik.backend.entity.user.Role;
+import com.highgeupsik.backend.entity.user.User;
 import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
