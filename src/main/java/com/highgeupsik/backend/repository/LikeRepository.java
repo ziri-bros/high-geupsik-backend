@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.highgeupsik.backend.entity.Comment;
-import com.highgeupsik.backend.entity.Like;
+import com.highgeupsik.backend.entity.board.Comment;
+import com.highgeupsik.backend.entity.board.Like;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 

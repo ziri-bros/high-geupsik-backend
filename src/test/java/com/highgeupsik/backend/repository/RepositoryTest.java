@@ -1,5 +1,9 @@
 package com.highgeupsik.backend.repository;
 
+import com.highgeupsik.backend.repository.board.BoardRepository;
+import com.highgeupsik.backend.repository.message.MessageRepository;
+import com.highgeupsik.backend.repository.message.RoomRepository;
+import com.highgeupsik.backend.repository.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -7,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.highgeupsik.backend.entity.Board;
-import com.highgeupsik.backend.entity.Message;
-import com.highgeupsik.backend.entity.Room;
-import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.entity.board.Board;
+import com.highgeupsik.backend.entity.message.Message;
+import com.highgeupsik.backend.entity.message.Room;
+import com.highgeupsik.backend.entity.user.User;
 
 @TestInstance(value = Lifecycle.PER_CLASS)
 @Transactional
@@ -18,11 +22,11 @@ import com.highgeupsik.backend.entity.User;
 public abstract class RepositoryTest {
 
 	@Autowired
-	RoomRepository roomRepository;
+    RoomRepository roomRepository;
 	@Autowired
-	MessageRepository messageRepository;
+    MessageRepository messageRepository;
 	@Autowired
-	BoardRepository boardRepository;
+    BoardRepository boardRepository;
 	@Autowired
 	UserRepository userRepository;
 

@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.jwt;
 
-import static com.highgeupsik.backend.utils.ErrorMessage.*;
+import static com.highgeupsik.backend.exception.ErrorMessages.*;
 
 import com.highgeupsik.backend.exception.TokenException;
 import io.jsonwebtoken.Claims;

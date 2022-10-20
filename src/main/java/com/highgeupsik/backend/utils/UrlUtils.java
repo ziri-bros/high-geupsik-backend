@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.utils;
 
-import com.highgeupsik.backend.api.timetable.neis.TimetableRequestCondition;
+import com.highgeupsik.backend.api.subjectschedule.neis.TimetableRequestCondition;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

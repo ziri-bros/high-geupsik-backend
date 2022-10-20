@@ -1,8 +1,8 @@
 package com.highgeupsik.backend.service;
 
-import com.highgeupsik.backend.dto.SchoolResDTO;
-import com.highgeupsik.backend.dto.SchoolSearchCondition;
-import com.highgeupsik.backend.repository.SchoolRepository;
+import com.highgeupsik.backend.api.school.SchoolResDTO;
+import com.highgeupsik.backend.api.school.SchoolSearchCondition;
+import com.highgeupsik.backend.repository.school.SchoolRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

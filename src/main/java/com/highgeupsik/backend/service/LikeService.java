@@ -1,19 +1,19 @@
 package com.highgeupsik.backend.service;
 
-import static com.highgeupsik.backend.utils.ErrorMessage.*;
+import static com.highgeupsik.backend.exception.ErrorMessages.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.highgeupsik.backend.entity.Board;
-import com.highgeupsik.backend.entity.Comment;
-import com.highgeupsik.backend.entity.Like;
-import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.entity.board.Board;
+import com.highgeupsik.backend.entity.board.Comment;
+import com.highgeupsik.backend.entity.board.Like;
+import com.highgeupsik.backend.entity.user.User;
 import com.highgeupsik.backend.exception.ResourceNotFoundException;
-import com.highgeupsik.backend.repository.BoardRepository;
-import com.highgeupsik.backend.repository.CommentRepository;
+import com.highgeupsik.backend.repository.board.BoardRepository;
+import com.highgeupsik.backend.repository.comment.CommentRepository;
 import com.highgeupsik.backend.repository.LikeRepository;
-import com.highgeupsik.backend.repository.UserRepository;
+import com.highgeupsik.backend.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,7 +1,7 @@
 package com.highgeupsik.backend.api;
 
 import com.highgeupsik.backend.resolver.LoginUser;
-import com.highgeupsik.backend.service.AlarmService;
+import com.highgeupsik.backend.service.alarm.AlarmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

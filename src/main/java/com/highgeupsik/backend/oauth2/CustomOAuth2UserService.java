@@ -1,8 +1,8 @@
 package com.highgeupsik.backend.oauth2;
 
-import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.entity.user.User;
 import com.highgeupsik.backend.jwt.JwtTokenProvider;
-import com.highgeupsik.backend.repository.UserRepository;
+import com.highgeupsik.backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

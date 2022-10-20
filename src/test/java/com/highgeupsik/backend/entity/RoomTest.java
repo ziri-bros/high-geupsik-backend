@@ -2,6 +2,10 @@ package com.highgeupsik.backend.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.highgeupsik.backend.entity.board.Board;
+import com.highgeupsik.backend.entity.message.Message;
+import com.highgeupsik.backend.entity.message.Room;
+import com.highgeupsik.backend.entity.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,15 +18,15 @@ public class RoomTest {
 
 	@BeforeEach
 	void init() {
-		sender = new User();
-		receiver = new User();
-		board = new Board();
+		sender = User.ofUser();
+		receiver = User.ofUser();
+		board = Board.ofBoard();
 		content = "content";
 	}
 
 	@Test
 	void create() {
-		Room room = Room.of(sender, receiver, board);
+		Room room = Room.ofBoard(sender, receiver, board);
 
 		assertThat(room.getSender()).isEqualTo(sender);
 		assertThat(room.getReceiver()).isEqualTo(receiver);
@@ -31,7 +35,7 @@ public class RoomTest {
 
 	@Test
 	void setRecentMessage() {
-		Room room = Room.of(sender, receiver, board);
+		Room room = Room.ofBoard(sender, receiver, board);
 
 		assertThat(room.getRecentMessage()).isNull();
 
@@ -42,7 +46,7 @@ public class RoomTest {
 
 	@Test
 	void addMessage() {
-		Room room = Room.of(sender, receiver, board);
+		Room room = Room.ofBoard(sender, receiver, board);
 
 		assertThat(room.getMessageList()).isEmpty();
 

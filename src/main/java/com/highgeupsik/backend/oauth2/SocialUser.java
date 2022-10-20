@@ -1,6 +1,6 @@
 package com.highgeupsik.backend.oauth2;
 
-import com.highgeupsik.backend.entity.User;
+import com.highgeupsik.backend.entity.user.User;
 import java.util.Collection;
 import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;

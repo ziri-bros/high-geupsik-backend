@@ -1,7 +1,7 @@
 package com.highgeupsik.backend.utils;
 
-import com.highgeupsik.backend.entity.Region;
-import com.highgeupsik.backend.entity.School;
+import com.highgeupsik.backend.entity.school.Region;
+import com.highgeupsik.backend.entity.school.School;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
