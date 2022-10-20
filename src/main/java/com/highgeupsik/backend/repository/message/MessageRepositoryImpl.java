@@ -1,7 +1,7 @@
 package com.highgeupsik.backend.repository.message;
 
-import static com.highgeupsik.backend.entity.QMessage.message;
-import static com.highgeupsik.backend.entity.QRoom.room;
+import static com.highgeupsik.backend.entity.message.QMessage.*;
+import static com.highgeupsik.backend.entity.message.QRoom.*;
 
 import com.highgeupsik.backend.entity.message.Message;
 import com.querydsl.core.types.dsl.BooleanExpression;

@@ -1,17 +1,14 @@
 package com.highgeupsik.backend.repository.comment;
 
-import static com.highgeupsik.backend.entity.QComment.*;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import static com.highgeupsik.backend.entity.board.QComment.comment;
 
 import com.highgeupsik.backend.entity.board.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 public class CommentRepositoryImpl implements CommentRepositoryCustom {
 

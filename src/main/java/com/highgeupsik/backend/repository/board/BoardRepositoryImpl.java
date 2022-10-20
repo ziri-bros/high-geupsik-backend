@@ -1,21 +1,18 @@
 package com.highgeupsik.backend.repository.board;
 
-import static com.highgeupsik.backend.entity.QBoard.*;
-import static org.springframework.util.StringUtils.*;
-
-import com.querydsl.core.BooleanBuilder;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import static com.highgeupsik.backend.entity.board.QBoard.board;
+import static org.springframework.util.StringUtils.hasText;
 
 import com.highgeupsik.backend.api.board.BoardResDTO;
 import com.highgeupsik.backend.api.board.BoardSearchCondition;
-import com.highgeupsik.backend.dto.QBoardResDTO;
+import com.highgeupsik.backend.api.board.QBoardResDTO;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
 

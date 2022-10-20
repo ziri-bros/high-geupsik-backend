@@ -1,7 +1,7 @@
 package com.highgeupsik.backend.repository.school;
 
-import static com.highgeupsik.backend.entity.QSchool.*;
-import static org.springframework.util.StringUtils.isEmpty;
+import static com.highgeupsik.backend.entity.school.QSchool.school;
+import static org.springframework.util.ObjectUtils.*;
 
 import com.highgeupsik.backend.api.school.SchoolSearchCondition;
 import com.highgeupsik.backend.entity.school.Region;
@@ -21,12 +21,11 @@ public class SchoolRepositoryImpl implements SchoolRepositoryCustom {
 
     @Override
     public List<School> findAllByRegionAndName(SchoolSearchCondition condition) {
-        List<School> schools = queryFactory.selectFrom(school)
+        return queryFactory.selectFrom(school)
             .where(regionEq(condition.getRegion()),
                 nameContains(condition.getKeyword()))
             .orderBy(school.name.asc())
             .fetch();
-        return schools;
     }
 
     private BooleanExpression regionEq(Region region) {
