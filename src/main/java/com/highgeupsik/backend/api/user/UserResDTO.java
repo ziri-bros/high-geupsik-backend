@@ -1,6 +1,5 @@
 package com.highgeupsik.backend.api.user;
 
-
 import com.highgeupsik.backend.api.school.SchoolResDTO;
 import com.highgeupsik.backend.entity.user.Role;
 import com.highgeupsik.backend.entity.user.User;
@@ -28,6 +27,6 @@ public class UserResDTO {
         grade = user.getStudentCard().getGrade().getGradeNum();
         classNum = user.getStudentCard().getClassNum();
         studentCardImage = user.getStudentCard().getStudentCardImage();
-        schoolResDTO = new SchoolResDTO(user.getSchool());
+        schoolResDTO = new SchoolResDTO(user.getStudentCard().getSchool());
     }
 }

@@ -2,16 +2,17 @@ package com.highgeupsik.backend.entity.user;
 
 import com.highgeupsik.backend.entity.board.Board;
 import com.highgeupsik.backend.entity.board.Comment;
-import com.highgeupsik.backend.entity.school.School;
 import com.highgeupsik.backend.entity.school.StudentCard;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -22,7 +23,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(
@@ -36,7 +39,7 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -48,13 +51,9 @@ public class User {
 
     private String refreshToken;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "student_card_id")
     private StudentCard studentCard;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id")
-    private School school;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -83,11 +82,6 @@ public class User {
 
     public void setStudentCard(StudentCard studentCard) {
         this.studentCard = studentCard;
-        studentCard.setUser(this);
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
     }
 
     public void updateRoleUser() {
