@@ -1,13 +1,13 @@
 package com.highgeupsik.backend.utils;
 
-import com.highgeupsik.backend.entity.school.Region;
+import com.highgeupsik.backend.api.school.neis.SchoolInfo;
 import com.highgeupsik.backend.entity.school.School;
 import com.highgeupsik.backend.repository.school.SchoolRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,14 +28,18 @@ public class InitDB {
     static class InitService {
 
         private final SchoolRepository schoolRepository;
+        private final UrlGenerator urlGenerator;
 
         public void dbInit() {
-            List<School> schoolList = new ArrayList<>();
-            for (Region region : Region.values()) {
-                ClassPathResource resource = new ClassPathResource("/static/schools/" + region.toString() + ".json");
-                ParsingUtils.addSchoolListFromJsonFile(resource, schoolList);
+            List<School> schools = new ArrayList<>();
+            for (int i = 1; i <= 3; i++) {
+                schools.addAll(OpenApiRequestUtils.getRequest(urlGenerator.getSchoolRequestUrl(i), SchoolInfo.class)
+                    .getSchoolInfoRes()
+                    .stream()
+                    .map(School::new)
+                    .collect(Collectors.toList()));
             }
-            schoolRepository.saveAll(schoolList);
+            schoolRepository.saveAll(schools);
         }
     }
 }

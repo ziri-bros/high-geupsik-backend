@@ -1,5 +1,6 @@
 package com.highgeupsik.backend.entity.school;
 
+import com.highgeupsik.backend.api.school.neis.SchoolInfoRes;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,27 +28,27 @@ public class School {
     @Column(name = "school_id", updatable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false, updatable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "code", nullable = false, updatable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(name = "region_code", nullable = false, updatable = false)
+    @Column(name = "region_code", nullable = false)
     private String regionCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "region", nullable = false, updatable = false)
+    @Column(name = "region", nullable = false)
     private Region region;
 
-    @Column(name = "homepage_url", nullable = false, updatable = false)
+    @Column(name = "homepage_url")
     private String homepageUrl;
 
-    public School(String name, String code, String regionCode, Region region, String homepageUrl) {
-        this.name = name;
-        this.code = code;
-        this.regionCode = regionCode;
-        this.region = region;
-        this.homepageUrl = homepageUrl;
+    public School(SchoolInfoRes schoolInfoRes) {
+        name = schoolInfoRes.getSCHUL_NM();
+        code = schoolInfoRes.getSD_SCHUL_CODE();
+        regionCode = schoolInfoRes.getATPT_OFCDC_SC_CODE();
+        region = Region.valueOf(schoolInfoRes.getLCTN_SC_NM());
+        homepageUrl = schoolInfoRes.getHMPG_ADRES();
     }
 }
