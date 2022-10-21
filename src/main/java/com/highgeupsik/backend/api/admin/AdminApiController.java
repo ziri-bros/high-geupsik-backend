@@ -1,10 +1,14 @@
 package com.highgeupsik.backend.api.admin;
 
-import static com.highgeupsik.backend.api.ApiUtils.*;
+import static com.highgeupsik.backend.api.ApiUtils.success;
 import static com.highgeupsik.backend.utils.PagingUtils.DEFAULT_PAGE_NUMBER;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.OK;
 
 import com.highgeupsik.backend.api.ApiResult;
+import com.highgeupsik.backend.service.user.UserAdminService;
+import com.highgeupsik.backend.service.user.UserConfirmService;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,18 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.highgeupsik.backend.service.user.UserConfirmService;
-import com.highgeupsik.backend.service.user.UserService;
-
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 @RestController
 public class AdminApiController {
 
-    private final UserService userService;
+    private final UserAdminService userAdminService;
     private final UserConfirmService userConfirmService;
 
     @ApiOperation(value = "학생증 검수를 위한 유저 조회", notes = "관리자가 유저를 조회합니다")
@@ -39,13 +37,13 @@ public class AdminApiController {
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}/authorize") //수락
     public void acceptUser(@PathVariable Long userId) {
-        userService.acceptUser(userId);
+        userAdminService.acceptUser(userId);
     }
 
     @ApiOperation(value = "학생증 거부")
     @ResponseStatus(OK)
     @PatchMapping("/users/{userId}") //거부
     public void rejectUser(@PathVariable Long userId) {
-        userService.rejectUser(userId);
+        userAdminService.rejectUser(userId);
     }
 }
