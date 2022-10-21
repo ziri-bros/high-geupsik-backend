@@ -36,7 +36,7 @@ public class BoardService {
             .content(content)
             .title(title)
             .category(category)
-            .region(user.getSchool().getRegion())
+            .region(user.getStudentCard().getSchool().getRegion())
             .build());
     }
 

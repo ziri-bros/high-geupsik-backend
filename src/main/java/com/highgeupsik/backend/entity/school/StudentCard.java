@@ -1,16 +1,17 @@
 package com.highgeupsik.backend.entity.school;
 
 import com.highgeupsik.backend.entity.TimeEntity;
-import com.highgeupsik.backend.entity.user.User;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,17 +32,14 @@ public class StudentCard extends TimeEntity {
 
     private String studentCardImage;
 
-    @OneToOne(mappedBy = "studentCard")
-    private User user;
+    @JoinColumn(name = "school_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private School school;
 
-    @Builder
-    public StudentCard(GRADE grade, int classNum, String studentCardImage) {
+    public StudentCard(School school, GRADE grade, int classNum, String studentCardImage) {
+        this.school = school;
         this.grade = grade;
         this.classNum = classNum;
         this.studentCardImage = studentCardImage;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

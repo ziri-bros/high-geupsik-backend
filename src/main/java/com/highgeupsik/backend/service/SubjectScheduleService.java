@@ -26,7 +26,7 @@ public class SubjectScheduleService {
 
     public SubjectScheduleDTO findTimetable(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-        TimetableRequestCondition requestForm = new TimetableRequestCondition(user.getSchool(), user.getStudentCard());
+        TimetableRequestCondition requestForm = new TimetableRequestCondition(user.getStudentCard());
         String[] dates = MyDateUtils.getWeekDates();
         return new SubjectScheduleDTO(
                 getSchedules(urlGenerator.getScheduleRequestUrl(requestForm, dates[1])),
