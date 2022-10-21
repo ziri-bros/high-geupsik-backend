@@ -28,11 +28,12 @@ public class InitDB {
     static class InitService {
 
         private final SchoolRepository schoolRepository;
+        private final UrlGenerator urlGenerator;
 
         public void dbInit() {
             List<School> schools = new ArrayList<>();
             for (int i = 1; i <= 3; i++) {
-                schools.addAll(OpenApiRequestUtils.getRequest(UrlUtils.getSchoolRequestUrl(i), SchoolInfo.class)
+                schools.addAll(OpenApiRequestUtils.getRequest(urlGenerator.getSchoolRequestUrl(i), SchoolInfo.class)
                     .getSchoolInfoRes()
                     .stream()
                     .map(School::new)
