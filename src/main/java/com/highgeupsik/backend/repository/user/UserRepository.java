@@ -10,9 +10,9 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u,s,sc from User u "
-        + "join StudentCard s "
+        + "left join StudentCard s "
         + "on u.studentCard = s "
-        + "join School sc "
+        + "left join School sc "
         + "on s.school = sc "
         + "where u.id = :userId")
     Optional<User> findById(@Param("userId") Long userId);
