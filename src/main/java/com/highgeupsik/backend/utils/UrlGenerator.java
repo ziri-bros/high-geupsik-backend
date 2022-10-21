@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class UrlGenerator {
 
-    @Value("${OPEN_API_KEY}")
+    @Value("${open_api_key}")
     private String openApiKey;
 
     public String getScheduleRequestUrl(TimetableRequestCondition requestCondition, String date) {
