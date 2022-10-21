@@ -31,8 +31,8 @@ public class School {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "code", nullable = false)
-    private String code;
+    @Column(name = "school_code", nullable = false)
+    private String schoolCode;
 
     @Column(name = "region_code", nullable = false)
     private String regionCode;
@@ -46,7 +46,7 @@ public class School {
 
     public School(SchoolInfoRes schoolInfoRes) {
         name = schoolInfoRes.getSCHUL_NM();
-        code = schoolInfoRes.getSD_SCHUL_CODE();
+        schoolCode = schoolInfoRes.getSD_SCHUL_CODE();
         regionCode = schoolInfoRes.getATPT_OFCDC_SC_CODE();
         region = Region.valueOf(schoolInfoRes.getLCTN_SC_NM());
         homepageUrl = schoolInfoRes.getHMPG_ADRES();

@@ -11,14 +11,14 @@ import lombok.Setter;
 public class SchoolResDTO {
 
     private String name;
-    private String code;
+    private String schoolCode;
     private String regionCode;
     private Region region;
     private String homepageUrl;
 
     public SchoolResDTO(School school) {
         name = school.getName();
-        code = school.getCode();
+        schoolCode = school.getSchoolCode();
         regionCode = school.getRegionCode();
         region = school.getRegion();
         homepageUrl = school.getHomepageUrl();
