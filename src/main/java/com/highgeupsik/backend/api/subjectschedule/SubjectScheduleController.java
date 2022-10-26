@@ -18,6 +18,6 @@ public class SubjectScheduleController {
 
     @GetMapping("/subject-schedules")
     public ApiResult timetables(@LoginUser Long userId){
-        return success(subjectScheduleService.findTimetable(userId));
+        return success(subjectScheduleService.findScheduleByUserId(userId));
     }
 }
