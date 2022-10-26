@@ -17,4 +17,8 @@ public class TimetableRequestCondition {
         grade = studentCard.getGrade().getGradeNum();
         classNm = studentCard.getClassNum();
     }
+
+    public String getKey(){
+        return regionCode+schoolCode+grade+classNm;
+    }
 }
