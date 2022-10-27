@@ -1,7 +1,8 @@
 package com.highgeupsik.backend.config;
 
-import com.google.common.collect.Lists;
-import java.util.Arrays;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
+
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 public class Swagger2Config {
 
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+            .useDefaultResponseMessages(false)
+            .apiInfo(apiInfo())
+            .select()
+            .apis(RequestHandlerSelectors.any())
+            .paths(PathSelectors.any())
+            .build()
+            .securityContexts(singletonList(securityContext()))
+            .securitySchemes(singletonList(apiKey()))
+            .produces(singleton("application/json"))
+            .consumes(singleton("application/json"));
+    }
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("하이급식 API 문서")
@@ -33,30 +49,15 @@ public class Swagger2Config {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .forPaths(PathSelectors.any()) // 적용 경로 수정 필요
+            .securityReferences(securityReference())
+            .operationSelector(o -> true)
             .build();
     }
 
-    List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope
-            = new AuthorizationScope("global", "전부 접근 가능");
+    List<SecurityReference> securityReference() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "전부 접근 가능");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Lists.newArrayList(
-            new SecurityReference("JWT", authorizationScopes));
-    }
-
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-            .useDefaultResponseMessages(false)
-            .apiInfo(this.apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.any())
-            .paths(PathSelectors.any())
-            .build()
-            .securityContexts(Lists.newArrayList(securityContext()))
-            .securitySchemes(Arrays.asList(apiKey()));
+        return singletonList(new SecurityReference("JWT", authorizationScopes));
     }
 }

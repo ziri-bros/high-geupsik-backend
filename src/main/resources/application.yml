@@ -21,4 +21,5 @@ spring:
       - aws
       - log
       - neis
+      - mvc
 
