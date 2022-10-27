@@ -7,12 +7,13 @@ import com.highgeupsik.backend.api.board.BoardResDTO;
 import com.highgeupsik.backend.api.board.BoardSearchCondition;
 import com.highgeupsik.backend.api.board.QBoardResDTO;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
@@ -37,12 +38,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
             .limit(pageable.getPageSize())
             .fetch();
 
-        long total = queryFactory
-            .selectFrom(board)
-            .where(builder)
-            .fetchCount();
+        JPAQuery<Long> total = queryFactory
+            .select(board.count())
+            .from(board)
+            .where(builder);
 
-        return new PageImpl<>(content, pageable, total);
+        return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
 
     private BooleanBuilder getBuilder(BoardSearchCondition condition) {
